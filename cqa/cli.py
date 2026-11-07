@@ -9,7 +9,7 @@ import argparse
 import asyncio
 import json
 
-from . import analytics, checklist, config, db, evaluations, importer, traces
+from . import analytics, checklist, config, db, evaluations, importer, redteam, traces
 
 
 def _table(rows: list[list], header: list[str]) -> str:
@@ -71,6 +71,29 @@ async def run(group: str, limit: int | None, version: int | None, yes: bool = Fa
     print(f"evaluated {len(ids) - len(failed)}/{len(ids)}" + (f", failed: {failed}" if failed else ""))
 
 
+def run_redteam(group: str, per_lang: int, yes: bool, only: list[str] | None = None) -> None:
+    cases = redteam.plan(group, per_lang, only)
+    if not cases:
+        raise SystemExit(f"no suitable chats in group {group}: import it first")
+    if config.LLM_PROVIDER != "mock" and not yes:
+        est = sum(0.025 if c["mutation"] == "harmless" else 0.012 for c in cases)
+        raise SystemExit(f"{len(cases)} red-team cases with real models: ~${est:.2f}. Add --yes to run.")
+    results = asyncio.run(redteam.run(cases))
+    for r in results:
+        if "checks" not in r:
+            continue
+        for c in r["checks"]:
+            if r["mutation"] != "harmless" or not c["ok"]:
+                print(f"{'OK ' if c['ok'] else 'FAIL'} {r['conversation_id']:<10} {r['mutation']:<25} {c['criterion']} "
+                      f"expected={'/'.join(c['expected'])} final={c['final']} votes={c['votes']}"
+                      + ("" if c["ok"] else f"\n     why: {c['rationale']}"))
+    s = redteam.summarize(results)
+    print(json.dumps(s, ensure_ascii=False, indent=1))
+    path = config.LOG_DIR / f"redteam-{db.now().replace(':', '')}.json"
+    path.write_text(json.dumps({"summary": s, "results": results}, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"full report: {path}")
+
+
 def main() -> None:
     config.setup_logging()
     db.init()
@@ -85,6 +108,11 @@ def main() -> None:
     r.add_argument("--yes", action="store_true", help="confirm spending on real models")
     sub.add_parser("report").add_argument("--version", type=int)
     sub.add_parser("trace").add_argument("conversation_id")
+    rt = sub.add_parser("redteam", help="break real dialogs on purpose and check the verdicts flip")
+    rt.add_argument("group")
+    rt.add_argument("--per-lang", type=int, default=1, help="chats per language (RU/KZ/EN)")
+    rt.add_argument("--yes", action="store_true", help="confirm spending on real models")
+    rt.add_argument("--only", nargs="+", choices=list(redteam.MUTATIONS), help="run only these mutations")
     args = p.parse_args()
     if args.cmd == "import":
         print("imported", asyncio.run(importer.import_group(args.group)))
@@ -92,6 +120,8 @@ def main() -> None:
         asyncio.run(run(args.group, args.limit, args.version, args.yes))
     elif args.cmd == "report":
         report(args.version)
+    elif args.cmd == "redteam":
+        run_redteam(args.group, args.per_lang, args.yes, args.only)
     else:
         trace(args.conversation_id)
 

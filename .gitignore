@@ -9,6 +9,5 @@ data/logs/
 # real DEV data (contains real calls): load via DATASET_API_URL, never publish
 invoke.json
 data/fixtures/DEV.json
-
-# written by CI on deploy
+*.zip
 RELEASE

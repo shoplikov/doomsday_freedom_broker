@@ -66,7 +66,7 @@ def normalize(record: dict) -> tuple[dict, list[dict]]:
 
 
 async def fetch_records(group_id: str) -> list[dict]:
-    raw_path = config.DATA_DIR / "raw" / f"{group_id}.json"
+    raw_path = config.RAW_DIR / f"{group_id}.json"
     fixture = config.DATA_DIR / "fixtures" / f"{group_id}.json"
     body = None
     if config.DATASET_API_URL:

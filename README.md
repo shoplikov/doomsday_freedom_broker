@@ -4,7 +4,22 @@ AI scoring of operator chats and calls (RU / KZ / EN) against an editable checkl
 Every verdict has message-level evidence, plain code does the math, humans decide appeals.
 Built for the Freedom Broker CQA hackathon (brief: `initial_docs/`).
 
-## Run
+## Run with Docker (recommended for the team and the jury)
+
+```bash
+cp .env.example .env                              # put OPENAI_API_KEY etc. here (optional: mock works without it)
+docker compose up -d --build                      # http://localhost:8005  (other port: CQA_PORT=8790 docker compose up -d)
+docker compose --profile test run --rm test       # test suite inside the container
+docker compose exec app python -m cqa.cli report  # CLI inside the running app
+docker compose logs -f app                        # live logs (also in the volume: /var/cqa/logs/cqa.log)
+docker compose down                               # stop; data stays in the cqa-data volume (down -v wipes it)
+```
+
+One container serves the API and the UI. SQLite, logs and cached API responses live in the `cqa-data` volume.
+`./data/fixtures` is mounted read-only, so a local `DEV.json` copy works offline in the container too.
+The container runs as a non-root user and has a health check on `/api/health`.
+
+## Run locally (for development)
 
 ```bash
 uv sync                      # Python 3.12 is installed automatically (.python-version)
@@ -30,6 +45,7 @@ uv run python -m cqa.cli import DEV                # terminal loop: import, eval
 uv run python -m cqa.cli run DEV --limit 10
 uv run python -m cqa.cli report                    # A/B agreement, judge sides, gold accuracy per role, cost
 uv run python -m cqa.cli trace p1-kz-001           # every LLM call of one dialog
+uv run python -m cqa.cli redteam DEV               # break real chats on purpose, check verdicts flip (asks --yes)
 ```
 
 With `DATASET_API_URL` set, `DEV` is fetched from the organizers' API and cached in `data/raw/` (offline fallback).

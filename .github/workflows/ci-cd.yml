@@ -33,7 +33,7 @@ jobs:
           uv sync --frozen
           uv run pytest -q
       - name: Docker build
-        run: docker build -t cqa:ci .
+        run: docker build --target app -t cqa:ci .
 
   deploy:
     needs: build
@@ -44,7 +44,8 @@ jobs:
       contents: write # create release tags
     env:
       APP_DIR: ${{ github.ref_name == 'main' && '/opt/doomsday_freedom_broker' || '/opt/doomsday_freedom_broker-dev' }}
-      APP_PORT: ${{ github.ref_name == 'main' && '80' || '8080' }}
+      CQA_PORT: ${{ github.ref_name == 'main' && '80' || '8080' }}
+      CQA_IMAGE: ${{ github.ref_name == 'main' && 'cqa-app:prod' || 'cqa-app:dev' }}
       # A new release only for a normal push to main, not for a manual (re)deploy or rollback.
       NEW_RELEASE: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
     steps:
@@ -88,12 +89,12 @@ jobs:
 
       - name: Build and restart
         run: |
-          ssh target "cd ${APP_DIR} && APP_PORT=${APP_PORT} docker compose up -d --build --remove-orphans && docker image prune -f"
+          ssh target "cd ${APP_DIR} && CQA_PORT=${CQA_PORT} CQA_IMAGE=${CQA_IMAGE} docker compose up -d --build --remove-orphans && docker image prune -f"
 
       - name: Health check
         run: |
           ssh target 'for i in $(seq 1 30); do
-              curl -fsS http://127.0.0.1:'"${APP_PORT}"'/api/health && exit 0; sleep 2; done
+              curl -fsS http://127.0.0.1:'"${CQA_PORT}"'/api/health && exit 0; sleep 2; done
             echo "App did not become healthy"; cd '"${APP_DIR}"' && docker compose ps && docker compose logs --tail 80; exit 1'
 
       - name: Create GitHub Release

@@ -1,7 +1,7 @@
 .git
 .github
-.venv
 .env
+.venv
 **/__pycache__
 .pytest_cache
 data/*.sqlite3*
@@ -9,7 +9,7 @@ data/raw
 data/logs
 data/fixtures/DEV.json
 invoke.json
-tests
-docs
 initial_docs
 sol_approach_design
+docs
+RELEASE

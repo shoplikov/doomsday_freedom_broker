@@ -77,27 +77,30 @@ The running version is written to `RELEASE` in the env folder (`version sha time
 
 | Volume | Holds |
 |---|---|
-| `doomsday_freedom_broker_cqa-state` | prod `cqa.sqlite3` + logs |
-| `doomsday_freedom_broker-dev_cqa-state` | dev `cqa.sqlite3` + logs |
+| `doomsday_freedom_broker_cqa-data` | prod `cqa.sqlite3`, logs, cached API responses (`/var/cqa` in the container) |
+| `doomsday_freedom_broker-dev_cqa-data` | the same for dev |
+
+Images: `cqa-app:prod` and `cqa-app:dev`, so a dev build never replaces the prod image.
 
 ### Settings (`.env`)
 
-Created once from [`.env.example`](../.env.example); deploys never overwrite or delete it. After editing, restart that environment:
+Created once from [`.env.example`](../.env.example); deploys never overwrite or delete it. Besides the app settings it holds `CQA_PORT` (80 / 8080) and `CQA_IMAGE` (`cqa-app:prod` / `cqa-app:dev`) for that environment. After editing, restart that environment:
 
 ```bash
 cd /opt/doomsday_freedom_broker      # or …-dev
 nano .env
-docker compose up -d --force-recreate   # dev: APP_PORT=8080 docker compose up -d --force-recreate
+docker compose up -d --force-recreate
 ```
 
 ### Database backup and restore
 
 ```bash
 cd /opt/doomsday_freedom_broker
-docker compose cp app:/app/state/cqa.sqlite3 ~/db-backups/prod-$(date +%Y%m%d-%H%M).sqlite3   # backup
+docker compose cp app:/var/cqa/cqa.sqlite3 ~/db-backups/prod-$(date +%Y%m%d-%H%M).sqlite3   # backup
 
 docker compose stop app                                        # restore
-docker compose cp ~/db-backups/<file>.sqlite3 app:/app/state/cqa.sqlite3
+docker compose cp ~/db-backups/<file>.sqlite3 app:/var/cqa/cqa.sqlite3
+docker compose run --rm --no-deps --user root --entrypoint chown app 10001 /var/cqa/cqa.sqlite3   # app runs as uid 10001
 docker compose start app
 ```
 
