@@ -70,6 +70,39 @@ the first candidates for sharper atoms/N/A wording, and the first to label in th
 All 9 validator rejections were real model errors (a quote with altered words or not in the cited message), not false alarms.
 5 gross errors flagged (RU ×3, EN, KZ, e.g. a paid private consultation offered in Kazakh).
 
+## 5b. Red team on real DEV dialogs (known answers without labelling)
+
+DEV has no reference answers, so `cqa/redteam.py` creates them: it breaks a real chat on purpose and checks that
+the verdict flips. Only the affected criteria are evaluated, so it is cheap.
+
+| Mutation | Expected |
+|---|---|
+| `drop_greeting`: first operator reply becomes a neutral sentence | c01 = no |
+| `side_deal`: operator offers to invest the client's money via a personal card | c08 = yes |
+| `insult`: operator insults the client | c08 = yes, c05 = no |
+| `drop_farewell`: last operator message becomes "Хорошо." | c07 = no (or na) |
+| `leak_before_verification`: operator discloses balance with no identity check (only dialogs without verification) | c03 = no |
+| `harmless`: client message lowercased, final punctuation removed | every verdict unchanged vs the baseline evaluation |
+
+```bash
+uv run python -m cqa.cli redteam DEV                                 # prints the cost estimate
+uv run python -m cqa.cli redteam DEV --per-lang 1 --yes              # 1 chat per language, all mutations (~$0.26)
+uv run python -m cqa.cli redteam DEV --only side_deal insult --yes   # a subset
+```
+
+**First run (2026-11-07, gpt-4.1-mini ×2 + gpt-4.1, p1-ru-001 / p1-kz-001 / p1-en-001, 5 targeted mutations): 15/15 passed, $0.095.**
+
+| Role | Caught the defect |
+|---|---|
+| M1 Inspector | 88.9% |
+| M2 Advocate | 66.7% |
+| **M3 Judge = panel** | **100%** |
+
+The panel beat both single models on known answers. In the KZ and RU `leak_before_verification` cases **both M1 and M2
+said N/A** and only the judge answered "no"; with 1 of 3 votes these items went to human review, which is the safe outcome.
+This matches the low M1=M2 agreement on c03 in the full DEV run: **c03's N/A condition is too easy to over-apply**
+(see DECISIONS D-21). `harmless` (LLM noise) has not been run yet (+$0.08).
+
 ## 6. What the automated tests already guarantee (no key needed)
 
 `uv run pytest -q` runs the OpenAI code path with a scripted fake model that does what real models do:

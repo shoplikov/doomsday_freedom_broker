@@ -8,7 +8,7 @@ Built for the Freedom Broker CQA hackathon (brief: `initial_docs/`).
 
 ```bash
 cp .env.example .env                              # put OPENAI_API_KEY etc. here (optional: mock works without it)
-docker compose up -d --build                      # http://localhost:8000  (other port: CQA_PORT=8790 docker compose up -d)
+docker compose up -d --build                      # http://localhost:8005  (other port: CQA_PORT=8790 docker compose up -d)
 docker compose --profile test run --rm test       # test suite inside the container
 docker compose exec app python -m cqa.cli report  # CLI inside the running app
 docker compose logs -f app                        # live logs (also in the volume: /var/cqa/logs/cqa.log)
@@ -45,6 +45,7 @@ uv run python -m cqa.cli import DEV                # terminal loop: import, eval
 uv run python -m cqa.cli run DEV --limit 10
 uv run python -m cqa.cli report                    # A/B agreement, judge sides, gold accuracy per role, cost
 uv run python -m cqa.cli trace p1-kz-001           # every LLM call of one dialog
+uv run python -m cqa.cli redteam DEV               # break real chats on purpose, check verdicts flip (asks --yes)
 ```
 
 With `DATASET_API_URL` set, `DEV` is fetched from the organizers' API and cached in `data/raw/` (offline fallback).

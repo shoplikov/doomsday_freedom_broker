@@ -32,7 +32,7 @@ with quotes → code validates quotes and counts points → humans decide disput
 ## Commands
 
 ```bash
-docker compose up -d --build            # full app in a container (port CQA_PORT, default 8000)
+docker compose up -d --build            # full app in a container (port CQA_PORT, default 8005)
 docker compose --profile test run --rm test
 uv sync                                  # local dev without Docker:
 uv run uvicorn cqa.main:app --reload     # http://localhost:8000, mock LLM by default
@@ -51,7 +51,7 @@ cqa/signals.py      facts for the LLM                   cqa/llm.py          the 
 cqa/checklist.py    versions, lint, fingerprint         cqa/mock_llm.py     fake LLM for dev and tests
 cqa/scoring.py      the math (no LLM)                   cqa/db.py           SQLite + audit helper
 cqa/traces.py       every LLM call: prompt, answer, ms  cqa/analytics.py    panel metrics vs gold labels
-cqa/cli.py          import / run / report / trace from the terminal
+cqa/cli.py          import / run / report / trace / redteam   cqa/redteam.py  known-answer mutations of real chats
 web/                vanilla JS Web Components, no build; web/api.js is the only fetch adapter
 ```
 
