@@ -8,14 +8,16 @@ Built for the Freedom Broker CQA hackathon (brief: `initial_docs/`).
 
 ```bash
 cp .env.example .env                              # put OPENAI_API_KEY etc. here (optional: mock works without it)
-docker compose up -d --build                      # http://localhost:8005  (other port: CQA_PORT=8790 docker compose up -d)
+docker compose up -d --build                      # app + Postgres; http://localhost:8005  (other port: CQA_PORT=8790 docker compose up -d)
 docker compose --profile test run --rm test       # test suite inside the container
 docker compose exec app python -m cqa.cli report  # CLI inside the running app
 docker compose logs -f app                        # live logs (also in the volume: /var/cqa/logs/cqa.log)
-docker compose down                               # stop; data stays in the cqa-data volume (down -v wipes it)
+docker compose exec db psql -U cqa cqa            # SQL shell
+docker compose down                               # stop; data stays in the volumes (down -v wipes it)
 ```
 
-One container serves the API and the UI. SQLite, logs and cached API responses live in the `cqa-data` volume.
+The `app` container serves the API and the UI; data lives in PostgreSQL (`db` service, `pgdata` volume, not
+published to the host). Logs and cached API responses live in the `cqa-data` volume.
 `./data/fixtures` is mounted read-only, so a local `DEV.json` copy works offline in the container too.
 The container runs as a non-root user and has a health check on `/api/health`.
 
@@ -24,6 +26,8 @@ The container runs as a non-root user and has a health check on `/api/health`.
 ```bash
 uv sync                      # Python 3.12 is installed automatically (.python-version)
 cp .env.example .env         # optional: works without it (mock LLM, offline SAMPLE data)
+# PostgreSQL: DATABASE_URL, default postgresql://cqa:cqa@localhost:5432/cqa. Quickest way to get one:
+docker run -d --name cqa-pg -e POSTGRES_USER=cqa -e POSTGRES_PASSWORD=cqa -e POSTGRES_DB=cqa -p 5432:5432 postgres:16-alpine
 uv run uvicorn cqa.main:app --reload
 # open http://localhost:8000
 ```
@@ -39,6 +43,7 @@ Real data and models: set `DATASET_API_URL`, `LLM_PROVIDER=openai`, `OPENAI_API_
 
 ```bash
 uv run pytest -q                                   # math, validator, 3-model panel on the OpenAI path (fake model), API flow
+                                                   # needs Postgres at TEST_DATABASE_URL (default as above); uses a throwaway schema
 uv run --with playwright pytest tests/e2e -q       # the whole demo in a real browser (uses /usr/bin/chromium)
 
 uv run python -m cqa.cli import DEV                # terminal loop: import, evaluate, analyse
@@ -46,6 +51,7 @@ uv run python -m cqa.cli run DEV --limit 10
 uv run python -m cqa.cli report                    # A/B agreement, judge sides, gold accuracy per role, cost
 uv run python -m cqa.cli trace p1-kz-001           # every LLM call of one dialog
 uv run python -m cqa.cli redteam DEV               # break real chats on purpose, check verdicts flip (asks --yes)
+uv run python -m cqa.cli migrate-sqlite data/cqa.sqlite3   # one-shot: copy a pre-Postgres SQLite DB into Postgres
 ```
 
 With `DATASET_API_URL` set, `DEV` is fetched from the organizers' API and cached in `data/raw/` (offline fallback).
@@ -79,7 +85,7 @@ Re-running is free for unchanged criteria (cache). `cli run` with real models as
 
 - [CLAUDE.md](CLAUDE.md): rules for everyone (people and AI agents) working in this repo
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): pipeline, three-model panel, scoring, data model
-- [docs/CONTRACTS.md](docs/CONTRACTS.md): JSON shapes, REST API, DB tables
+- [docs/CONTRACTS.md](docs/CONTRACTS.md): JSON shapes, REST API
 - [docs/PLAN.md](docs/PLAN.md): 4 lanes, ownership, hour-by-hour plan, cut rules
 - [docs/DEMO.md](docs/DEMO.md): 5-minute demo script, control-round runbook, jury Q&A
 - [docs/DECISIONS.md](docs/DECISIONS.md): decisions made and still open

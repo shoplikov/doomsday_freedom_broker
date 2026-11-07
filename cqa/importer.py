@@ -98,15 +98,19 @@ def save(group_id: str, records: list[dict]) -> int:
         for record in records:
             conv, msgs = normalize(record)
             con.execute(
-                "INSERT OR REPLACE INTO conversations (id, group_id, channel, language, audio_url,"
-                " transcript_hash, raw_json, imported_at) VALUES (?,?,?,?,?,?,?,?)",
+                "INSERT INTO conversations (id, group_id, channel, language, audio_url, transcript_hash, raw_json,"
+                " imported_at) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) ON CONFLICT (id) DO UPDATE SET"
+                " group_id = EXCLUDED.group_id, channel = EXCLUDED.channel, language = EXCLUDED.language,"
+                " audio_url = EXCLUDED.audio_url, transcript_hash = EXCLUDED.transcript_hash,"
+                " raw_json = EXCLUDED.raw_json, imported_at = EXCLUDED.imported_at",
                 (conv["id"], group_id, conv["channel"], conv["language"], conv["audio_url"],
                  conv["transcript_hash"], conv["raw_json"], db.now()),
             )
-            con.execute("DELETE FROM messages WHERE conversation_id = ?", (conv["id"],))
-            con.executemany(
+            con.execute("DELETE FROM messages WHERE conversation_id = %s", (conv["id"],))
+            con.cursor().executemany(
                 "INSERT INTO messages (conversation_id, idx, mid, speaker, ts_raw, t_sec, text, text_masked, lang)"
-                " VALUES (:conversation_id, :idx, :mid, :speaker, :ts_raw, :t_sec, :text, :text_masked, :lang)",
+                " VALUES (%(conversation_id)s, %(idx)s, %(mid)s, %(speaker)s, %(ts_raw)s, %(t_sec)s, %(text)s,"
+                " %(text_masked)s, %(lang)s)",
                 msgs,
             )
     return len(records)
@@ -117,4 +121,4 @@ async def import_group(group_id: str) -> int:
 
 
 def messages(conversation_id: str) -> list[dict]:
-    return db.rows("SELECT * FROM messages WHERE conversation_id = ? ORDER BY idx", conversation_id)
+    return db.rows("SELECT * FROM messages WHERE conversation_id = %s ORDER BY idx", conversation_id)

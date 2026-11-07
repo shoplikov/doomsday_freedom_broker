@@ -1,6 +1,8 @@
-# docker compose up -d --build          -> app on http://localhost:8005 (CQA_PORT to change)
-# docker compose --profile test run --rm test   -> test suite inside the container (mock LLM)
+# docker compose up -d --build          -> app on http://localhost:8005 (CQA_PORT to change) + Postgres
+# docker compose --profile test run --rm test   -> test suite inside the container (mock LLM, own schema in db)
 # docker compose exec app python -m cqa.cli report   -> CLI inside the running app
+# docker compose exec db psql -U cqa cqa              -> SQL shell (db is not published to the host)
+# Prod and dev run as two compose projects on one host: no fixed container names, so they never collide.
 
 services:
   app:
@@ -9,13 +11,32 @@ services:
     env_file:
       - path: .env # LLM_PROVIDER, OPENAI_API_KEY, MODEL_*, DATASET_API_URL ...; optional
         required: false
+    environment:
+      DATABASE_URL: postgresql://cqa:${POSTGRES_PASSWORD:-cqa}@db:5432/cqa
     ports:
       - "${CQA_PORT:-8005}:8000"
     volumes:
-      - cqa-data:/var/cqa # SQLite, logs, cached API responses survive restarts
+      - cqa-data:/var/cqa # logs, cached API responses, and the old SQLite file that migrate-sqlite reads
       - ./data/fixtures:/app/data/fixtures:ro # local offline datasets (SAMPLE, your DEV.json copy)
+    depends_on:
+      db: { condition: service_healthy }
     restart: unless-stopped
     stop_grace_period: 20s
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: cqa
+      POSTGRES_DB: cqa
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-cqa}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cqa -d cqa"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
 
   test:
     profiles: [test]
@@ -24,6 +45,11 @@ services:
     environment:
       LLM_PROVIDER: mock
       DATASET_API_URL: ""
+      # The suite creates and drops its own schema, so it never touches the app's tables.
+      TEST_DATABASE_URL: postgresql://cqa:${POSTGRES_PASSWORD:-cqa}@db:5432/cqa
+    depends_on:
+      db: { condition: service_healthy }
 
 volumes:
   cqa-data:
+  pgdata:

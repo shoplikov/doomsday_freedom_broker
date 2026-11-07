@@ -85,12 +85,12 @@ def _model(evals: list[dict]) -> dict:
 
 
 def build(group_id: str, team_name: str) -> dict:
-    ids = [r["id"] for r in db.rows("SELECT id FROM conversations WHERE group_id = ? ORDER BY id", group_id)]
+    ids = [r["id"] for r in db.rows("SELECT id FROM conversations WHERE group_id = %s ORDER BY id", group_id)]
     if not ids:
         raise LookupError(f"no conversations in group '{group_id}': import it first")
     evals = {}
     for cid in ids:
-        last = db.row("SELECT max(id) AS id FROM evaluations WHERE conversation_id = ?", cid)
+        last = db.row("SELECT max(id) AS id FROM evaluations WHERE conversation_id = %s", cid)
         evals[cid] = evaluations.load(last["id"]) if last and last["id"] else None
     return {"schema_version": SCHEMA_VERSION, "team_name": team_name,
             "model": _model([e for e in evals.values() if e]),

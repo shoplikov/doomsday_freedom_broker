@@ -76,13 +76,13 @@ def ensure_seed() -> None:
     if not db.row("SELECT version FROM checklists LIMIT 1"):
         with db.tx() as con:
             con.execute(
-                "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (1, ?, ?, ?, ?)",
+                "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (1, %s, %s, %s, %s)",
                 (SEED.read_text(encoding="utf-8"), "seed from organizers' PDF", "system", db.now()),
             )
 
 
 def get(version: int | None = None) -> dict | None:
-    r = (db.row("SELECT * FROM checklists WHERE version = ?", version) if version
+    r = (db.row("SELECT * FROM checklists WHERE version = %s", version) if version
          else db.row("SELECT * FROM checklists ORDER BY version DESC LIMIT 1"))
     if not r:
         return None
@@ -99,10 +99,10 @@ def save(cl: dict, who: str, note: str = "") -> int:
         raise ValueError(errors)
     body = {k: v for k, v in cl.items() if k not in ("version", "note", "created_at")}
     with db.tx() as con:
-        prev = con.execute("SELECT max(version) FROM checklists").fetchone()[0] or 0
+        prev = con.execute("SELECT max(version) AS v FROM checklists").fetchone()["v"] or 0
         version = prev + 1
         con.execute(
-            "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (?,?,?,?,?)",
+            "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (%s,%s,%s,%s,%s)",
             (version, db.dumps(body), note, who, db.now()),
         )
         db.audit(con, who, "checklist", version, "publish", before={"version": prev}, after={"version": version}, reason=note)

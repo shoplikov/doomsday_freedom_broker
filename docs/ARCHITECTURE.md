@@ -5,7 +5,7 @@
 ## 1. Pipeline for one dialog
 
 ```
- Organizers' API ──GET ?group_id──▶ importer ──▶ normalize ──▶ privacy mask ──▶ SQLite
+ Organizers' API ──GET ?group_id──▶ importer ──▶ normalize ──▶ privacy mask ──▶ Postgres
                                      (server-side,  m1…mN, MM:SS / ISO   [IIN_1] [CARD_1]
                                       raw JSON cached)  → seconds
 
@@ -99,7 +99,7 @@ AI evaluated ──▶ auto_accepted ──(operator appeals)──▶ submitted
 - Each criterion keeps `ai` (original), `decision` (who, reason, before → after) and `final`.
 - `total_ai` and `total` are both stored, and the card shows "ИИ: X → итог: Y".
 
-## 6. Data model (SQLite, JSON in TEXT columns)
+## 6. Data model (PostgreSQL, JSON and ISO timestamps in TEXT columns)
 
 ```
 conversations 1─n messages          (mid, speaker, ts_raw, t_sec, text, text_masked, lang)
@@ -107,7 +107,10 @@ conversations 1─n evaluations ─n─1 checklists(version)
 evaluations   1─n appeals
 audit         (who, when, entity, action, before, after, reason)
 cache         (key → criterion result)
+traces        (every LLM call)      gold_labels (conversation, criterion → label, labelled_by)
 ```
+
+Schema: `SCHEMA` in `cqa/db.py`, created with `CREATE TABLE IF NOT EXISTS` on startup (no migration tool).
 
 Per-criterion results live inside `evaluations.result_json` (see CONTRACTS.md). That is simpler than
 a verdicts table and is enough for 65 + control dialogs.

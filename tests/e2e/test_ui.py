@@ -19,12 +19,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 @pytest.fixture(scope="module")
-def server():
+def server(fresh_database_url):
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         port = s.getsockname()[1]
     tmp = tempfile.mkdtemp()
-    env = {**os.environ, "CQA_DB_PATH": f"{tmp}/e2e.sqlite3", "CQA_LOG_DIR": f"{tmp}/logs",
+    env = {**os.environ, "DATABASE_URL": fresh_database_url(), "CQA_LOG_DIR": f"{tmp}/logs",
            "LLM_PROVIDER": "mock", "DATASET_API_URL": ""}
     proc = subprocess.Popen([sys.executable, "-m", "uvicorn", "cqa.main:app", "--port", str(port)],
                             cwd=ROOT, env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

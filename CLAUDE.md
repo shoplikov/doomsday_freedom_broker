@@ -33,11 +33,12 @@ with quotes → code validates quotes and counts points → humans decide disput
 ## Commands
 
 ```bash
-docker compose up -d --build            # full app in a container (port CQA_PORT, default 8005)
+docker compose up -d --build            # app + Postgres in containers (port CQA_PORT, default 8005)
 docker compose --profile test run --rm test
-uv sync                                  # local dev without Docker:
+uv sync                                  # local dev without Docker needs a Postgres (DATABASE_URL), e.g.:
+docker run -d --name cqa-pg -e POSTGRES_USER=cqa -e POSTGRES_PASSWORD=cqa -e POSTGRES_DB=cqa -p 5432:5432 postgres:16-alpine
 uv run uvicorn cqa.main:app --reload     # http://localhost:8000, mock LLM by default
-uv run pytest -q                         # must stay green on main
+uv run pytest -q                         # must stay green on main; own throwaway schema on TEST_DATABASE_URL
 uv run --with playwright pytest tests/e2e -q   # browser demo flow; run before merging UI changes
 uv run python -m cqa.cli report          # is the panel working? (see docs/VALIDATION.md)
 ```
@@ -50,10 +51,11 @@ cqa/importer.py     API fetch, normalize, store         cqa/evaluations.py  eval
 cqa/privacy.py      typed masks [IIN_1] ...             cqa/pipeline.py     3-role prompts, validator, confidence
 cqa/signals.py      facts for the LLM                   cqa/llm.py          the only OpenAI caller
 cqa/checklist.py    versions, lint, fingerprint         cqa/mock_llm.py     fake LLM for dev and tests
-cqa/scoring.py      the math (no LLM)                   cqa/db.py           SQLite + audit helper
+cqa/scoring.py      the math (no LLM)                   cqa/db.py           PostgreSQL schema, pool, audit helper
 cqa/traces.py       every LLM call: prompt, answer, ms  cqa/analytics.py    panel metrics vs gold labels
 cqa/cli.py          import / run / report / trace / redteam / export   cqa/redteam.py  known-answer mutations of real chats
 cqa/results.py      organisers' results.json (format 1.0)
+cqa/sqlite_migrate.py   one-shot `cli migrate-sqlite`: old SQLite file -> Postgres
 web/                vanilla JS Web Components, no build; web/api.js is the only fetch adapter
 ```
 
@@ -65,6 +67,7 @@ web/                vanilla JS Web Components, no build; web/api.js is the only 
 - Small PRs into `main`, `pytest` green, no direct pushes of broken code. Branch names: `a/...`, `b/...`, `c/...`, `d/...`.
 - No secrets in git (`.env` is ignored). No Claude/AI attribution lines in commits or PRs.
 - Changing prompts? Bump `PROMPT_VERSION` in `cqa/config.py` so the cache does not serve old verdicts.
+- SQL is PostgreSQL with `%s` placeholders (psycopg 3). A NULL-able filter param needs a type: `%s::text IS NULL`.
 - Keep it simple: no new dependency, abstraction or config flag unless the demo needs it.
   Deliberate shortcuts carry a `ponytail:` comment naming the limit.
 - UI text is Russian; code, docs and commit messages are English.
