@@ -59,6 +59,17 @@ Real DEV data is never committed (it has real calls): keep a local copy in `data
 Logs: `data/logs/cqa.log`. Every LLM call (prompt, raw answer, latency, tokens, validation) is in the `traces` table
 and behind the «Трасса» button on each criterion.
 
+## Beyond the brief: why you can trust the scores
+
+| Feature | Where | What it gives |
+|---|---|---|
+| **Stress test** | dialog card → «Проверка на прочность» | Break a copy of the dialog on purpose (side deal, insult, data before verification, no greeting, no closing, 5 silent minutes, or your own operator line) and watch whether the AI notices. The right answer is known by construction, so anyone can check the AI live. |
+| **Checklist health** | «Аналитика» | Per criterion: how often the three models disagree, how often humans overturned the AI. A criterion the models keep arguing about is worded ambiguously; the page names it. |
+| **Criterion test drive** | «Чек-лист» → criterion → «Тест-драйв» | Run an edited criterion on 5 dialogs before publishing (dialogs the models argued about first): which verdicts change, and whether the models now agree. |
+| **Review by impact** | «Проверка» | Uncertain verdicts sorted by how many points they can move the total, so a reviewer's minute goes where it matters. |
+| **Where the points went** | dialog card | One chip per criterion that lost points, biggest first, click to jump. |
+| **Measured accuracy** | `cli bench`, [docs/EVALUATION.md](docs/EVALUATION.md) | Every prompt or checklist change is measured on 65 DEV dialogs labelled blind, synthetic dialogs with planted traps, and broken-on-purpose copies; kept only if it also holds on a held-out half and on a fresh set written afterwards. `cli gold-import` puts the blind labels into «Аналитика». |
+
 ## Model and cost (required by the brief)
 
 | Role | Model (set in `.env`) | Calls per dialog |

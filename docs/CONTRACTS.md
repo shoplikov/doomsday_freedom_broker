@@ -40,15 +40,20 @@ a condition; duplicate ids. Warnings are allowed: weights ≠ 100, vague words, 
 ```json
 { "criteria": [{
   "id": "c07",
+  "rationale": "1–2 sentences (Russian), written first so the decisions follow the reasoning",
+  "na_applies": false,
+  "na_reason": null | "…",
   "atoms": { "summary_or_offer": false, "farewell": false },
   "verdict": "yes" | "no" | "na" | "scored",
   "step": null | 15,
   "evidence": [{ "msg": "m5", "quote": "exact substring" }],
-  "checked_range": ["m5", "m7"] | null,
-  "na_reason": null | "…",
-  "rationale": "1–2 sentences (Russian)"
+  "checked_range": ["m5", "m7"] | null
 }] }
 ```
+
+`na_applies` (only for criteria with N/A allowed) decides N/A: `true` means the verdict is N/A.
+A quote that is near-verbatim (≥ 90 % similar, e.g. a dropped Kazakh suffix) is replaced with the exact
+text of the cited message before validation (`pipeline.snap_quotes`), so the shown quote is always real.
 
 Validator rules (`pipeline.validate`): every quote must be in the cited message (case, whitespace and
 ё/е are normalized; `…` splits a quote into parts); atoms must be complete; N/A only if allowed and
@@ -93,7 +98,7 @@ applicable_weight, gross_error, criteria{points, max_points}, sections[]) and `f
 | GET | `/api/appeals` | `state` | appeals |
 | POST | `/api/appeals/{id}/decision` | `{action: uphold\|change, verdict?, step?, reason}` | evaluation |
 | POST | `/api/evaluations/{id}/review` | same + `criterion_id` | evaluation (low-confidence items) |
-| GET | `/api/review-queue` | | `{appeals[], low_confidence[]}` |
+| GET | `/api/review-queue` | | `{appeals[], low_confidence[]}`; each low-confidence item has `impact` (max change of the total if another role's answer were final) and the list is sorted by it |
 | GET | `/api/checklists` · `/active` · `/{version}` | | versions / checklist |
 | POST | `/api/checklists/lint` | `{checklist}` | `{errors, warnings}` |
 | POST | `/api/checklists` | `{checklist, note}` | `{version, warnings}` |
@@ -105,6 +110,11 @@ applicable_weight, gross_error, criteria{points, max_points}, sections[]) and `f
 | POST | `/api/gold` | `{conversation_id, criterion_id, label, note}` (empty label deletes) | label |
 | GET | `/api/analytics` | `checklist_version?` | panel metrics (see VALIDATION.md) |
 | GET | `/api/results/{group_id}` | | organisers' results file, format 1.0 (section 7) |
+| GET | `/api/stress-tests/kinds` | | `[{id, title, expect: {criterion_id: [labels]}}]` |
+| POST | `/api/stress-tests` | `{conversation_id, mutation, text?, after_mid?}` (`text` for `custom`) | `{id, title, changed[], checks[{criterion_id, type, before, after, expected, ok, votes, confidence, rationale, evidence}], ok}`; the original dialog is not changed |
+| GET | `/api/stress-tests` · `/summary` | `conversation_id?` | past stress tests / pass rate per defect |
+| GET | `/api/checklist-health` | | per criterion of the active checklist: `dialogs, split, split_rate, na_rate, needs_review, human_changed, appeals, appeals_won, alert, examples[]` |
+| POST | `/api/checklists/test-drive` | `{criterion, conversation_ids?}` | `{rows[{conversation_id, before, after, votes, confidence, rationale}], changed, unanimous, dialogs, warnings}`; nothing is saved |
 
 Header `X-Role: operator | reviewer` identifies the actor (there is no login, as the brief requires).
 Errors: 404 not found, 409 already decided, 422 validation (`detail` = message or list).

@@ -1,0 +1,3263 @@
+[
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-001",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Подала заявку на вывод 3 дня назад, деньги на карту халыка так и не пришли"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Статус конкретной заявки на вывод нужно проверить отдельно."
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "проверьте пожалуйста, нужен оператор"
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:52",
+    "speaker": "operator",
+    "text": "Здравствуйте! Меня зовут Дамир. Сейчас посмотрим. Чтобы открыть данные по вашей заявке, нужно пройти идентификацию — ссылка придёт в этот чат."
+   },
+   {
+    "timestamp": "02:30",
+    "speaker": "client",
+    "text": "прошла"
+   },
+   {
+    "timestamp": "02:31",
+    "speaker": "system",
+    "text": "Личность клиента подтверждена."
+   },
+   {
+    "timestamp": "02:58",
+    "speaker": "operator",
+    "text": "Спасибо. Вижу заявку от 4 ноября на 180 000 KZT на карту *4417. Со стороны брокера она исполнена 5 ноября. Зачисление в другой банк занимает до 3 рабочих дней, то есть деньги должны прийти не позднее 10 ноября."
+   },
+   {
+    "timestamp": "03:25",
+    "speaker": "client",
+    "text": "а быстрее никак? мне нужны деньги"
+   },
+   {
+    "timestamp": "03:50",
+    "speaker": "operator",
+    "text": "Со стороны брокера ускорить уже не получится: перевод отправлен, дальше его зачисляет банк. Если 10 ноября деньги не придут, напишите в этот чат — мы пришлём платёжное поручение, с ним можно обратиться в Halyk."
+   },
+   {
+    "timestamp": "04:12",
+    "speaker": "client",
+    "text": "ладно, поняла"
+   },
+   {
+    "timestamp": "04:30",
+    "speaker": "operator",
+    "text": "Хорошо."
+   },
+   {
+    "timestamp": "04:33",
+    "speaker": "system",
+    "text": "Оператор закрыл чат."
+   }
+  ],
+  "focus": [
+   "c03",
+   "c07"
+  ],
+  "trap": "verification correctly precedes the disclosure; the useful next step mid-chat is not a closing, the operator ends with 'Хорошо.' and closes without goodbye",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Дамир, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gave timing and bank; the request was found after verification, nothing to ask"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 identity confirmed before withdrawal data in m13"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m13 status and deadline, m15 explains no speed-up and the next step"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 addresses the client's urgency from m14 with a concrete next step"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 1:05 after transfer, answers clear and in order"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m17 'Хорошо.' then m18 chat closed: no goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-002",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Добрый день. Подавал заявку на IPO на прошлой неделе, хочу понять принята она или нет"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Статус конкретной заявки на IPO нужно проверить отдельно."
+   },
+   {
+    "timestamp": "00:31",
+    "speaker": "client",
+    "text": "Соедините с оператором"
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:39",
+    "speaker": "client",
+    "text": "Да"
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:34",
+    "speaker": "operator",
+    "text": "Здравствуйте, меня зовут Асель. Да, вижу вашу заявку на участие в IPO на 1 000 USD, статус — «Принята». Распределение будет после закрытия книги заявок, ориентировочно 13 ноября."
+   },
+   {
+    "timestamp": "02:05",
+    "speaker": "client",
+    "text": "А деньги сейчас списались или просто заблокированы?"
+   },
+   {
+    "timestamp": "02:27",
+    "speaker": "operator",
+    "text": "Сумма заблокирована на счёте до распределения. После аллокации спишется только сумма по выделенным бумагам, остаток разблокируется."
+   },
+   {
+    "timestamp": "02:51",
+    "speaker": "client",
+    "text": "Понял, спасибо"
+   },
+   {
+    "timestamp": "03:10",
+    "speaker": "operator",
+    "text": "Пожалуйста! Если появятся вопросы по распределению — пишите, поможем. До свидания!"
+   }
+  ],
+  "focus": [
+   "c03",
+   "c07"
+  ],
+  "trap": "a friendly, complete answer hides that the operator disclosed the client's IPO order (amount, status) with no identity verification at all",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Асель, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 named the order; operator found it without needing more data"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 discloses order amount and status; no identity-verified system message anywhere"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 status and allocation date, m12 explains the block and refund"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout, no complaint left unaddressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 0:52 after transfer, clear answers"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 offers further help and says goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data disclosed without verification is a c03 issue, not a gross error"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-003",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Какая у вас комиссия за покупку акций?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:07",
+    "speaker": "bot",
+    "text": "Комиссия зависит от вашего тарифа и биржи, на которой совершается сделка."
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "client",
+    "text": "ну это понятно. можно живого человека"
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:41",
+    "speaker": "operator",
+    "text": "Здравствуйте! Меня зовут Ольга, подскажу. Уточните, пожалуйста, какой у вас тариф и какие акции планируете покупать — казахстанские или американские?"
+   },
+   {
+    "timestamp": "02:20",
+    "speaker": "client",
+    "text": "американские. тариф не помню"
+   },
+   {
+    "timestamp": "02:42",
+    "speaker": "operator",
+    "text": "Тариф можно посмотреть в веб-версии во вкладке «Кабинет» — название указано под вашим ФИО."
+   },
+   {
+    "timestamp": "03:15",
+    "speaker": "client",
+    "text": "нашел, «Фридом» какой то"
+   },
+   {
+    "timestamp": "03:44",
+    "speaker": "operator",
+    "text": "На тарифе «Фридом» для американских акций комиссия 0,25% от суммы сделки плюс 1,2 USD за поручение."
+   },
+   {
+    "timestamp": "04:05",
+    "speaker": "client",
+    "text": "а если продавать то же самое?"
+   },
+   {
+    "timestamp": "04:20",
+    "speaker": "operator",
+    "text": "Да, при продаже комиссия такая же."
+   },
+   {
+    "timestamp": "04:38",
+    "speaker": "client",
+    "text": "ясно, спасибо"
+   },
+   {
+    "timestamp": "04:55",
+    "speaker": "operator",
+    "text": "Итак: для акций США на вашем тарифе — 0,25% + 1,2 USD за поручение, и при покупке, и при продаже. Могу ещё чем-то помочь?"
+   },
+   {
+    "timestamp": "05:20",
+    "speaker": "client",
+    "text": "нет"
+   },
+   {
+    "timestamp": "05:31",
+    "speaker": "operator",
+    "text": "Хорошего дня, до свидания!"
+   }
+  ],
+  "focus": [
+   "c02",
+   "c07"
+  ],
+  "trap": "clean dialog: the answer depends on tariff and market, which the operator asks for before answering",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Ольга, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asks tariff and market, both missing in m1, before quoting the fee"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general fee question; client reads own tariff herself (m13)"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m14 fee for the client's tariff and market, m16 covers selling"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; no unannounced waits"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m18 summary + offer of help, m20 goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-004",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Как перевести деньги с D-счёта на торговый? Сижу в приложении на айфоне, не могу найти"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Для этого используйте поручение на перевод между счетами."
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "client",
+    "text": "где оно? соедините с оператором"
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:39",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:29",
+    "speaker": "operator",
+    "text": "Здравствуйте, меня зовут Руслан. Подскажите, вы в приложении или в веб-версии?"
+   },
+   {
+    "timestamp": "01:50",
+    "speaker": "client",
+    "text": "в приложении, я же написал"
+   },
+   {
+    "timestamp": "02:14",
+    "speaker": "operator",
+    "text": "Извините. В приложении откройте «Меню → Поручения → Денежные средства → Перевод между счетами», в поле «Откуда» выберите D-счёт, в поле «Куда» — торговый, укажите сумму и подпишите SMS-кодом."
+   },
+   {
+    "timestamp": "02:58",
+    "speaker": "client",
+    "text": "перевел, отобразилось"
+   },
+   {
+    "timestamp": "03:16",
+    "speaker": "operator",
+    "text": "Отлично. Хорошего дня!"
+   }
+  ],
+  "focus": [
+   "c02"
+  ],
+  "trap": "the operator's clarifying question looks diligent, but the client had already said 'в приложении' in m1",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Руслан, Russian"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asks app vs web although m1 says the client is in the app"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no client data or protected action"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 full path and steps; client confirms success in m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 apologises for the re-ask the client pointed out in m11"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "short, clear messages; no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 only a goodbye, no summary or offer of help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-005",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Здравствуйте. Хочу вложить 2 млн тенге в облигации, какие сейчас лучше брать?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "Я не даю индивидуальных инвестиционных рекомендаций. Список облигаций доступен в разделе «Котировки»."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "client",
+    "text": "Хочу поговорить с сотрудником"
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "client",
+    "text": "Да"
+   },
+   {
+    "timestamp": "00:53",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:55",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "02:02",
+    "speaker": "operator",
+    "text": "Здравствуйте! Меня зовут Максат. Поддержка не даёт рекомендаций, какие бумаги покупать. В приложении в разделе «Котировки» выберите «Облигации» — там можно отфильтровать бумаги по доходности, валюте и сроку погашения."
+   },
+   {
+    "timestamp": "02:40",
+    "speaker": "client",
+    "text": "Жаль. Я в этом вообще не разбираюсь, боюсь ошибиться"
+   },
+   {
+    "timestamp": "03:05",
+    "speaker": "operator",
+    "text": "Понимаю, на старте это непросто. Если хотите, оставьте свой номер — вечером созвонимся, и я за небольшую плату помогу собрать портфель под вас."
+   },
+   {
+    "timestamp": "03:41",
+    "speaker": "client",
+    "text": "Спасибо, подумаю. Пока посмотрю фильтр"
+   },
+   {
+    "timestamp": "03:58",
+    "speaker": "operator",
+    "text": "Хорошо, удачи!"
+   }
+  ],
+  "focus": [
+   "c08"
+  ],
+  "trap": "a warm, empathetic tone wraps a paid private consultation and a request for the client's personal number",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Максат, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 states the request fully; no detail was needed to decline recommendations"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general question, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 correctly declines advice and points to the bond filter"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 acknowledges the client's worry from m11"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear messages, no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 only a goodbye wish, no summary or offer"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 asks for the client's number for a paid private consultation"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-006",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Поменяла номер телефона, старой симки уже нет. Как обновить номер в анкете?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Изменение данных оформляется поручением «Изменение сведений»."
+   },
+   {
+    "timestamp": "00:29",
+    "speaker": "client",
+    "text": "Так смс же придет на старый номер. Оператора пожалуйста"
+   },
+   {
+    "timestamp": "00:31",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "04:12",
+    "speaker": "operator",
+    "text": "Добрый день, меня зовут Жанна. Раз доступа к старому номеру нет, подписать поручение SMS-кодом не получится. Обновить номер можно в любом офисе Freedom Broker с удостоверением личности. Если у вас есть ЭЦП, поручение «Изменение сведений» можно подписать ею в веб-версии."
+   },
+   {
+    "timestamp": "04:50",
+    "speaker": "client",
+    "text": "ЭЦП есть. А где это поручение в веб-версии?"
+   },
+   {
+    "timestamp": "05:18",
+    "speaker": "operator",
+    "text": "«Поручения → Персональные данные → Изменение сведений». Укажите новый номер и при подписании выберите ЭЦП."
+   },
+   {
+    "timestamp": "05:55",
+    "speaker": "client",
+    "text": "получилось, спасибо"
+   },
+   {
+    "timestamp": "06:10",
+    "speaker": "operator",
+    "text": "Пожалуйста. Всего доброго!"
+   }
+  ],
+  "focus": [
+   "c06"
+  ],
+  "trap": "a strong, complete answer, but the operator's first reaction comes 3:34 after the transfer with no apology",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Жанна, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 and m5 gave everything needed (number changed, old SIM gone)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "operator explains how the client updates data herself; no data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 office or ЭЦП options, m12 exact path; client succeeds m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 addresses the lost-SIM problem directly"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "m10 first reaction 3:34 after transfer m9, over the 3-minute threshold"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-007",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Хочу поучаствовать в IPO которое сейчас на главной висит. Какая минимальная сумма заявки и можно ли подать если на счету тенге?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Условия участия указаны на странице IPO в приложении."
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "client",
+    "text": "не нашла там ни минималку, ни про тенге. оператор"
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "02:48",
+    "speaker": "operator",
+    "text": "Здравствуйте, я Тимур. Да, подать заявку можно и с тенге: при подаче сумма автоматически конвертируется в доллары по курсу брокера на момент блокировки."
+   },
+   {
+    "timestamp": "03:20",
+    "speaker": "client",
+    "text": "ок"
+   },
+   {
+    "timestamp": "03:38",
+    "speaker": "operator",
+    "text": "Хорошего дня!"
+   }
+  ],
+  "focus": [
+   "c04"
+  ],
+  "trap": "short and polite, but the first of the client's two questions (minimum amount) is never answered",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Тимур, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 and m5 state both questions fully"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general IPO conditions, no client data"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 answers tenge only; minimum amount from m1/m5 left open"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "the one answer is clear; no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-008",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Нужен документ для налоговой, для декларации 270 формы. Где его взять?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Отчёты и документы можно заказать в приложении."
+   },
+   {
+    "timestamp": "00:31",
+    "speaker": "client",
+    "text": "какой именно документ заказывать? соедините с оператором"
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:25",
+    "speaker": "operator",
+    "text": "Здравствуйте! Меня зовут Ержан. Это в документах, там есть налоговый."
+   },
+   {
+    "timestamp": "02:02",
+    "speaker": "client",
+    "text": "в каких документах? в меню несколько разделов, и «налоговый» не вижу"
+   },
+   {
+    "timestamp": "02:40",
+    "speaker": "operator",
+    "text": "Извините, уточню путь: «Меню → Отчёты и документы → Заказать документ → Налоговый отчёт». Выберите 2025 год, отчёт формируется до 3 рабочих дней и появится в том же разделе."
+   },
+   {
+    "timestamp": "03:12",
+    "speaker": "client",
+    "text": "нашёл, заказал. спасибо"
+   },
+   {
+    "timestamp": "03:25",
+    "speaker": "operator",
+    "text": "Пожалуйста, хорошего дня!"
+   }
+  ],
+  "focus": [
+   "c06"
+  ],
+  "trap": "the final answer is complete, but the vague first answer forces the client to re-ask",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Ержан, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 says what the document is for; nothing else needed"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 exact path, year and timing; client orders it m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, apologises in m12"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m10 too vague, client has to re-ask in m11"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-009",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "как отключить маржинальную торговлю? боюсь случайно уйти в минус"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Использование маржи можно отключить в настройках приказа."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "client",
+    "text": "Подключите оператора пожалуйста"
+   },
+   {
+    "timestamp": "00:54",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:58",
+    "speaker": "client",
+    "text": "Да"
+   },
+   {
+    "timestamp": "00:59",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "01:01",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "01:47",
+    "speaker": "operator",
+    "text": "Здравствуйте, меня зовут Анна. Понимаю ваше опасение. Подскажите, вы хотите отключить маржу только при выставлении приказа или полностью на счёте?"
+   },
+   {
+    "timestamp": "02:15",
+    "speaker": "client",
+    "text": "полностью"
+   },
+   {
+    "timestamp": "02:49",
+    "speaker": "operator",
+    "text": "Тогда подайте поручение: «Меню → Поручения → Прочие → Отказ от маржинальной торговли». После его исполнения сделки с плечом будут недоступны. Пока поручение не исполнено, при каждой сделке снимайте галочку «Использовать маржу» в настройках приказа."
+   },
+   {
+    "timestamp": "03:20",
+    "speaker": "client",
+    "text": "ага, спасибо"
+   },
+   {
+    "timestamp": "03:27",
+    "speaker": "system",
+    "text": "Клиент покинул чат."
+   }
+  ],
+  "focus": [
+   "c02",
+   "c07"
+  ],
+  "trap": "the chat ends without any operator closing, but only because the client left 7 seconds after the answer",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Анна, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asks per-order vs whole account, which changes the answer"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "operator explains how the client submits the order; no data or protected action"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 path, effect and interim workaround"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges the client's fear from m1"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; no waits"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m14 client left 7 s after thanks, before the operator could close"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-010",
+  "channel": "agent chat",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Почему отклонили вывод денег??"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Здравствуйте! Я AIM, AI-ассистент Freedom Broker. Я могу ответить на вопросы о продуктах и услугах, предоставить информацию по вашим счетам, активам и комиссиям, сравнить данные в таблице, отправить контакты вашего менеджера и передать вопрос специалистам поддержки."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Продолжая разговор, Вы соглашаетесь на сбор и обработку персональных данных и подтверждаете, что ознакомились с Политикой конфиденциальности Компании."
+   },
+   {
+    "timestamp": "00:07",
+    "speaker": "bot",
+    "text": "Причину отклонения конкретной заявки нужно проверить отдельно."
+   },
+   {
+    "timestamp": "00:20",
+    "speaker": "client",
+    "text": "оператор"
+   },
+   {
+    "timestamp": "00:22",
+    "speaker": "bot",
+    "text": "Желаете, чтобы я соединил Вас с оператором?"
+   },
+   {
+    "timestamp": "00:24",
+    "speaker": "client",
+    "text": "да"
+   },
+   {
+    "timestamp": "00:25",
+    "speaker": "bot",
+    "text": "Пожалуйста, ожидайте. Оператор скоро подключится к чату."
+   },
+   {
+    "timestamp": "00:26",
+    "speaker": "system",
+    "text": "Эскалация на оператора."
+   },
+   {
+    "timestamp": "02:24",
+    "speaker": "operator",
+    "text": "Здравствуйте, меня зовут Инна. Вижу вашу вчерашнюю заявку на вывод 450 000 KZT — она отклонена, потому что карта оформлена не на ваше имя: ФИО держателя не совпадает с данными анкеты."
+   },
+   {
+    "timestamp": "02:50",
+    "speaker": "client",
+    "text": "да, это карта мужа. и что делать?"
+   },
+   {
+    "timestamp": "03:15",
+    "speaker": "operator",
+    "text": "Вывод возможен только на счёт или карту, оформленные на вас. Для дальнейшей проверки пройдите, пожалуйста, идентификацию — ссылка в чате."
+   },
+   {
+    "timestamp": "03:50",
+    "speaker": "client",
+    "text": "прошла"
+   },
+   {
+    "timestamp": "03:51",
+    "speaker": "system",
+    "text": "Личность клиента подтверждена."
+   },
+   {
+    "timestamp": "04:12",
+    "speaker": "operator",
+    "text": "Спасибо. Других заявок на вывод у вас нет. Подайте новую заявку на свою карту: «Меню → Вывести средства», выберите карту, оформленную на ваше имя."
+   },
+   {
+    "timestamp": "04:40",
+    "speaker": "client",
+    "text": "ок, поняла"
+   },
+   {
+    "timestamp": "04:54",
+    "speaker": "operator",
+    "text": "Хорошего дня!"
+   }
+  ],
+  "focus": [
+   "c03"
+  ],
+  "trap": "a verified-identity system message exists, but only after the operator already disclosed the order amount and rejection reason",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Инна, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 is enough to look up the rejected withdrawal"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 discloses amount and reason before verification in m14"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 reason, m12 and m15 correct next step"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10/m12 address the rejected withdrawal the client is upset about"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "clear answers, no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m17 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data disclosed before verification is a c03 issue"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-011",
+  "channel": "voice call",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "2026-11-05T11:02:04.5433012+05:00",
+    "speaker": "system",
+    "text": "Запись и транскрибирование запущены."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:05.2530829+05:00",
+    "speaker": "system",
+    "text": "Bot dialog and transcription languages have been updated. The dialog language changed from kk-KZ to ru-RU, with transcription now aligned to ru-RU."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:16.6624039+05:00",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе, Фридом брокерге хош келдіңіз. Здравствуйте, добро пожаловать во Фридом брокер. Для выбора русского языка нажмите 2."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:19.0810111+05:00",
+    "speaker": "client",
+    "text": "2"
+   },
+   {
+    "timestamp": "2026-11-05T11:02:28.1215279+05:00",
+    "speaker": "bot",
+    "text": "По услугам Фридом банк, кредиты, карты нажмите один. По услугам Фридом брокер, акции и облигации нажмите 3. Для связи со специалистом нажмите 0."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:33.8990608+05:00",
+    "speaker": "client",
+    "text": "0"
+   },
+   {
+    "timestamp": "2026-11-05T11:02:42.1579240+05:00",
+    "speaker": "bot",
+    "text": "Продолжая разговор, вы соглашаетесь на сбор и обработку ваших персональных данных, а также на запись разговора. После консультации просим оценить качество обслуживания сотрудника."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:43.6135241+05:00",
+    "speaker": "system",
+    "text": "Клиент переведен от агента на представителя службы поддержки"
+   },
+   {
+    "timestamp": "2026-11-05T11:02:55.9777560+05:00",
+    "speaker": "system",
+    "text": "Агент присоединился к разговору с клиентом."
+   },
+   {
+    "timestamp": "2026-11-05T11:02:59.0973060+05:00",
+    "speaker": "operator",
+    "text": "Компания фридом брокер, меня зовут Арман, здравствуйте. Чем могу помочь?"
+   },
+   {
+    "timestamp": "2026-11-05T11:03:07.8513358+05:00",
+    "speaker": "client",
+    "text": "Здравствуйте. Я хочу тариф поменять, у меня сейчас какой то стандартный, мне сказали есть подешевле."
+   },
+   {
+    "timestamp": "2026-11-05T11:03:14.3602037+05:00",
+    "speaker": "operator",
+    "text": "Да, конечно подскажу. А вы в основном какие бумаги покупаете казахстанские или американские? И примерно как часто сделки делаете?"
+   },
+   {
+    "timestamp": "2026-11-05T11:03:28.0629072+05:00",
+    "speaker": "client",
+    "text": "Американские в основном. Ну раз два в месяц, не больше, суммы небольшие до тысячи долларов."
+   },
+   {
+    "timestamp": "2026-11-05T11:03:41.1441955+05:00",
+    "speaker": "operator",
+    "text": "Понял. При таком объёме обычно выгоднее тариф без абонентской платы, где комиссия только за сделку. Сравнить тарифы можно на сайте в разделе тарифы, там таблица по всем рынкам."
+   },
+   {
+    "timestamp": "2026-11-05T11:03:54.7275367+05:00",
+    "speaker": "client",
+    "text": "А поменять как, мне в офис надо ехать?"
+   },
+   {
+    "timestamp": "2026-11-05T11:04:02.7015764+05:00",
+    "speaker": "operator",
+    "text": "Нет, в офис не нужно. В приложении откройте меню, поручения, прочие и смена тарифа. Выбираете тариф и подписываете смс кодом. Новый тариф начнёт действовать со следующего торгового дня."
+   },
+   {
+    "timestamp": "2026-11-05T11:04:15.1171979+05:00",
+    "speaker": "client",
+    "text": "Ага со следующего дня. Понятно."
+   },
+   {
+    "timestamp": "2026-11-05T11:04:20.4037655+05:00",
+    "speaker": "operator",
+    "text": "Итак, тарифы сравниваете на сайте, меняете через поручение смена тарифа в приложении, действует со следующего дня. Могу ещё чем то помочь?"
+   },
+   {
+    "timestamp": "2026-11-05T11:04:27.1521911+05:00",
+    "speaker": "client",
+    "text": "Нет, всё, спасибо."
+   },
+   {
+    "timestamp": "2026-11-05T11:04:30.9245038+05:00",
+    "speaker": "operator",
+    "text": "Спасибо за звонок, всего доброго, до свидания."
+   },
+   {
+    "timestamp": "2026-11-05T11:04:33.7122250+05:00",
+    "speaker": "system",
+    "text": "Клиент завершил разговор."
+   }
+  ],
+  "focus": [
+   "c02",
+   "c07"
+  ],
+  "trap": "speech-to-text call: the operator asks market and frequency before advising a tariff and closes properly",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Арман, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 asks market and trade frequency, missing in m11, before advising in m14"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "tariff advice and how-to, no client data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m14 tariff type and where to compare, m16 how and when the change applies"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; operator joins within seconds"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m18 summary + offer of help, m20 goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-ru-012",
+  "channel": "voice call",
+  "language": "RU",
+  "transcript": [
+   {
+    "timestamp": "2026-11-06T16:40:11.0991709+05:00",
+    "speaker": "system",
+    "text": "Запись и транскрибирование запущены."
+   },
+   {
+    "timestamp": "2026-11-06T16:40:22.9486738+05:00",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе, Фридом брокерге хош келдіңіз. Здравствуйте, добро пожаловать во Фридом брокер. Для выбора русского языка нажмите 2."
+   },
+   {
+    "timestamp": "2026-11-06T16:40:25.2077052+05:00",
+    "speaker": "client",
+    "text": "2"
+   },
+   {
+    "timestamp": "2026-11-06T16:40:34.3745328+05:00",
+    "speaker": "bot",
+    "text": "По услугам Фридом банк, кредиты, карты нажмите один. По услугам Фридом брокер, акции и облигации нажмите 3. Для связи со специалистом нажмите 0."
+   },
+   {
+    "timestamp": "2026-11-06T16:40:38.9781064+05:00",
+    "speaker": "client",
+    "text": "0"
+   },
+   {
+    "timestamp": "2026-11-06T16:40:47.1037872+05:00",
+    "speaker": "bot",
+    "text": "Продолжая разговор, вы соглашаетесь на сбор и обработку ваших персональных данных, а также на запись разговора. После консультации просим оценить качество обслуживания сотрудника."
+   },
+   {
+    "timestamp": "2026-11-06T16:40:48.9682180+05:00",
+    "speaker": "system",
+    "text": "Клиент переведен от агента на представителя службы поддержки"
+   },
+   {
+    "timestamp": "2026-11-06T16:40:49.9823754+05:00",
+    "speaker": "system",
+    "text": "Запись и транскрибирование приостановлены."
+   },
+   {
+    "timestamp": "2026-11-06T16:41:03.6655194+05:00",
+    "speaker": "system",
+    "text": "Агент присоединился к разговору с клиентом."
+   },
+   {
+    "timestamp": "2026-11-06T16:41:06.0831970+05:00",
+    "speaker": "system",
+    "text": "Запись и транскрибирование возобновлены."
+   },
+   {
+    "timestamp": "2026-11-06T16:41:10.3709137+05:00",
+    "speaker": "operator",
+    "text": "Фридом брокер, меня зовут Дана, здравствуйте."
+   },
+   {
+    "timestamp": "2026-11-06T16:41:17.0781527+05:00",
+    "speaker": "client",
+    "text": "Да здравствуйте. Я вот хочу на айпио подать заявку, а в приложении не вижу где это. Раньше было на главной а сейчас нету."
+   },
+   {
+    "timestamp": "2026-11-06T16:41:26.9339287+05:00",
+    "speaker": "system",
+    "text": "Клиент находится на удержании."
+   },
+   {
+    "timestamp": "2026-11-06T16:44:07.2234302+05:00",
+    "speaker": "system",
+    "text": "Клиент больше не находится на удержании."
+   },
+   {
+    "timestamp": "2026-11-06T16:44:11.4858837+05:00",
+    "speaker": "operator",
+    "text": "Алло, вы на линии?"
+   },
+   {
+    "timestamp": "2026-11-06T16:44:14.7031986+05:00",
+    "speaker": "client",
+    "text": "Да да, я тут."
+   },
+   {
+    "timestamp": "2026-11-06T16:44:20.2420198+05:00",
+    "speaker": "operator",
+    "text": "Смотрите, айпио сейчас находится в меню, раздел айпио. Там список текущих размещений, выбираете нужное и нажимаете подать заявку. Если раздела нет, обновите приложение до последней версии."
+   },
+   {
+    "timestamp": "2026-11-06T16:44:34.9071203+05:00",
+    "speaker": "client",
+    "text": "А, у меня наверно старая версия просто. Сейчас обновлю. Понятно, спасибо."
+   },
+   {
+    "timestamp": "2026-11-06T16:44:37.1976225+05:00",
+    "speaker": "system",
+    "text": "Клиент завершил разговор."
+   }
+  ],
+  "focus": [
+   "c06",
+   "c07"
+  ],
+  "trap": "the operator puts the caller on hold for 2:41 without saying a word; the client then hangs up right after thanking",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name Дана, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m12 states the problem fully; nothing to clarify"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m17 where IPO is and the fix if the section is missing"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite; the problem from m12 is addressed in m17"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "m13 hold right after m12 with no warning; operator speaks again in m15, 2:54 later"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m19 client hung up 3 s after thanking, before the operator could close"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-001",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Сәлеметсіз бе, неге свободные средства 0 көрсетіп тұр? Шотта ақша бар еді ғой"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Нақты шоттағы қаражатты бөлек тексеру керек."
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "client",
+    "text": "Операторға қосыңызшы"
+   },
+   {
+    "timestamp": "00:43",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "client",
+    "text": "иә"
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "02:29",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе, менің атым Айдана. Шотыңызды тексеру үшін жеке басыңызды растау керек, чатқа сілтеме келеді."
+   },
+   {
+    "timestamp": "03:04",
+    "speaker": "client",
+    "text": "растадым"
+   },
+   {
+    "timestamp": "03:05",
+    "speaker": "system",
+    "text": "Клиенттің жеке басы расталды."
+   },
+   {
+    "timestamp": "03:31",
+    "speaker": "operator",
+    "text": "Рақмет. Сізде 1 500 000 теңгеге IPO өтінімі бар, сол сома бөлуге дейін блокталған. Сондықтан бос қаражат 0 болып көрінеді."
+   },
+   {
+    "timestamp": "04:00",
+    "speaker": "client",
+    "text": "а, точно, забыл про ипо. Бөлгеннен кейін қалғаны қайтады ма?"
+   },
+   {
+    "timestamp": "04:21",
+    "speaker": "operator",
+    "text": "Иә, бөлінбеген бөлігі бөлуден кейін шотқа қайтарылады."
+   },
+   {
+    "timestamp": "04:42",
+    "speaker": "client",
+    "text": "түсінікті, рақмет"
+   },
+   {
+    "timestamp": "04:55",
+    "speaker": "operator",
+    "text": "Сау болыңыз!"
+   }
+  ],
+  "focus": [
+   "c03"
+  ],
+  "trap": "mixed KZ/RU client; verification is confirmed before the operator reveals the blocked IPO order",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Айдана, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 describes the problem fully; data came from the account after verification"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 identity confirmed before account data in m13"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m13 reason for zero balance, m15 answers the follow-up"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 addresses the missing-money worry from m1"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m17 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-002",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Ақша шығаруға заявка бердім, қашан түседі?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Нақты өтінімнің мәртебесін бөлек тексеру керек."
+   },
+   {
+    "timestamp": "00:30",
+    "speaker": "client",
+    "text": "операторды қосыңыз"
+   },
+   {
+    "timestamp": "00:32",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "иә"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "01:30",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе! Мен Бауыржанмын. Өтінімді қарау үшін жеке басыңызды растаңыз, сілтеме чатқа келді."
+   },
+   {
+    "timestamp": "02:02",
+    "speaker": "client",
+    "text": "болды"
+   },
+   {
+    "timestamp": "02:03",
+    "speaker": "system",
+    "text": "Клиенттің жеке басы расталды."
+   },
+   {
+    "timestamp": "02:30",
+    "speaker": "operator",
+    "text": "Рақмет. Өтініміңіз бүгін орындалды, 250 000 теңге Kaspi картасына жіберілді. Әдетте бір жұмыс күні ішінде түседі."
+   },
+   {
+    "timestamp": "03:01",
+    "speaker": "client",
+    "text": "Жақсы. Әйелім де кеше шығарып еді, онікі де түсті ме екен? Оның да шоты сіздерде"
+   },
+   {
+    "timestamp": "03:29",
+    "speaker": "operator",
+    "text": "Жұбайыңыздың өтінімі де кеше орындалды, 400 мың теңге, бүгін түсуі керек."
+   },
+   {
+    "timestamp": "03:52",
+    "speaker": "client",
+    "text": "о, жақсы, рақмет"
+   },
+   {
+    "timestamp": "04:06",
+    "speaker": "operator",
+    "text": "Оқасы жоқ. Сау болыңыз!"
+   }
+  ],
+  "focus": [
+   "c08",
+   "c03"
+  ],
+  "trap": "the client is verified and asks innocently; the operator then reveals another client's (the wife's) withdrawal amount and status",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Бауыржан, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 is enough to look up the client's own withdrawal"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m12 verification precedes the client's own data in m13; the wife's data is a c08 matter"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m13 status, amount and expected arrival"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear answers, no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m17 only a goodbye"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 discloses another client's withdrawal amount and status"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-003",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Салеметсиз бе. Облигацияга заявка калай беремин? Приложениеде таппай жатырмын"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "Облигацияларды «Котировки» бөлімінен іздеуге болады."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "client",
+    "text": "Оператор керек"
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "иа"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "01:40",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе, мен Ерболмын. Қосымшада ма, әлде веб-нұсқада ма?"
+   },
+   {
+    "timestamp": "02:05",
+    "speaker": "client",
+    "text": "приложение дедим гой жогарыда"
+   },
+   {
+    "timestamp": "02:31",
+    "speaker": "operator",
+    "text": "«Котировки» бөлімінен табасыз."
+   },
+   {
+    "timestamp": "03:10",
+    "speaker": "client",
+    "text": "Котировкиде тизим бар, бирак заявка беретин жер жок. Жана шыгатын облигация гой, размещение"
+   },
+   {
+    "timestamp": "03:37",
+    "speaker": "operator",
+    "text": "Сол жерден іздеңіз, атауы бойынша."
+   },
+   {
+    "timestamp": "04:15",
+    "speaker": "client",
+    "text": "тусинбедим. жарайды озим карайм"
+   },
+   {
+    "timestamp": "04:28",
+    "speaker": "operator",
+    "text": "Жақсы."
+   }
+  ],
+  "focus": [
+   "c02",
+   "c04",
+   "c06"
+  ],
+  "trap": "client types Kazakh without special letters; operator re-asks what was said, repeats the bot's vague hint and never explains how to apply for a new placement",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Ербол, Kazakh"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asks app vs web although m1 says 'Приложениеде'"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no client data"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [
+     "0"
+    ],
+    "why": "m12/m14 only a general hint; m15 client still does not know how to apply"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m11 irritation and m15 unresolved problem met with curt m12/m16, no reaction"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m12 vague, client has to re-ask in m13 and still fails in m15"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 'Жақсы.' only, no goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "curt but no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-004",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Верификациядан өте алмай жатырмын. Жеке куәлік фотосын жүктесем «Сурет сапасы төмен» деп ошибка шығады"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Құжатты жақсы жарықта, жарқылсыз қайта суретке түсіріп көріңіз."
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "3 рет түсірдім, бәрібір. Операторға қосыңызшы"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "client",
+    "text": "иә"
+   },
+   {
+    "timestamp": "00:51",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "01:58",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе, менің атым Гүлнар. Бірнеше рет қайталау ыңғайсыз екені түсінікті. Бұл қате көбіне камерадан түсірілген сурет қысылғанда шығады. eGov-тан жүктелген куәліктің PDF нұсқасын жүктеп көріңіз, файл 10 МБ-тан аспауы керек."
+   },
+   {
+    "timestamp": "02:40",
+    "speaker": "client",
+    "text": "eGov-тан скачать еттім, бірақ қай жерге салам? кнопкада тек камера бар"
+   },
+   {
+    "timestamp": "05:05",
+    "speaker": "operator",
+    "text": "Камера экранының төменгі сол жағында «Файл» белгісі бар, соны басып PDF файлды таңдаңыз."
+   },
+   {
+    "timestamp": "05:41",
+    "speaker": "client",
+    "text": "таптым, жүктелді. Тексеру қанша уақыт алады?"
+   },
+   {
+    "timestamp": "06:02",
+    "speaker": "operator",
+    "text": "Жақсы. Нәтижесін күтіңіз. Сау болыңыз!"
+   }
+  ],
+  "focus": [
+   "c06",
+   "c04"
+  ],
+  "trap": "a good fix is given, but a 2:25 unannounced silence follows the client's question and the last question (how long the check takes) is skipped",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Гүлнар, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gives the exact error text, m5 says retries failed; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "the client uploads documents herself; no data disclosed"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m10/m12 solve the upload; m13 question about check duration ignored in m14"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges the repeated attempts from m5"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "unannounced 2:25 gap between m11 and m12"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 goodbye without summary or offer of help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-005",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Облигация алгам, купон кашан туседи? кайдан коруге болады?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Купон төлеу күндері облигация бетінде көрсетіледі."
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "client",
+    "text": "таппадым, операторга косыныз"
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "client",
+    "text": "иа"
+   },
+   {
+    "timestamp": "00:43",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "01:31",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе, мен Нұрсұлтанмын. Қай облигацияны алдыңыз, атауын немесе тикерін жазыңызшы?"
+   },
+   {
+    "timestamp": "02:02",
+    "speaker": "client",
+    "text": "Казахтелеком, 2028 жылгы"
+   },
+   {
+    "timestamp": "02:40",
+    "speaker": "operator",
+    "text": "Бұл облигация бойынша купон жылына екі рет төленеді, келесі төлем — 15 желтоқсан. Купон күндерін «Котировки» бөлімінде облигацияны ашып, «Купондар» қойындысынан көре аласыз. Купон брокерлік шотқа түседі."
+   },
+   {
+    "timestamp": "03:05",
+    "speaker": "client",
+    "text": "жаксы"
+   },
+   {
+    "timestamp": "03:12",
+    "speaker": "system",
+    "text": "Клиентпен байланыс үзілді."
+   }
+  ],
+  "focus": [
+   "c02",
+   "c07"
+  ],
+  "trap": "client writes Kazakh without special letters; the connection drops seconds after the answer, so there is no closing to judge",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Нұрсұлтан, Kazakh"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asks which bond, needed for the date asked in m1"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "public coupon schedule of a bond, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 next date, frequency and where to see it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear answers, no waits"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m14 connection lost 7 s after the client's 'жаксы'"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-kz-006",
+  "channel": "agent chat",
+  "language": "KZ",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Тарифті ауыстырайын деп едім, қалай істеймін? Жаңа тариф бірден іске қоса ма?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Сәлеметсіз бе! Мен AIM, Freedom Broker компаниясының жасанды интеллект көмекшісімін. Өнімдер мен қызметтер туралы сұрақтарға жауап бере аламын, шоттарыңыз, активтеріңіз және комиссиялар туралы ақпарат бере аламын, деректерді кестеде салыстыра аламын, менеджеріңіздің байланыс деректерін жібере аламын және сұрағыңызды қолдау қызметіне жолдай аламын."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Әңгімені жалғастыра отырып, дербес деректеріңіздің жиналуына және өңделуіне келісесіз әрі компанияның Құпиялылық саясатымен танысқаныңызды растайсыз."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Тарифті ауыстыру үшін «Смена тарифа» тапсырмасын беру керек."
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "client",
+    "text": "Ол қай жерде? Операторға қосыңыз"
+   },
+   {
+    "timestamp": "00:39",
+    "speaker": "bot",
+    "text": "Сізді операторға қосайын ба?"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "Иә"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "bot",
+    "text": "Күте тұрыңыз, оператор жақында чатқа қосылады."
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "system",
+    "text": "Чат операторға жіберілді."
+   },
+   {
+    "timestamp": "02:59",
+    "speaker": "operator",
+    "text": "Сәлеметсіз бе! Қосымшада «Меню → Поручения → Прочие → Смена тарифа» бөлімін ашып, керек тарифті таңдаңыз да, SMS-кодпен қол қойыңыз."
+   },
+   {
+    "timestamp": "03:35",
+    "speaker": "client",
+    "text": "Таптым, рақмет"
+   },
+   {
+    "timestamp": "03:53",
+    "speaker": "operator",
+    "text": "Оқасы жоқ, сау болыңыз!"
+   }
+  ],
+  "focus": [
+   "c01",
+   "c04"
+  ],
+  "trap": "the operator greets warmly but never gives a name, and the second question (does the tariff apply immediately) is skipped",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 greets but gives no name"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 states both questions fully"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no client data"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m10 answers how to change; when it takes effect (m1) left open"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear message, no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-001",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "How much do you charge to withdraw USD?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:07",
+    "speaker": "bot",
+    "text": "Withdrawal fees depend on the currency and the destination."
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "can I talk to an agent"
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:30",
+    "speaker": "operator",
+    "text": "Hi, I'm Daniel. USD withdrawals are free of charge on our side."
+   },
+   {
+    "timestamp": "02:01",
+    "speaker": "client",
+    "text": "Even to my account at a US bank? I'm moving back to the States."
+   },
+   {
+    "timestamp": "02:33",
+    "speaker": "operator",
+    "text": "For a transfer to a foreign bank there is a fee of 0.1% of the amount, minimum 30 USD. Intermediary banks may also deduct their own fees."
+   },
+   {
+    "timestamp": "03:02",
+    "speaker": "client",
+    "text": "So which is it, free or 0.1%?"
+   },
+   {
+    "timestamp": "03:30",
+    "speaker": "operator",
+    "text": "Sorry for the confusion. Withdrawals are free to USD accounts in Kazakhstan banks. To a US bank it's 0.1%, minimum 30 USD, plus possible intermediary bank fees."
+   },
+   {
+    "timestamp": "03:52",
+    "speaker": "client",
+    "text": "ok got it"
+   },
+   {
+    "timestamp": "04:05",
+    "speaker": "operator",
+    "text": "Have a good day!"
+   }
+  ],
+  "focus": [
+   "c02",
+   "c06"
+  ],
+  "trap": "the bot already flagged that the fee depends on destination, yet the operator answers 'free' without asking, then contradicts himself",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Daniel, English"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 answers without asking the destination, which changes the fee (m4, m11)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general fee question, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m14 gives the correct fee for both cases in the end"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, apologises in m14"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m10 and m12 contradict each other, client re-asks in m13"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-002",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I can't log in, forgot my password. Already asked your bot twice"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:06",
+    "speaker": "bot",
+    "text": "You can reset your password on the login screen."
+   },
+   {
+    "timestamp": "00:20",
+    "speaker": "client",
+    "text": "I DID try. Agent please"
+   },
+   {
+    "timestamp": "00:22",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:24",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:25",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:26",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:38",
+    "speaker": "operator",
+    "text": "Hi, I'm Kevin. On the login screen, right under the password field, tap \"Forgot password?\", enter your phone number and confirm with the SMS code."
+   },
+   {
+    "timestamp": "02:10",
+    "speaker": "client",
+    "text": "there is no such button?? this is ridiculous"
+   },
+   {
+    "timestamp": "02:41",
+    "speaker": "operator",
+    "text": "It's right under the password field, as I wrote. Reading the screen usually helps 🙂"
+   },
+   {
+    "timestamp": "03:09",
+    "speaker": "client",
+    "text": "wow. ok found it"
+   },
+   {
+    "timestamp": "03:22",
+    "speaker": "operator",
+    "text": "Great. Bye."
+   }
+  ],
+  "focus": [
+   "c08",
+   "c05"
+  ],
+  "trap": "the instruction is correct and short; the gross error is a sarcastic jab with a smiley at a frustrated client",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Kevin, English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 states the problem fully"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to for password reset, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gives the correct reset path and location; client finds it m13"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 mocks the frustrated client instead of addressing m11"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "m10 already clear about the location; no waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Bye.' without summary or offer"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m12 sarcastic insult of the client"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-003",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I bought Apple shares yesterday and they're not in my portfolio. Where are they??"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Information about a specific trade needs to be checked separately."
+   },
+   {
+    "timestamp": "00:30",
+    "speaker": "client",
+    "text": "Connect me to an agent please"
+   },
+   {
+    "timestamp": "00:32",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "02:36",
+    "speaker": "operator",
+    "text": "Hello, I'm Laura. I understand it's worrying not to see your shares. I can see your order for 10 AAPL filled yesterday at 228.40 USD. US trades settle the next business day, so the shares will appear in your portfolio after settlement, by the end of today."
+   },
+   {
+    "timestamp": "03:15",
+    "speaker": "client",
+    "text": "ok, and the money already left my account?"
+   },
+   {
+    "timestamp": "03:39",
+    "speaker": "operator",
+    "text": "Yes, 2,284 USD plus commission was debited when the order was filled."
+   },
+   {
+    "timestamp": "04:05",
+    "speaker": "client",
+    "text": "Fine, thanks"
+   },
+   {
+    "timestamp": "04:19",
+    "speaker": "operator",
+    "text": "So: the purchase went through and the shares will appear after settlement today. Is there anything else I can help you with?"
+   },
+   {
+    "timestamp": "04:46",
+    "speaker": "client",
+    "text": "no that's all"
+   },
+   {
+    "timestamp": "04:57",
+    "speaker": "operator",
+    "text": "Have a nice day, goodbye!"
+   }
+  ],
+  "focus": [
+   "c03",
+   "c07"
+  ],
+  "trap": "a model answer in tone and closing, but the order details and debited amount are disclosed with no identity verification",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Laura, English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 named the stock and the day; nothing missing"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 and m12 disclose order and debit with no verification message"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 explains settlement and timing, m12 answers the follow-up"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges the worry from m1"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; no waits"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 summary + offer of help, m16 goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data disclosed without verification is a c03 issue"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-004",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Can a foreign citizen open an account with you? I'm from Uzbekistan but live in Almaty"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Account opening conditions depend on your citizenship and residency status."
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "client",
+    "text": "I need specifics. agent please"
+   },
+   {
+    "timestamp": "00:43",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:48",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:35",
+    "speaker": "operator",
+    "text": "Hello! Let me check the current requirements for non-residents, one moment please."
+   },
+   {
+    "timestamp": "02:50",
+    "speaker": "operator",
+    "text": "Thanks for waiting, my name is Tom. Yes, citizens of Uzbekistan can open an account. You'll need your passport, an IIN and a residence permit or registration in Kazakhstan. You can apply in the Freedom Broker app or at any office."
+   },
+   {
+    "timestamp": "03:25",
+    "speaker": "client",
+    "text": "I have an IIN but no residence permit, just temporary registration"
+   },
+   {
+    "timestamp": "03:52",
+    "speaker": "operator",
+    "text": "Temporary registration together with the IIN is enough to open the account remotely in the app. If the app rejects your documents, visit an office with your passport."
+   },
+   {
+    "timestamp": "04:18",
+    "speaker": "client",
+    "text": "great, thanks"
+   },
+   {
+    "timestamp": "04:30",
+    "speaker": "operator",
+    "text": "You're welcome, have a good day!"
+   }
+  ],
+  "focus": [
+   "c01"
+  ],
+  "trap": "the first operator message greets and announces a short check; the name only appears in the second message",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 greets without a name; name Tom only in m11"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gives citizenship and residence; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general account-opening conditions, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m11 documents and channels, m13 answers the registration case"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 announces the check; reply in m11 1:15 later"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m15 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-005",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Hi, I topped up my brokerage account from a Halyk card 2 hours ago and the money is not there"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "Do you need instructions for a top-up, or have you already sent the payment?"
+   },
+   {
+    "timestamp": "00:25",
+    "speaker": "client",
+    "text": "already sent. agent pls"
+   },
+   {
+    "timestamp": "00:27",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:31",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:32",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:20",
+    "speaker": "operator",
+    "text": "Hello, I'm Aliya. Sorry for the worry, let's check. First I need to verify your identity — a link has been sent to this chat."
+   },
+   {
+    "timestamp": "01:58",
+    "speaker": "client",
+    "text": "done"
+   },
+   {
+    "timestamp": "01:59",
+    "speaker": "system",
+    "text": "Customer identity verified."
+   },
+   {
+    "timestamp": "02:15",
+    "speaker": "operator",
+    "text": "Thank you. Which currency and roughly what amount did you send?"
+   },
+   {
+    "timestamp": "02:40",
+    "speaker": "client",
+    "text": "200 000 tenge"
+   },
+   {
+    "timestamp": "03:05",
+    "speaker": "operator",
+    "text": "I can see an incoming payment of 200,000 KZT from today, it is being processed. Card top-ups from other banks are credited within 1 business day, so it will appear on your account by tomorrow."
+   },
+   {
+    "timestamp": "03:35",
+    "speaker": "client",
+    "text": "ok. can I already buy shares with it?"
+   },
+   {
+    "timestamp": "03:52",
+    "speaker": "operator",
+    "text": "Not yet — the money becomes available for trading once it's credited."
+   },
+   {
+    "timestamp": "04:10",
+    "speaker": "client",
+    "text": "understood"
+   },
+   {
+    "timestamp": "04:22",
+    "speaker": "operator",
+    "text": "To sum up: your 200,000 KZT top-up is being processed and will be credited by tomorrow. Is there anything else I can help with?"
+   },
+   {
+    "timestamp": "04:45",
+    "speaker": "client",
+    "text": "no thanks"
+   },
+   {
+    "timestamp": "04:53",
+    "speaker": "operator",
+    "text": "Goodbye, have a nice evening!"
+   }
+  ],
+  "focus": [
+   "c03",
+   "c02",
+   "c07"
+  ],
+  "trap": "clean dialog: verification first, then the operator asks the missing currency and amount before reporting the payment status",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Aliya, English"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "na"
+    ],
+    "why": "m13 asks currency and amount, missing in m1, before checking"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 identity verified before payment data in m15"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m15 status and timing, m17 answers the follow-up"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges the worry"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, ordered answers; no waits"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m19 summary + offer of help, m21 goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ },
+ {
+  "split": "fresh",
+  "conversation_id": "fresh-en-006",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Where can I download my broker report for my tax return? Also, are dividend taxes on US stocks withheld automatically or do I have to declare them myself?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "The broker report is available in the app under Reports and Documents."
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "I need an agent for the tax question"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:51",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "02:58",
+    "speaker": "client",
+    "text": "hello? anyone there? been waiting forever"
+   },
+   {
+    "timestamp": "04:20",
+    "speaker": "operator",
+    "text": "Hi, I'm Chris. Open Menu → Reports and Documents → Broker Report, select the period 01.01–31.12.2025 and download it."
+   },
+   {
+    "timestamp": "04:55",
+    "speaker": "client",
+    "text": "ok downloaded"
+   },
+   {
+    "timestamp": "05:10",
+    "speaker": "operator",
+    "text": "Great. Have a nice day!"
+   }
+  ],
+  "focus": [
+   "c04",
+   "c06",
+   "c05"
+  ],
+  "trap": "the operator answers only the question the bot had already covered, ignores the dividend-tax question and the wait complaint, and joins 3:29 after transfer",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name Chris, English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 states both questions fully"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general report and tax questions, no client data"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "m11 covers the report; dividend tax question from m1/m5 left open"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 complaint about waiting is ignored in m11"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "4"
+    ],
+    "why": "m11 first reaction 3:29 after transfer m9"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m13 only a goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side offer or leak"
+   }
+  },
+  "verified": true
+ }
+]

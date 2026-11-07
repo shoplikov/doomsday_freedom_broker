@@ -47,7 +47,8 @@ Two analysts already reviewed this dialog for the criteria below:
 - ADVOCATE looked for the strongest honest evidence in the operator's favour.
 Their briefs are in BRIEFS. They can be wrong: open every message they cite and check it yourself.
 Decide every atom (or scale step) from the TRANSCRIPT. Concrete evidence beats argument.
-If the evidence is genuinely ambiguous, take the stricter reading and say why in the rationale.""",
+If the evidence is genuinely ambiguous, take the stricter reading and say why in the rationale.
+N/A is neither strict nor lenient: if a criterion's na_condition holds, the answer is N/A, not "no".""",
 }
 
 OUTPUT_FORMAT = """OUTPUT

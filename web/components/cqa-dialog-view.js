@@ -289,6 +289,7 @@ class CqaDialogView extends HTMLElement {
                 <span class="meter ${tone((100 * x.points) / x.max_points)}"><i style="width:${(100 * x.points) / x.max_points}%"></i></span></div>`).join("")}
           </div>
         </div>
+        ${this.lostHtml(ev)}
         ${attention.length ? `<div class="alert warn" style="margin-top:16px">${icon("alert")}<div><b>Нужен человек:</b>
           ${attention.map((c) => `<button class="link" data-goto="${esc(c.criterion_id)}">${esc(c.title)}</button>`).join(", ")}.
           ${role === "reviewer" ? "Откройте критерий и нажмите «Решить»." : "Решение принимает проверяющий."}</div></div>` : ""}
@@ -298,6 +299,17 @@ class CqaDialogView extends HTMLElement {
           ${s.total_note ? `<span class="err">итог не рассчитан: ${esc(s.total_note)}</span>` : ""}</div>
       </section>
       ${ev.result.criteria.map((c) => this.criterionHtml(c, s.criteria[c.criterion_id], openAppeals[c.criterion_id], role)).join("")}`;
+  }
+
+  // Where the points went: one chip per criterion that lost points, biggest loss first, click = go to it.
+  lostHtml(ev) {
+    const s = ev.result.score;
+    const lost = ev.result.criteria.map((c) => ({ c, p: s.criteria[c.criterion_id] }))
+      .filter(({ p }) => p && p.points != null && p.max_points - p.points > 0.004)
+      .sort((a, b) => (b.p.max_points - b.p.points) - (a.p.max_points - a.p.points));
+    if (!lost.length) return "";
+    return `<div class="lost"><span class="small faint">Где потеряны баллы:</span>${lost.map(({ c, p }) =>
+      `<button class="chip lost-chip" data-goto="${esc(c.criterion_id)}" title="${esc(c.rationale ?? "")}">${esc(c.title)} <b>−${fmt(p.max_points - p.points)}</b></button>`).join("")}</div>`;
   }
 
   criterionHtml(c, pts, appeal, role) {

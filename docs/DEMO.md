@@ -9,6 +9,14 @@
 | 3:00–4:00 | Role **Оператор** → «Оспорить» a criterion with a comment. Role **Проверяющий** → review queue → «Решение» → change with a reason → new total, "ИИ: X → итог: Y". | "Humans decide; every change is explained and logged." |
 | 4:00–5:00 | **Чек-лист** → replace a criterion → lint flags a vague word → fix → «Сохранить как v2» → «Применить ко всем» → diff of totals. Only the changed criterion re-ran (cache). | "No code, no redeploy: minutes, not hours." |
 
+**Killer features inside the same 5 minutes** (10–20 s each, no extra slot needed):
+- 1:00–3:00, on the card: «Где потеряны баллы» chips → one click to the criterion. Then «Проверка на прочность» →
+  «Предложение в обход компании» (pre-run, shown from history) → "we broke the dialog on purpose; the AI caught it".
+  If the jury wants, type their own operator line («Своя реплика оператора») and run it live (~40 s).
+- 3:00–4:00, «Проверка»: the queue is sorted by impact ("±15 к итогу" first).
+- 4:00–5:00, before publishing the replaced criterion: «Тест-драйв» on 5 dialogs (changed verdicts, agreement),
+  and «Аналитика» → «Здоровье чек-листа» shows which wording the models argue about.
+
 Pinned dialogs (fill in on DEV): a KZ/RU code-switch chat ___, a call with audio ___,
 a gross-error chat ___, an N/A-heavy chat ___.
 
@@ -47,7 +55,7 @@ edit → lint → publish vN+1 → apply → diff. Target: under 5 minutes, no c
 | Question | Answer |
 |---|---|
 | Which model, what cost? | README table; $ per evaluation from real token usage on every card. |
-| How do you know the AI is right? | Gold set agreement per criterion (and KZ only), red-team flip rate, low-confidence → human. |
+| How do you know the AI is right? | 65 DEV dialogs labelled blind + synthetic traps + broken-on-purpose copies (docs/EVALUATION.md); accuracy per criterion in «Аналитика»; try «Проверка на прочность» yourself; low-confidence → human, sorted by impact. |
 | How good is it in Kazakh? | We judge in the original language, never translate; KZ bake-off picked the model; KZ calibration numbers. |
 | What if the AI is wrong? | Validator rejects invented quotes; disagreement → review queue; appeals recalc with the same code; audit log. |
 | Client data? | Typed masks before any LLM call; "что видел ИИ" toggle; keys and data stay server-side. |

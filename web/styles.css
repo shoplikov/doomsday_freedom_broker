@@ -520,3 +520,6 @@ tr.sub td { border-top: 0; padding-top: 0; color: var(--text-2); }
 .warn-text { color: var(--warn); }
 .hbar.crit-health { grid-template-columns: minmax(160px, 260px) minmax(80px, 1fr) 72px minmax(160px, 1.4fr); }
 @media (max-width: 860px) { .hbar.crit-health { grid-template-columns: 1fr 64px; } .hbar.crit-health .meter { grid-column: 1 / -1; grid-row: 2; } .hbar.crit-health > .small { grid-column: 1 / -1; } }
+.lost { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 14px; }
+.lost-chip { font-family: inherit; letter-spacing: 0; }
+.lost-chip b { color: var(--bad); font-weight: 600; margin-left: 4px; }

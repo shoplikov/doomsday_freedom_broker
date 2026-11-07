@@ -41,6 +41,7 @@ uv run uvicorn cqa.main:app --reload     # http://localhost:8000, mock LLM by de
 uv run pytest -q                         # must stay green on main; own throwaway schema on TEST_DATABASE_URL
 uv run --with playwright pytest tests/e2e -q   # browser demo flow; run before merging UI changes
 uv run python -m cqa.cli report          # is the panel working? (see docs/VALIDATION.md)
+uv run python -m cqa.cli bench --split tune --out results/bench/x.json   # before/after any prompt or checklist change (docs/EVALUATION.md)
 ```
 
 ## Code map
@@ -55,6 +56,8 @@ cqa/scoring.py      the math (no LLM)                   cqa/db.py           Post
 cqa/traces.py       every LLM call: prompt, answer, ms  cqa/analytics.py    panel metrics vs gold labels
 cqa/cli.py          import / run / report / trace / redteam / export   cqa/redteam.py  known-answer mutations of real chats
 cqa/results.py      organisers' results.json (format 1.0)
+cqa/bench.py        eval bench: known answers (data/eval), metrics, compare    cqa/insights.py  stress test, checklist health, test drive, review impact
+data/eval/          blind gold labels, synthetic scenarios, labelling guide, candidate checklists (docs/EVALUATION.md)
 cqa/sqlite_migrate.py   one-shot `cli migrate-sqlite`: old SQLite file -> Postgres
 web/                vanilla JS Web Components, no build; web/api.js is the only fetch adapter
 ```
