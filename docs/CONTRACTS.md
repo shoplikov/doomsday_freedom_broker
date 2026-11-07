@@ -81,7 +81,7 @@ applicable_weight, gross_error, criteria{points, max_points}, sections[]) and `f
 
 | Method | Path | Body / query | Returns |
 |---|---|---|---|
-| GET | `/api/health` | | provider, models, judge_mode, threshold, dataset_api |
+| GET | `/api/health` | | `db: "postgres"`, provider, models, judge_mode, threshold, dataset_api |
 | POST | `/api/datasets/{group_id}/import` | | `{imported}` |
 | GET | `/api/conversations` | `language, channel, group_id` | list + latest total/status |
 | GET | `/api/conversations/{id}` | | messages, signals, evaluations[], latest (full) |
@@ -101,7 +101,7 @@ applicable_weight, gross_error, criteria{points, max_points}, sections[]) and `f
 | GET | `/api/audit` | `limit` | audit lines |
 | GET | `/api/traces` | `conversation_id` | LLM calls of a dialog (no prompt bodies) |
 | GET | `/api/traces/{id}` | | one call: request messages, raw response, error, validation, tokens, latency |
-| GET | `/api/gold` | `conversation_id?` | gold labels |
+| GET | `/api/gold` | `conversation_id?` | gold labels `{conversation_id, criterion_id, label, fingerprint, note, labelled_by, at}` (`labelled_by` was `by` before Postgres) |
 | POST | `/api/gold` | `{conversation_id, criterion_id, label, note}` (empty label deletes) | label |
 | GET | `/api/analytics` | `checklist_version?` | panel metrics (see VALIDATION.md) |
 | GET | `/api/results/{group_id}` | | organisers' results file, format 1.0 (section 7) |

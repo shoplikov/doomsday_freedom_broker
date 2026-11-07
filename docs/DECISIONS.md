@@ -25,6 +25,7 @@ Short log. New decision → add a row; change one → strike through and add the
 | D-20 | 2026-11-07 | Docker Compose: one `app` service (API + UI), named volume for SQLite/logs/cache, `test` profile runs pytest in the image | Same run on every laptop and the jury's machine; state survives restarts |
 
 | D-21 | 2026-11-07 | Red team on real DEV chats is the cheap correctness check until gold labels exist; run it after every prompt or checklist change | 15/15 passed for $0.095; it showed the judge catching what both M1 and M2 missed |
+| D-23 | 2026-11-07 | ~~SQLite~~ → **PostgreSQL 16** is the only runtime DB (psycopg 3 + small pool, `DATABASE_URL`; `db` service in Compose). JSON and timestamps stay TEXT. Old SQLite files move over once with `cli migrate-sqlite`. Supersedes the SQLite part of D-01/D-15/D-20 | Prod and dev keep real review work (appeals, gold labels, decisions): a server database with `pg_dump` backups and concurrent writers is safer than a file in a volume; TEXT columns kept the code change small |
 
 ## Open (owner decides by the given hour)
 
