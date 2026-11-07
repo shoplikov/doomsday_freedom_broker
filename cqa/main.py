@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import analytics, checklist, config, db, evaluations, importer, signals, traces
+from . import analytics, checklist, config, db, evaluations, importer, results, signals, traces
 
 config.setup_logging()
 
@@ -100,6 +100,12 @@ def list_conversations(language: str | None = None, channel: str | None = None, 
            " WHERE (? IS NULL OR c.language = ?) AND (? IS NULL OR c.channel = ?) AND (? IS NULL OR c.group_id = ?)"
            " ORDER BY c.id")
     return db.rows(sql, language, language, channel, channel, group_id, group_id)
+
+
+@app.get("/api/results/{group_id}")
+def results_file(group_id: str):
+    """The organisers' results.json (format 1.0) for a group; the UI offers it as a download."""
+    return _guard(results.build, group_id, config.TEAM_NAME)
 
 
 @app.get("/api/conversations/{conversation_id}")

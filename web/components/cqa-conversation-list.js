@@ -12,6 +12,7 @@ class CqaConversationList extends HTMLElement {
         <input name="group" value="${health.dataset_api ? "DEV" : "SAMPLE"}" size="9" aria-label="group_id" class="mono">
         <button data-act="import">Загрузить набор</button>
         <button data-act="run" class="primary">Оценить все</button>
+        <button data-act="export" title="Файл для организаторов: results/dev или results/prod">results.json</button>
         <span class="muted small" data-progress></span>
         <span class="grow"></span>
         <select name="language" aria-label="Язык"><option value="">Все языки</option><option>RU</option><option>KZ</option><option>EN</option></select>
@@ -20,6 +21,7 @@ class CqaConversationList extends HTMLElement {
       <div class="panel"><div data-list class="loading">Загрузка</div></div>`;
     this.querySelector('[data-act="import"]').onclick = () => this.importGroup();
     this.querySelector('[data-act="run"]').onclick = () => this.runAll();
+    this.querySelector('[data-act="export"]').onclick = () => this.exportResults();
     this.querySelectorAll("select").forEach((s) => (s.onchange = () => this.load()));
     this.load();
   }
@@ -33,6 +35,21 @@ class CqaConversationList extends HTMLElement {
       const r = await api.post(`/api/datasets/${encodeURIComponent(group)}/import`);
       this.progress(`Загружено: ${r.imported}`);
       this.load();
+    } catch (e) { this.progress(`Ошибка: ${e.message}`); }
+  }
+
+  // The organisers' results file (format 1.0) for the group in the input, as a download.
+  async exportResults() {
+    const group = this.querySelector('[name="group"]').value.trim();
+    try {
+      const doc = await api.get(`/api/results/${encodeURIComponent(group)}`);
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(doc, null, 2) + "\n"], { type: "application/json" }));
+      a.download = "results.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+      const errors = doc.results.filter((r) => r.status !== "ok").length;
+      this.progress(`results.json: ${doc.results.length} диалогов, ошибок ${errors}`);
     } catch (e) { this.progress(`Ошибка: ${e.message}`); }
   }
 

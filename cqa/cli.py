@@ -1,15 +1,17 @@
-"""Terminal loop for the team:  uv run python -m cqa.cli {import,run,report,trace} ...
+"""Terminal loop for the team:  uv run python -m cqa.cli {import,run,report,trace,export} ...
 
   import DEV                 fetch + normalize + store a group
   run DEV [--limit 10]       evaluate the group with the active checklist (parallel, uses the cache)
   report [--version N]       panel analytics: A/B agreement, judge sides, gold accuracy per role, cost
   trace CONVERSATION_ID      every LLM call of one dialog: role, try, latency, tokens, validation errors
+  export DEV [--prod]        organisers' results/{dev,prod}/results.json (format 1.0)
 """
 import argparse
 import asyncio
 import json
+from pathlib import Path
 
-from . import analytics, checklist, config, db, evaluations, importer, redteam, traces
+from . import analytics, checklist, config, db, evaluations, importer, redteam, results, traces
 
 
 def _table(rows: list[list], header: list[str]) -> str:
@@ -113,6 +115,11 @@ def main() -> None:
     rt.add_argument("--per-lang", type=int, default=1, help="chats per language (RU/KZ/EN)")
     rt.add_argument("--yes", action="store_true", help="confirm spending on real models")
     rt.add_argument("--only", nargs="+", choices=list(redteam.MUTATIONS), help="run only these mutations")
+    ex = sub.add_parser("export", help="write the organisers' results.json (format 1.0) for a group")
+    ex.add_argument("group")
+    ex.add_argument("--out", type=Path, help="default: results/dev/results.json, or results/prod/... with --prod")
+    ex.add_argument("--prod", action="store_true", help="control set: write to results/prod/")
+    ex.add_argument("--team", help="team_name (default: CQA_TEAM_NAME)")
     args = p.parse_args()
     if args.cmd == "import":
         print("imported", asyncio.run(importer.import_group(args.group)))
@@ -120,6 +127,11 @@ def main() -> None:
         asyncio.run(run(args.group, args.limit, args.version, args.yes))
     elif args.cmd == "report":
         report(args.version)
+    elif args.cmd == "export":
+        out = args.out or config.ROOT / "results" / ("prod" if args.prod else "dev") / "results.json"
+        doc = results.write(args.group, out, args.team)
+        bad = [r["conversation_id"] for r in doc["results"] if r["status"] != "ok"]
+        print(f"{out}: {len(doc['results'])} dialogs, {len(bad)} errors{' ' + ', '.join(bad) if bad else ''}; model {doc['model']}")
     elif args.cmd == "redteam":
         run_redteam(args.group, args.per_lang, args.yes, args.only)
     else:

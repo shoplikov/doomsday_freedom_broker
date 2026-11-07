@@ -104,6 +104,7 @@ applicable_weight, gross_error, criteria{points, max_points}, sections[]) and `f
 | GET | `/api/gold` | `conversation_id?` | gold labels |
 | POST | `/api/gold` | `{conversation_id, criterion_id, label, note}` (empty label deletes) | label |
 | GET | `/api/analytics` | `checklist_version?` | panel metrics (see VALIDATION.md) |
+| GET | `/api/results/{group_id}` | | organisers' results file, format 1.0 (section 7) |
 
 Header `X-Role: operator | reviewer` identifies the actor (there is no login, as the brief requires).
 Errors: 404 not found, 409 already decided, 422 validation (`detail` = message or list).
@@ -117,3 +118,38 @@ Errors: 404 not found, 409 already decided, 422 validation (`detail` = message o
 | `<cqa-review-queue>` | C | open appeals + low-confidence items |
 | `<cqa-checklist-editor>` | C (+B for lint UX) | edit/add/replace criteria, lint, publish, apply, diff |
 | `<cqa-analytics>` | C + D | panel metrics, accuracy vs gold, disagreements, gold misses |
+
+## 7. Results file for the organisers (format 1.0)
+
+Source: `initial_docs/CQA_Student_Guide_Appendix_Results.pdf`. Built by `cqa/results.py` from the **latest
+evaluation** of every dialog in a group (final layer, so reviewer decisions count). Committed as
+`results/dev/results.json` (DEV: 60 chats + 5 calls) and `results/prod/results.json` (control set: exactly 10).
+
+```bash
+uv run python -m cqa.cli export DEV            # -> results/dev/results.json
+uv run python -m cqa.cli export <group> --prod # -> results/prod/results.json
+```
+
+| Our id | `criterion_id` | `value` |
+|---|---|---|
+| c01 | `contact` | `true` / `false` |
+| c02 | `discovery` | `true` / `false` / `null` |
+| c03 | `identification` | `true` / `false` / `null` |
+| c04 | `consultation` | `0, 5, 10, 15, 20` / `null` |
+| c05 | `empathy` | `true` / `false` |
+| c06 | `dialogue` | `0, 4, 7, 10` |
+| c07 | `closure` | `true` / `false` / `null` |
+| c08 | `critical` | `true` / `false` |
+
+- `null` = N/A. Scale values are the step before weighting.
+- `evidence_turns` = 1-based positions in the original transcript array (our `m<N>`), from the evidence quotes;
+  for a "no" without quotes, the whole `checked_range`.
+- `rationale` = the deciding model's rationale; with a human decision, the reviewer's reason.
+- `score.final_score` = `scoring.score` total (N/A weight redistributed, half-up, 2 dp).
+  `critical_flag` = value of `critical`.
+- A dialog that has no evaluation, has no final answer for a criterion, or has no total is written as
+  `{"status": "error", "criteria": [], "score": null, "error": "..."}`. It is never dropped or replaced with a zero.
+- `model.name` lists the models of the exported evaluations. `mode` is `external_api` for OpenAI models,
+  `local` for self-hosted ones, and `hybrid` for a mix. `team_name` comes from `CQA_TEAM_NAME`.
+- If a criterion is replaced in the checklist editor under a new id, the export cannot map it and writes the
+  dialog as an error. Keep the c01–c08 ids when editing.

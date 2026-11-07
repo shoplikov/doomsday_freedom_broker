@@ -26,6 +26,7 @@ with quotes → code validates quotes and counts points → humans decide disput
 |---|---|
 | Task, demo plan, API format | `initial_docs/CQA_Hackathon_Student_Guide_v3 1.pdf` |
 | Criteria, weights, scales, N/A, rounding | `initial_docs/CQA_Chat_Quality_Checklist 1.pdf` → `data/checklist_v1.json` |
+| Results file to submit (`results/{dev,prod}/results.json`) | `initial_docs/CQA_Student_Guide_Appendix_Results.pdf` → `cqa/results.py`, `docs/CONTRACTS.md` §7 |
 | Background ideas (not binding) | `sol_approach_design/*.pdf` |
 | Decisions | `docs/DECISIONS.md` |
 
@@ -51,7 +52,8 @@ cqa/signals.py      facts for the LLM                   cqa/llm.py          the 
 cqa/checklist.py    versions, lint, fingerprint         cqa/mock_llm.py     fake LLM for dev and tests
 cqa/scoring.py      the math (no LLM)                   cqa/db.py           SQLite + audit helper
 cqa/traces.py       every LLM call: prompt, answer, ms  cqa/analytics.py    panel metrics vs gold labels
-cqa/cli.py          import / run / report / trace / redteam   cqa/redteam.py  known-answer mutations of real chats
+cqa/cli.py          import / run / report / trace / redteam / export   cqa/redteam.py  known-answer mutations of real chats
+cqa/results.py      organisers' results.json (format 1.0)
 web/                vanilla JS Web Components, no build; web/api.js is the only fetch adapter
 ```
 

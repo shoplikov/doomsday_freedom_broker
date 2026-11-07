@@ -18,9 +18,12 @@ a gross-error chat ___, an N/A-heavy chat ___.
 2. **23:01** «Оценить все» right away. Progress shows done/total/failed.
 3. **23:15** Failed dialogs: run them again (the run only redoes what is not cached).
 4. **23:20** Spot-check 3 cards (one per language). Clear the review queue for the pinned dialogs.
-5. **23:30** Freeze: copy `data/cqa.sqlite3` to a backup.
-6. **23:40** Final commit plus push before **24:00 stop-code**. After stop-code, processing and the
-   criterion swap through the UI are still allowed (no code edits).
+5. **23:30** Export: `docker compose exec app python -m cqa.cli export <group> --out /var/cqa/results.json`,
+   then `docker compose cp app:/var/cqa/results.json results/prod/results.json` (or the «results.json» button
+   on the dialog list). Check: exactly **10** records, errors included, IDs as in the API. Freeze: back up the DB.
+6. **23:40** Commit plus **push** `results/prod/results.json` before **24:00 stop-code** (a local commit does not
+   count; the repo must be public by then). After stop-code, processing and the criterion swap through the UI are
+   still allowed (no code edits).
 
 **No batch API this hour**: batch jobs can take up to 24h. Use parallel calls (`CONCURRENCY`).
 

@@ -69,6 +69,12 @@ Cost per evaluation is computed from real token usage × `LLM_PRICES` and shown 
 Alternative `gpt-5-mini` ×2 + `gpt-5`: ≈ $0.058 and ~90 s per dialog, more unanimous answers.
 Re-running is free for unchanged criteria (cache). `cli run` with real models asks for `--yes` and shows an estimate.
 
+## Results for the organisers
+
+`uv run python -m cqa.cli export DEV` writes `results/dev/results.json` in the organisers' format 1.0
+(`--prod` writes `results/prod/`). The same file is at `GET /api/results/{group_id}` and behind the
+«results.json» button on the dialog list. Mapping and rules: [docs/CONTRACTS.md §7](docs/CONTRACTS.md).
+
 ## Docs
 
 - [CLAUDE.md](CLAUDE.md): rules for everyone (people and AI agents) working in this repo
