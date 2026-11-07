@@ -27,6 +27,7 @@ def _get(key: str, default: str = "") -> str:
 
 
 DB_PATH = Path(_get("CQA_DB_PATH") or DATA_DIR / "cqa.sqlite3")
+RAW_DIR = Path(_get("CQA_RAW_DIR") or DATA_DIR / "raw")  # cached API responses (offline fallback)
 DATASET_API_URL = _get("DATASET_API_URL")
 
 LLM_PROVIDER = _get("LLM_PROVIDER", "mock")  # mock | openai

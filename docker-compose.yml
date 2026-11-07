@@ -1,0 +1,29 @@
+# docker compose up -d --build          -> app on http://localhost:8000 (CQA_PORT to change)
+# docker compose --profile test run --rm test   -> test suite inside the container (mock LLM)
+# docker compose exec app python -m cqa.cli report   -> CLI inside the running app
+
+services:
+  app:
+    build: { context: ., target: app }
+    image: cqa-app:latest
+    env_file:
+      - path: .env          # LLM_PROVIDER, OPENAI_API_KEY, MODEL_*, DATASET_API_URL ...; optional
+        required: false
+    ports:
+      - "${CQA_PORT:-8000}:8000"
+    volumes:
+      - cqa-data:/var/cqa                         # SQLite, logs, cached API responses survive restarts
+      - ./data/fixtures:/app/data/fixtures:ro     # local offline datasets (SAMPLE, your DEV.json copy)
+    restart: unless-stopped
+    stop_grace_period: 20s
+
+  test:
+    profiles: [test]
+    build: { context: ., target: test }
+    image: cqa-test:latest
+    environment:
+      LLM_PROVIDER: mock
+      DATASET_API_URL: ""
+
+volumes:
+  cqa-data:
