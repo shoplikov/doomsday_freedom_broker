@@ -1,26 +1,38 @@
 <!doctype html>
-<html lang="ru">
+<html lang="ru" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>CQA · Оценка качества диалогов</title>
+  <script>try { const t = localStorage.getItem("cqa-theme"); if (t) document.documentElement.dataset.theme = t; } catch {}</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Fonts are optional: offline the UI falls back to system fonts. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,300;7..72,400&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap&subset=cyrillic">
   <link rel="stylesheet" href="styles.css">
   <!-- Dynamics 365: set window.CQA_API_BASE before app.js if the API lives on another origin. -->
 </head>
 <body>
   <header class="top">
-    <strong class="brand">CQA</strong>
+    <a class="brand" href="#/dialogs" aria-label="CQA, на главную">
+      <span class="brand-mark" aria-hidden="true"><i style="height:9px"></i><i style="height:16px"></i><i style="height:12px"></i><i style="height:6px"></i></span>
+      <span>CQA<small>Quality Analytics</small></span>
+    </a>
     <nav>
       <a href="#/dialogs" data-page="dialogs">Диалоги</a>
       <a href="#/review" data-page="review">Проверка</a>
       <a href="#/checklist" data-page="checklist">Чек-лист</a>
       <a href="#/analytics" data-page="analytics">Аналитика</a>
     </nav>
+    <span class="spacer"></span>
+    <span id="health" class="health">LLM…</span>
     <div class="roles" role="group" aria-label="Роль">
       <button type="button" data-role="operator">Оператор</button>
       <button type="button" data-role="reviewer">Проверяющий</button>
     </div>
-    <span id="health" class="muted small"></span>
+    <button type="button" class="icon-btn ghost" id="theme" aria-label="Сменить тему" title="Светлая / тёмная тема">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+    </button>
   </header>
   <main id="view"></main>
   <script type="module" src="app.js"></script>

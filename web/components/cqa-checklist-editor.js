@@ -1,10 +1,10 @@
-import { api, esc, fmt } from "../api.js";
+import { api, esc, fmt, loading, pageHead } from "../api.js";
 
 // Checklist editor (Criterion Studio v0): edit / add / replace criteria, lint, publish vN+1,
 // apply to all dialogs (only changed criteria hit the LLM), then show the before/after diff.
 class CqaChecklistEditor extends HTMLElement {
   async connectedCallback() {
-    this.innerHTML = '<div class="panel muted">Загрузка…</div>';
+    this.innerHTML = loading();
     try {
       this.cl = await api.get("/api/checklists/active");
       this.versions = await api.get("/api/checklists");
@@ -15,16 +15,17 @@ class CqaChecklistEditor extends HTMLElement {
   render() {
     const cl = this.cl;
     this.innerHTML = `
-      <div class="panel row">
-        <b>${esc(cl.name)}</b><span class="badge">активная v${cl.version}</span>
-        <span class="muted small">версии: ${this.versions.map((v) => `v${v.version}${v.note ? ` (${esc(v.note)})` : ""}`).join(", ")}</span>
-      </div>
+      ${pageHead("Чек-лист — это данные", esc(cl.name),
+        "Меняйте критерии без деплоя: проверка, публикация новой версии, переоценка. Модели заново спрашиваются только по изменённым критериям.",
+        `<span class="badge lime dot">активная v${cl.version}</span>`)}
+      <div class="panel tight row small"><span class="muted">Версии:</span>${this.versions.map((v) =>
+        `<span class="badge ${v.version === cl.version ? "lime" : ""}" title="${esc(v.note ?? "")}">v${v.version}${v.note ? ` · ${esc(v.note)}` : ""}</span>`).join("")}</div>
       <div data-criteria>${cl.criteria.map((c, i) => this.criterionHtml(c, i)).join("")}</div>
-      <div class="panel">
+      <div class="panel sticky-bar">
         <div class="row">
           <button data-act="add">+ Критерий</button>
           <button data-act="lint">Проверить</button>
-          <input data-note placeholder="Что изменили? (в журнал)" size="40">
+          <input data-note placeholder="Что изменили? (в журнал)" class="grow" style="min-width:200px">
           <button data-act="publish" class="primary">Сохранить как v${Math.max(...this.versions.map((v) => v.version)) + 1}</button>
         </div>
         <div data-lint class="small" style="margin-top:6px"></div>
@@ -53,6 +54,8 @@ class CqaChecklistEditor extends HTMLElement {
     const scale = (c.scale || []).map((s) => `${s.step}: ${s.label}`).join("\n");
     return `
       <div class="editor-crit" data-i="${i}">
+        <div class="ec-head"><span class="ec-num">${i + 1}</span><b class="grow">${esc(c.title) || '<span class="faint">Новый критерий</span>'}</b>
+          <span class="badge">${esc(c.type)}</span><span class="badge">вес ${esc(c.weight)}</span></div>
         <div class="grid4">
           <div><label>ID</label><input data-f="id" value="${esc(c.id)}"></div>
           <div><label>Раздел</label><select data-f="section">${sections}</select></div>
@@ -70,7 +73,7 @@ class CqaChecklistEditor extends HTMLElement {
         <textarea data-f="atoms" rows="3">${esc(atoms)}</textarea>
         <label>Шкала для scale — по одной ступени на строку: <code>балл: описание</code></label>
         <textarea data-f="scale" rows="3">${esc(scale)}</textarea>
-        <div class="row" style="margin-top:6px"><button data-del="${i}">Удалить критерий</button></div>
+        <div class="row" style="margin-top:12px"><button data-del="${i}" class="ghost small">Удалить критерий</button></div>
       </div>`;
   }
 
@@ -97,8 +100,8 @@ class CqaChecklistEditor extends HTMLElement {
   showLint(r) {
     this.querySelector("[data-lint]").innerHTML =
       r.errors.map((e) => `<div class="err">✗ ${esc(e)}</div>`).join("") +
-      r.warnings.map((w) => `<div style="color:var(--warn)">! ${esc(w)}</div>`).join("") +
-      (!r.errors.length && !r.warnings.length ? '<div style="color:var(--ok)">✓ без замечаний</div>' : "");
+      r.warnings.map((w) => `<div class="lint-warn">! ${esc(w)}</div>`).join("") +
+      (!r.errors.length && !r.warnings.length ? '<div class="lint-ok">✓ без замечаний</div>' : "");
   }
 
   async lint() {
@@ -136,9 +139,9 @@ class CqaChecklistEditor extends HTMLElement {
       }
       p.textContent = `готово ${run.done}/${run.total}${run.failed.length ? `, ошибок ${run.failed.length}` : ""}`;
       const diff = await api.get(`/api/checklists/diff?from_v=${from}&to_v=${to}`);
-      this.querySelector("[data-diff]").innerHTML = `<table><thead><tr><th>Диалог</th><th>v${from}</th><th>v${to}</th><th>Δ</th></tr></thead><tbody>
+      this.querySelector("[data-diff]").innerHTML = `<table class="small" style="margin-top:10px"><thead><tr><th>Диалог</th><th class="num">v${from}</th><th class="num">v${to}</th><th class="num">Δ</th></tr></thead><tbody>
         ${diff.map((r) => `<tr><td><a href="#/dialog/${encodeURIComponent(r.conversation_id)}">${esc(r.conversation_id)}</a></td>
-          <td>${fmt(r.from)}</td><td>${fmt(r.to)}</td><td>${r.delta == null ? "—" : (r.delta > 0 ? "+" : "") + fmt(r.delta)}</td></tr>`).join("")}
+          <td class="num">${fmt(r.from)}</td><td class="num">${fmt(r.to)}</td><td class="num ${r.delta > 0 ? "good" : r.delta < 0 ? "poor" : ""}">${r.delta == null ? "—" : (r.delta > 0 ? "+" : "") + fmt(r.delta)}</td></tr>`).join("")}
         </tbody></table>`;
     } catch (e) { p.textContent = `Ошибка: ${e.message}`; }
   }

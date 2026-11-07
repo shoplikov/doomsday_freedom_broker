@@ -31,7 +31,15 @@ document.querySelectorAll("[data-role]").forEach((b) =>
 window.addEventListener("hashchange", route);
 route();
 
+document.getElementById("theme").addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+  document.documentElement.dataset.theme = next;
+  try { localStorage.setItem("cqa-theme", next); } catch { /* private mode: theme resets on reload */ }
+});
+
+const health = document.getElementById("health");
 api.get("/api/health").then((h) => {
-  document.getElementById("health").textContent =
-    `LLM: ${h.provider}${h.provider === "mock" ? " (без ключа)" : ` · ${h.models.judge}`}`;
-}).catch(() => { document.getElementById("health").textContent = "API недоступен"; });
+  health.classList.add(h.provider === "mock" ? "mock" : "on");
+  health.textContent = h.provider === "mock" ? "LLM: mock (без ключа)" : `LLM · ${h.models.judge}`;
+  health.title = Object.entries(h.models).map(([k, v]) => `${k}: ${v}`).join("\n");
+}).catch(() => { health.classList.add("down"); health.textContent = "API недоступен"; });

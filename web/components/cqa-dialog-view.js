@@ -1,4 +1,7 @@
-import { api, esc, fmt, getRole, statusText, verdictText } from "../api.js";
+import { api, channelText, esc, fmt, getRole, loading, statusBadge, tone, verdictText } from "../api.js";
+
+const speakerText = { operator: "Оператор", client: "Клиент", system: "Система", bot: "Бот" };
+const roleShort = { inspector: "M1", advocate: "M2", judge: "M3" };
 
 const pretty = (text) => { try { return JSON.stringify(JSON.parse(text), null, 2); } catch { return text ?? ""; } };
 
@@ -8,6 +11,7 @@ class CqaDialogView extends HTMLElement {
   connectedCallback() {
     this.id_ = this.getAttribute("conversation-id");
     this.showRaw = false;
+    this.innerHTML = loading();
     this.load();
   }
 
@@ -34,24 +38,27 @@ class CqaDialogView extends HTMLElement {
     const d = this.data;
     const ev = d.latest;
     this.innerHTML = `
-      <div class="row" style="margin-bottom:8px">
-        <a href="#/dialogs">← Диалоги</a>
-        <b>${esc(d.id)}</b><span class="badge">${esc(d.channel)}</span><span class="badge">${esc(d.language)}</span>
-        <span style="flex:1"></span>
-        <label class="small"><input type="checkbox" data-raw ${this.showRaw ? "checked" : ""}> исходный текст (ИИ видел маскированный)</label>
-        <button data-act="evaluate" class="primary">${ev ? "Переоценить" : "Оценить"}</button>
-      </div>
+      <section class="hero" style="margin-bottom:20px">
+        <div><a href="#/dialogs" class="kicker">Диалоги</a>
+          <h1 class="display" style="font-size:clamp(28px,4vw,42px)">${esc(d.id)}</h1>
+          <div class="row"><span class="badge">${esc(channelText[d.channel] ?? d.channel)}</span><span class="badge">${esc(d.language)}</span>
+            <span class="muted small">${d.messages.length} сообщений</span></div></div>
+        <div class="hero-actions">
+          <label class="small muted"><input type="checkbox" data-raw ${this.showRaw ? "checked" : ""}> исходный текст (ИИ видел маскированный)</label>
+          <button data-act="evaluate" class="primary">${ev ? "Переоценить" : "Оценить"}</button>
+        </div>
+      </section>
       <div class="split">
-        <div class="panel">
-          ${d.audio_url ? `<audio controls preload="none" src="${esc(d.audio_url)}" style="width:100%"></audio>` : ""}
+        <div class="panel sticky-col">
+          ${d.audio_url ? `<audio controls preload="none" src="${esc(d.audio_url)}"></audio>` : ""}
           ${this.signalsHtml(d.signals)}
           <div data-transcript>${d.messages.map((m) => `
             <div class="msg ${esc(m.speaker)}" id="msg-${esc(m.mid)}" data-t="${m.t_sec ?? ""}">
-              <div class="meta">${esc(m.mid)} · ${esc(m.ts_raw)} · ${esc(m.speaker)}${m.lang ? ` · ${esc(m.lang)}` : ""}</div>
-              ${esc(this.showRaw ? m.text : m.text_masked)}
+              <div class="meta"><b>${esc(speakerText[m.speaker] ?? m.speaker)}</b><span>${esc(m.mid)}</span><span>${esc(m.ts_raw)}</span>${m.lang ? `<span>${esc(m.lang)}</span>` : ""}</div>
+              <div class="bubble">${esc(this.showRaw ? m.text : m.text_masked)}</div>
             </div>`).join("")}</div>
         </div>
-        <div>${ev ? this.evaluationHtml(ev) : '<div class="panel muted">Ещё не оценён.</div>'}</div>
+        <div>${ev ? this.evaluationHtml(ev) : '<div class="panel empty"><b>Ещё не оценён</b>Нажмите «Оценить», и три модели разберут диалог по чек-листу.</div>'}</div>
       </div>`;
     this.querySelector('[data-act="evaluate"]').onclick = () => this.evaluate();
     this.querySelector("[data-raw]").onchange = (e) => { this.showRaw = e.target.checked; this.render(); };
@@ -125,11 +132,12 @@ class CqaDialogView extends HTMLElement {
 
   signalsHtml(s) {
     const lp = (p) => Object.entries(p || {}).map(([k, v]) => `${k} ${v}%`).join(" · ") || "—";
-    return `<div class="small muted" style="margin-bottom:8px">
-      Язык клиента: ${esc(lp(s.language_profile.client))} · оператора: ${esc(lp(s.language_profile.operator))}
-      ${s.first_operator_reply ? ` · первый ответ: ${esc(s.first_operator_reply.mid)}` : ""}
-      ${s.operator_reply_gaps.length ? ` · <span class="badge warn">паузы: ${s.operator_reply_gaps.map((g) => `${esc(g.before)} ${g.seconds}с`).join(", ")}</span>` : ""}
-      ${s.risk_hits.length ? ` · <span class="badge bad">риск: ${s.risk_hits.map((r) => esc(r.mid)).join(", ")}</span>` : ""}
+    return `<div class="signals small">
+      <span class="badge">клиент: ${esc(lp(s.language_profile.client))}</span>
+      <span class="badge">оператор: ${esc(lp(s.language_profile.operator))}</span>
+      ${s.first_operator_reply ? `<button class="chip" data-mid="${esc(s.first_operator_reply.mid)}">первый ответ: ${esc(s.first_operator_reply.mid)}</button>` : ""}
+      ${s.operator_reply_gaps.length ? `<span class="badge warn">паузы: ${s.operator_reply_gaps.map((g) => `${esc(g.before)} ${g.seconds}с`).join(", ")}</span>` : ""}
+      ${s.risk_hits.length ? `<span class="badge bad">риск: ${s.risk_hits.map((r) => esc(r.mid)).join(", ")}</span>` : ""}
     </div>`;
   }
 
@@ -151,20 +159,22 @@ class CqaDialogView extends HTMLElement {
     const role = getRole();
     return `
       <div class="panel">
-        <div class="row">
-          <span class="total">${fmt(ev.total)}</span>
-          ${changed ? `<span class="layers muted">ИИ: ${fmt(ev.total_ai)} → итог: ${fmt(ev.total)}</span>` : ""}
-          <span class="badge ${ev.status === "needs_review" ? "warn" : ev.status === "failed" ? "bad" : "ok"}">${esc(statusText[ev.status] ?? ev.status)}</span>
-          ${s.gross_error ? '<span class="badge bad">ГРУБАЯ ОШИБКА</span>' : ""}
+        <div class="score-card">
+          <div class="ring" style="--v:${ev.total ?? 0};--c:var(--${{ warn: "warn", bad: "bad" }[tone(ev.total)] ?? "lime"})">
+            <div><span class="total">${fmt(ev.total)}</span><small>из 100</small></div></div>
+          <div class="sections">
+            <div class="row">${statusBadge(ev.status)}${s.gross_error ? '<span class="badge bad">грубая ошибка</span>' : ""}
+              ${changed ? `<span class="layers muted">ИИ: ${fmt(ev.total_ai)} → итог: ${fmt(ev.total)}</span>` : ""}</div>
+            ${s.sections.filter((x) => x.max_points).map((x) => `
+              <div class="sec"><span>${esc(x.title)}<b>${fmt(x.points)} / ${fmt(x.max_points)}</b></span>
+                <div class="bar"><i style="width:${(100 * x.points) / x.max_points}%"></i></div></div>`).join("")}
+          </div>
         </div>
-        <div class="small muted">чек-лист v${ev.checklist_version} · применимый вес ${s.applicable_weight}
+        <div class="small faint" style="margin-top:14px">чек-лист v${ev.checklist_version} · применимый вес ${s.applicable_weight}
           · ${esc(ev.models.provider)} · $${(ev.cost_usd ?? 0).toFixed(4)} · ${ev.tokens_in}/${ev.tokens_out} токенов
           ${s.total_note ? ` · <span class="err">итог не рассчитан: ${esc(s.total_note)}</span>` : ""}</div>
-        ${s.sections.filter((x) => x.max_points).map((x) => `
-          <div class="small" style="margin-top:6px">${esc(x.title)}: ${fmt(x.points)} / ${fmt(x.max_points)}
-            <div class="bar"><i style="width:${(100 * x.points) / x.max_points}%"></i></div></div>`).join("")}
       </div>
-      <div class="panel">${ev.result.criteria.map((c) => this.criterionHtml(ev, c, s.criteria[c.criterion_id], openAppeals[c.criterion_id], role)).join("")}</div>`;
+      <div>${ev.result.criteria.map((c) => this.criterionHtml(ev, c, s.criteria[c.criterion_id], openAppeals[c.criterion_id], role)).join("")}</div>`;
   }
 
   criterionHtml(ev, c, pts, appeal, role) {
@@ -174,32 +184,45 @@ class CqaDialogView extends HTMLElement {
     const canDecide = role === "reviewer" && (appeal || (["needs_review", "failed"].includes(c.status) && !c.decision));
     return `
       <div class="crit" data-crit="${esc(c.criterion_id)}">
-        <h4><span>${esc(c.criterion_id)} · ${esc(c.title)}</span><span>${pointsText}</span></h4>
+        <h4><span><span class="cid">${esc(c.criterion_id)}</span>${esc(c.title)}</span><span class="pts">${pointsText}</span></h4>
         <div class="row small">
-          <b>${verdictText(c.final)}</b>
-          ${c.decision ? `<span class="muted">(ИИ: ${verdictText(c.ai)} → решение ${esc(c.decision.by)}: «${esc(c.decision.reason)}»)</span>` : ""}
-          <span class="badge ${conf >= 0.99 ? "ok" : conf >= 0.66 ? "" : "warn"}" title="Согласие инспектора, адвоката и судьи">
-            согласие ${Math.round(conf * 100)}% · ${Object.entries(c.votes || {}).map(([k, v]) => `${k[0].toUpperCase()}:${esc(v)}`).join(" ")}</span>
-          ${c.status === "needs_review" ? '<span class="badge warn">на проверку</span>' : ""}
-          ${c.cached ? '<span class="muted">кэш</span>' : ""}
+          <b class="verdict ${this.verdictClass(c)}">${verdictText(c.final)}</b>
+          <span class="votes" title="Голоса: M1 инспектор, M2 адвокат, M3 судья">${Object.entries(c.votes || {}).map(([k, v]) =>
+            `<span class="${String(v) === this.finalKey(c) ? "agree" : ""}">${roleShort[k] ?? esc(k)} ${esc(v)}</span>`).join("")}</span>
+          <span class="badge ${conf >= 0.99 ? "ok" : conf >= 0.66 ? "" : "warn"}" title="Согласие инспектора, адвоката и судьи">согласие ${Math.round(conf * 100)}%</span>
+          ${c.status === "needs_review" ? '<span class="badge warn dot">на проверку</span>' : ""}
+          ${c.cached ? '<span class="faint">кэш</span>' : ""}
           ${appeal ? '<span class="badge warn">апелляция</span>' : ""}
         </div>
-        ${c.rationale ? `<div>${esc(c.rationale)}</div>` : ""}
+        ${c.decision ? `<div class="small muted" style="margin-top:6px">ИИ: ${verdictText(c.ai)} → решение ${esc(c.decision.by)}: «${esc(c.decision.reason)}»</div>` : ""}
+        ${c.rationale ? `<div class="rationale">${esc(c.rationale)}</div>` : ""}
         ${c.na_reason ? `<div class="small muted">N/A: ${esc(c.na_reason)}</div>` : ""}
         <div>${(c.evidence || []).map((e) => `<button class="chip" data-mid="${esc(e.msg)}" title="${esc(e.quote)}">${esc(e.msg)}: «${esc(String(e.quote).slice(0, 50))}»</button>`).join("")}
           ${c.checked_range ? `<span class="small muted">проверено: <button class="chip" data-mid="${esc(c.checked_range[0])}">${esc(c.checked_range[0])}</button>–<button class="chip" data-mid="${esc(c.checked_range[1])}">${esc(c.checked_range[1])}</button></span>` : ""}</div>
         ${Object.keys(c.errors || {}).length ? `<div class="small err">валидатор: ${esc(JSON.stringify(c.errors))}</div>` : ""}
         ${appeal ? `<div class="small">Комментарий оператора: «${esc(appeal.comment)}»</div>` : ""}
-        <div class="row small" style="margin-top:4px">
+        <div class="row small actions">
           ${role === "operator" && !appeal ? `<button data-appeal="${esc(c.criterion_id)}">Оспорить</button>` : ""}
           ${canDecide ? `<button data-decide="${esc(c.criterion_id)}" class="primary">Решение</button>` : ""}
           <button data-trace-toggle="${esc(c.criterion_id)}">${this.openTraces.has(c.criterion_id) ? "Скрыть трассу" : "Трасса"}</button>
-          <span style="flex:1"></span>
+          <span class="grow"></span>
           <label class="muted">эталон <select data-gold="${esc(c.criterion_id)}">${this.goldOptions(c)}</select><span class="muted"></span></label>
         </div>
         ${this.openTraces.has(c.criterion_id) ? this.traceHtml(c) : ""}
         <div data-form></div>
       </div>`;
+  }
+
+  finalKey(c) {
+    const f = c.final;
+    return !f ? "" : f.verdict === "scored" ? String(f.step) : f.verdict;
+  }
+
+  verdictClass(c) {
+    const v = c.final?.verdict;
+    if (c.type === "flag") return v === "yes" ? "no" : v === "no" ? "yes" : "";
+    if (v === "scored") return c.final.step > 0 ? "yes" : "no";
+    return v === "yes" ? "yes" : v === "no" ? "no" : "";
   }
 
   formSlot(cid) { return this.querySelector(`[data-crit="${CSS.escape(cid)}"] [data-form]`); }

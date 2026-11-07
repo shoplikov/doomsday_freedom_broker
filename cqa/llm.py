@@ -37,7 +37,8 @@ def parse_json(text: str) -> dict:
 async def chat_json(model: str, messages: list[dict]) -> tuple[dict, dict, str]:
     extra = {"reasoning_effort": config.REASONING_EFFORT} if config.REASONING_EFFORT else {}
     resp = await _openai().chat.completions.create(
-        model=model, messages=messages, response_format={"type": "json_object"}, **extra,
+        model=model, messages=messages, response_format={"type": "json_object"},
+        extra_body=config.LLM_EXTRA_BODY or None, **extra,
     )
     u = resp.usage
     usage = {"model": model, "in": u.prompt_tokens if u else 0, "out": u.completion_tokens if u else 0}

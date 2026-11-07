@@ -100,7 +100,7 @@ def test_demo_flow(page, server):
     page.locator('[data-role="reviewer"]').click()
     page.goto(server + "/#/review")
     expect(page.locator("cqa-review-queue")).to_contain_text("s-ru-001")
-    page.locator("cqa-review-queue tr[data-href]").first.click()
+    page.locator("cqa-review-queue [data-href]").first.click()
     page.locator('[data-decide="c05"]').click()
     form = page.locator('[data-crit="c05"] .form')
     form.locator("[data-action]").select_option("change")

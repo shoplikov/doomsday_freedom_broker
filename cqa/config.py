@@ -44,6 +44,9 @@ CONCURRENCY = int(_get("CONCURRENCY", "8"))
 RATIONALE_LANGUAGE = _get("RATIONALE_LANGUAGE", "Russian")
 # Only for reasoning models (gpt-5*, o*): minimal | low | medium | high. Empty = provider default.
 REASONING_EFFORT = _get("REASONING_EFFORT")
+# Extra JSON merged into every chat request, for OpenAI-compatible servers (vLLM / SGLang), e.g.
+# {"chat_template_kwargs": {"enable_thinking": false}} to turn off Qwen thinking.
+LLM_EXTRA_BODY: dict = json.loads(_get("LLM_EXTRA_BODY") or "{}")
 LLM_PRICES: dict[str, list[float]] = json.loads(_get("LLM_PRICES") or "{}")
 
 LOG_DIR = Path(_get("CQA_LOG_DIR") or DATA_DIR / "logs")

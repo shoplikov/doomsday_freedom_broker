@@ -45,3 +45,21 @@ export const statusText = {
   reviewed: "проверено человеком",
   failed: "ошибка оценки",
 };
+
+// ---- shared view helpers ----
+export const pageHead = (kicker, title, sub = "", actions = "") => `
+  <section class="hero"><div><span class="kicker">${kicker}</span><h1 class="display">${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div>
+  ${actions ? `<div class="hero-actions">${actions}</div>` : ""}</section>`;
+
+export const loading = (text = "Загрузка") => `<div class="loading">${esc(text)}</div>`;
+
+// Totals are on a 0..100 scale.
+export const tone = (v) => (v == null ? "" : v >= 85 ? "" : v >= 60 ? "warn" : "bad");
+export const scoreBar = (v) => v == null ? '<span class="faint">—</span>'
+  : `<span class="score"><b>${fmt(v)}</b><span class="meter ${tone(v)}"><i style="width:${Math.max(0, Math.min(100, v))}%"></i></span></span>`;
+
+export const statusClass = (s) => (s === "needs_review" ? "warn" : s === "failed" ? "bad" : s ? "ok" : "");
+export const statusBadge = (s) => s
+  ? `<span class="badge dot ${statusClass(s)}">${esc(statusText[s] ?? s)}</span>` : '<span class="faint">не оценён</span>';
+
+export const channelText = { "agent chat": "Чат", "voice call": "Звонок" };
