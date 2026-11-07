@@ -60,23 +60,26 @@ def test_demo_flow(page, server):
     page.set_default_timeout(15000)
 
     # 1. list: import SAMPLE and evaluate everything
-    page.get_by_text("Загрузить набор").click()
+    page.get_by_role("button", name="Загрузить", exact=True).click()
     expect(page.locator("[data-progress]")).to_have_text("Загружено: 5")
-    page.get_by_text("Оценить все").click()
+    page.get_by_role("button", name="Оценить все").click()
     expect(page.locator("[data-progress]")).to_contain_text("Готово: 5/5")
     expect(page.locator("tr[data-id]")).to_have_count(5)
     page.select_option('select[name="language"]', "KZ")
     expect(page.locator("tr[data-id]")).to_have_count(1)
     page.select_option('select[name="language"]', "")
+    page.fill('[name="q"]', "call")
+    expect(page.locator("tr[data-id]")).to_have_count(1)
+    page.fill('[name="q"]', "")
 
-    # 2. card: evidence chip jumps to the message, masked vs raw text, trace of all three roles
+    # 2. card: evidence quote jumps to the message, masked vs raw text, trace of all three roles
     page.locator('tr[data-id="s-ru-001"]').click()
     expect(page.locator(".total")).to_be_visible()
     expect(page.locator(".crit")).to_have_count(8)
-    page.locator(".crit .chip[data-mid]").first.click()
+    page.locator(".crit [data-mid]").first.click()
     expect(page.locator(".msg.hl")).to_have_count(1)
     expect(page.locator("#msg-m2")).to_contain_text("[IIN_1]")
-    page.locator("[data-raw]").check()
+    page.locator("label.switch:has([data-raw])").click()
     expect(page.locator("#msg-m2")).to_contain_text("900101300123")
     page.locator('[data-trace-toggle="c01"]').click()
     trace = page.locator('[data-crit="c01"] .trace')
@@ -86,16 +89,20 @@ def test_demo_flow(page, server):
     expect(trace.locator("details[open] pre")).to_contain_text("criteria")  # raw model response
     expect(trace.locator("details pre").first).to_contain_text("quality-assurance panel")  # exact prompt
 
-    # 3. gold label is saved and survives reload
+    # 3. gold label is saved
     page.select_option('[data-gold="c01"]', "yes")
     expect(page.locator('[data-gold="c01"] + span')).to_have_text("сохранено")
 
-    # 4. operator appeals, reviewer changes the verdict, total is recalculated
+    # 4. operator appeals (a too-short reason is refused), reviewer changes the verdict, total is recalculated
     page.locator('[data-role="operator"]').click()
     page.locator('[data-appeal="c05"]').click()
-    page.locator('[data-crit="c05"] textarea').fill("Оператор ответил на проблему в m5")
-    page.get_by_text("Отправить апелляцию").click()
-    expect(page.locator('[data-crit="c05"]')).to_contain_text("апелляция")
+    crit = page.locator('[data-crit="c05"]')
+    crit.locator("textarea").fill("нет")
+    crit.get_by_text("Отправить апелляцию").click()
+    expect(crit.locator(".field-error")).to_be_visible()
+    crit.locator("textarea").fill("Оператор ответил на проблему в m5")
+    crit.get_by_text("Отправить апелляцию").click()
+    expect(crit).to_contain_text("Апелляция оператора")
     before = page.locator(".total").inner_text()
     page.locator('[data-role="reviewer"]').click()
     page.goto(server + "/#/review")
@@ -103,30 +110,36 @@ def test_demo_flow(page, server):
     page.locator("cqa-review-queue [data-href]").first.click()
     page.locator('[data-decide="c05"]').click()
     form = page.locator('[data-crit="c05"] .form')
-    form.locator("[data-action]").select_option("change")
-    current = page.locator('[data-crit="c05"] .row b').first.inner_text()
-    form.locator("[data-verdict]").select_option("no" if current == "Да" else "yes")
-    form.locator("textarea").fill("Проверено по m5")
+    form.locator('label.choice:has([value="change"])').click()
+    current = page.locator('[data-crit="c05"] .verdict').inner_text()
+    form.locator(f'label:has([data-verdict][value="{"no" if current == "Да" else "yes"}"])').click()
+    form.locator("textarea").fill("Проверено по m5, ответа не было")
     form.get_by_text("Сохранить решение").click()
     expect(page.locator('[data-crit="c05"]')).to_contain_text("решение reviewer")
     expect(page.locator(".layers")).to_contain_text("ИИ:")
     assert page.locator(".total").inner_text() != before
 
-    # 5. replace a criterion through the UI, publish v2, apply to all, see the diff
+    # 5. replace a criterion in the checklist studio, publish v2, apply to all, see the diff
     page.goto(server + "/#/checklist")
-    crit = page.locator('.editor-crit:has(input[data-f="id"][value="c07"])')
-    crit.locator('[data-f="definition"]').fill("Да — оператор предложил мобильное приложение для следующего обращения и попрощался.")
-    crit.locator('[data-f="atoms"]').fill("offered_app: Предложил ли оператор мобильное приложение?\nfarewell: Попрощался ли оператор?")
-    page.locator("[data-note]").fill("замена c07")
-    page.get_by_text("Сохранить как v2").click()
+    page.locator('.cl-item[data-id="c07"]').click()
+    page.fill('[data-path="definition"]', "Да — оператор предложил мобильное приложение для следующего обращения и попрощался.")
+    page.fill('[data-path="atoms.0.q"]', "Предложил ли оператор мобильное приложение?")
+    page.fill('[data-path="atoms.0.id"]', "offered_app")
+    page.fill('[data-path="atoms.1.q"]', "Попрощался ли оператор?")
+    page.get_by_role("button", name="Опубликовать v2").click()  # no note yet: refused
+    expect(page.locator("[data-note]")).to_have_class("invalid")
+    page.fill("[data-note]", "замена c07")
+    page.get_by_role("button", name="Опубликовать v2").click()
     expect(page.locator("[data-apply]")).to_contain_text("Опубликована v2")
     page.get_by_text("Применить ко всем диалогам").click()
     expect(page.locator("[data-diff] tbody tr")).to_have_count(5)
 
-    # 6. lint blocks a broken criterion
-    page.get_by_text("+ Критерий").click()
-    page.get_by_text("Проверить").click()
-    expect(page.locator("[data-lint]")).to_contain_text("title is empty")
+    # 6. validation blocks a broken criterion and points at the field
+    page.get_by_text("Добавить критерий").click()
+    page.get_by_role("button", name="Опубликовать v3").click()
+    expect(page.locator("[data-editor]")).to_contain_text("Введите название")
+    page.locator('[data-act="delete"]').click()
+    page.locator('[data-act="del-yes"]').click()
 
     # 7. analytics for v1 shows the gold label and the panel numbers
     page.goto(server + "/#/analytics")
