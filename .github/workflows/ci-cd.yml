@@ -2,17 +2,14 @@ name: CI/CD
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
   pull_request:
-    branches: [main]
+    branches: [main, dev]
   workflow_dispatch:
 
 concurrency:
   group: ci-cd-${{ github.ref }}
   cancel-in-progress: false
-
-env:
-  APP_DIR: /opt/doomsday_freedom_broker
 
 jobs:
   build:
@@ -29,9 +26,13 @@ jobs:
 
   deploy:
     needs: build
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    env:
+      # main -> http://<host>/ , dev -> http://<host>:8080/
+      APP_DIR: ${{ github.ref_name == 'main' && '/opt/doomsday_freedom_broker' || '/opt/doomsday_freedom_broker-dev' }}
+      APP_PORT: ${{ github.ref_name == 'main' && '80' || '8080' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -56,10 +57,10 @@ jobs:
 
       - name: Build and restart
         run: |
-          ssh target "cd ${APP_DIR} && docker compose up -d --build --remove-orphans && docker image prune -f"
+          ssh target "cd ${APP_DIR} && APP_PORT=${APP_PORT} docker compose up -d --build --remove-orphans && docker image prune -f"
 
       - name: Health check
         run: |
           ssh target 'for i in $(seq 1 30); do
-              curl -fsS http://127.0.0.1/api/health && exit 0; sleep 2; done
+              curl -fsS http://127.0.0.1:'"${APP_PORT}"'/api/health && exit 0; sleep 2; done
             echo "App did not become healthy"; cd '"${APP_DIR}"' && docker compose ps && docker compose logs --tail 80; exit 1'
