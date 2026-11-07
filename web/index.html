@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CQA · Оценка качества диалогов</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- Dynamics 365: set window.CQA_API_BASE before app.js if the API lives on another origin. -->
+</head>
+<body>
+  <header class="top">
+    <strong class="brand">CQA</strong>
+    <nav>
+      <a href="#/dialogs" data-page="dialogs">Диалоги</a>
+      <a href="#/review" data-page="review">Проверка</a>
+      <a href="#/checklist" data-page="checklist">Чек-лист</a>
+      <a href="#/analytics" data-page="analytics">Аналитика</a>
+    </nav>
+    <div class="roles" role="group" aria-label="Роль">
+      <button type="button" data-role="operator">Оператор</button>
+      <button type="button" data-role="reviewer">Проверяющий</button>
+    </div>
+    <span id="health" class="muted small"></span>
+  </header>
+  <main id="view"></main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
