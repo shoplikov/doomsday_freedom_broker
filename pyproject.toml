@@ -1,0 +1,18 @@
+[project]
+name = "cqa"
+version = "0.1.0"
+description = "Conversation Quality Analytics: AI scoring of operator chats and calls with evidence, appeals and a versioned checklist"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "httpx>=0.27",
+    "openai>=1.40",
+]
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
