@@ -242,3 +242,10 @@ def test_empty_greedy_answer_is_resampled_at_once(fake):
     res = run(["c01"])[0]["c01"]
     assert res["status"] == "auto_accepted" and f.roles().count("inspector") == 2
     assert pipeline.RESAMPLE_TEMPERATURE in f.temps
+
+
+def test_flag_named_by_the_verdict_is_raised_even_without_an_atom():
+    c08 = C["c08"]
+    r = {"atoms": {a["id"]: False for a in c08["atoms"]}, "verdict": "yes"}
+    assert pipeline.derive(c08, r)["verdict"] == "yes"
+    assert pipeline.derive(c08, r | {"verdict": "no"})["verdict"] == "no"

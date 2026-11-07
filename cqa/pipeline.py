@@ -180,6 +180,8 @@ def derive(c: dict, r: dict) -> dict:
         return {"verdict": "scored", "step": float(r["step"])}
     values = [bool(r["atoms"][a["id"]]) for a in c["atoms"]]
     hit = any(values) if c.get("rule", "any" if c["type"] == "flag" else "all") == "any" else all(values)
+    if c["type"] == "flag" and r.get("verdict") == "yes":
+        hit = True  # safety first: a violation the model names but cannot file under an atom is still raised
     return {"verdict": "yes" if hit else "no", "step": None}
 
 
