@@ -1,0 +1,100 @@
+"""Terminal loop for the team:  uv run python -m cqa.cli {import,run,report,trace} ...
+
+  import DEV                 fetch + normalize + store a group
+  run DEV [--limit 10]       evaluate the group with the active checklist (parallel, uses the cache)
+  report [--version N]       panel analytics: A/B agreement, judge sides, gold accuracy per role, cost
+  trace CONVERSATION_ID      every LLM call of one dialog: role, try, latency, tokens, validation errors
+"""
+import argparse
+import asyncio
+import json
+
+from . import analytics, checklist, config, db, evaluations, importer, traces
+
+
+def _table(rows: list[list], header: list[str]) -> str:
+    rows = [[("—" if v is None else str(v)) for v in r] for r in rows]
+    widths = [max(len(h), *(len(r[i]) for r in rows)) if rows else len(h) for i, h in enumerate(header)]
+    line = lambda r: "  ".join(v.ljust(w) for v, w in zip(r, widths))  # noqa: E731
+    return "\n".join([line(header), line(["-" * w for w in widths])] + [line(r) for r in rows])
+
+
+def report(version: int | None) -> None:
+    a = analytics.compute(version)
+    print(f"checklist v{a['checklist_version']} · dialogs {a['dialogs']} · status {a['status']} · "
+          f"avg total {a['avg_total']} · gross errors {a['gross_errors']} · cost ${a['cost_usd']} "
+          f"(avg ${a['avg_cost_usd']}/dialog)")
+    print(f"M1/M2 independent agreement: {a['ab_agreement_pct']}% · gold labels: {a['gold']['labels']} · "
+          f"accuracy % {a['gold']['accuracy_pct']}")
+    g = a["gold"]
+    print(f"panel accuracy when M1=M2: {g['accuracy_when_m1_eq_m2_pct']}% (n={g['agreed_n']}) · "
+          f"when they split: {g['accuracy_when_split_pct']}% (n={g['split_n']})\n")
+    print(_table([[c["criterion_id"], c["title"][:28], c["n"], c["ab_agreement_pct"],
+                   "/".join(str(c["judge_sided"][k]) for k in ("both", "inspector", "advocate", "neither")),
+                   c["avg_confidence"], c["needs_review"], c["failed"], c["validation_issues"], c["gold_n"],
+                   c["accuracy_pct"]["inspector"], c["accuracy_pct"]["advocate"], c["accuracy_pct"]["panel"],
+                   json.dumps(c["final_dist"], ensure_ascii=False)] for c in a["criteria"]],
+                 ["id", "title", "n", "A=B%", "judge both/A/B/none", "conf", "review", "fail", "valid!",
+                  "gold", "accA%", "accB%", "panel%", "final answers"]))
+    print("\nLLM calls by role:")
+    print(_table([[r["role"], r["calls"], r["retries"], r["errors"], round(r["avg_ms"] or 0), r["max_ms"],
+                   r["tokens_in"], r["tokens_out"]] for r in a["calls"]],
+                 ["role", "calls", "retries", "errors", "avg ms", "max ms", "tokens in", "tokens out"]))
+    print("\nBy language:", json.dumps(a["by_language"], ensure_ascii=False))
+    if a["gold_misses"]:
+        print(f"\nGold misses ({len(a['gold_misses'])}):")
+        for m in a["gold_misses"][:30]:
+            print(f"  {m['conversation_id']} {m['criterion_id']} gold={m['gold']} final={m['final']} votes={m['votes']}")
+
+
+def trace(conversation_id: str) -> None:
+    rows = traces.list_for(conversation_id)
+    print(_table([[t["id"], t["role"], t["attempt"], t["model"], t["latency_ms"], t["tokens_in"], t["tokens_out"],
+                   t["error"] or "", t["validation"] or ""] for t in rows],
+                 ["trace", "role", "try", "model", "ms", "in", "out", "error", "validation errors"]))
+    print("\nFull prompt/response: GET /api/traces/<id>  or the «Трасса» button on the dialog card.")
+
+
+EST_USD_PER_DIALOG = 0.025  # measured on DEV: gpt-4.1-mini x2 + gpt-4.1, 8 criteria, ~$0.023
+
+
+async def run(group: str, limit: int | None, version: int | None, yes: bool = False) -> None:
+    ids = [r["id"] for r in db.rows("SELECT id FROM conversations WHERE group_id = ? ORDER BY id", group)][:limit]
+    if not ids:
+        raise SystemExit(f"no dialogs in group {group}: run `import {group}` first")
+    if config.LLM_PROVIDER != "mock" and not yes:
+        # ponytail: estimate ignores the cache, so it is an upper bound; already-evaluated criteria cost $0.
+        raise SystemExit(f"{len(ids)} dialogs with real models ({config.MODELS}): up to ~${len(ids) * EST_USD_PER_DIALOG:.2f}. "
+                         "Cached criteria are free. Add --yes to run, or --limit N to try a few first.")
+    results = await asyncio.gather(*(evaluations.evaluate(i, version) for i in ids), return_exceptions=True)
+    failed = [(i, r) for i, r in zip(ids, results) if isinstance(r, Exception)]
+    print(f"evaluated {len(ids) - len(failed)}/{len(ids)}" + (f", failed: {failed}" if failed else ""))
+
+
+def main() -> None:
+    config.setup_logging()
+    db.init()
+    checklist.ensure_seed()
+    p = argparse.ArgumentParser(prog="cqa")
+    sub = p.add_subparsers(dest="cmd", required=True)
+    sub.add_parser("import").add_argument("group")
+    r = sub.add_parser("run")
+    r.add_argument("group")
+    r.add_argument("--limit", type=int)
+    r.add_argument("--version", type=int)
+    r.add_argument("--yes", action="store_true", help="confirm spending on real models")
+    sub.add_parser("report").add_argument("--version", type=int)
+    sub.add_parser("trace").add_argument("conversation_id")
+    args = p.parse_args()
+    if args.cmd == "import":
+        print("imported", asyncio.run(importer.import_group(args.group)))
+    elif args.cmd == "run":
+        asyncio.run(run(args.group, args.limit, args.version, args.yes))
+    elif args.cmd == "report":
+        report(args.version)
+    else:
+        trace(args.conversation_id)
+
+
+if __name__ == "__main__":
+    main()
