@@ -143,7 +143,8 @@ uv run python -m cqa.cli export <group> --prod # -> results/prod/results.json
 
 - `null` = N/A. Scale values are the step before weighting.
 - `evidence_turns` = 1-based positions in the original transcript array (our `m<N>`), from the evidence quotes;
-  for a "no" without quotes, the whole `checked_range`.
+  for a "no" without quotes, the whole `checked_range`; with neither, the turns that were checked
+  (all operator turns for `critical`, the client's request for an N/A).
 - `rationale` = the deciding model's rationale; with a human decision, the reviewer's reason.
 - `score.final_score` = `scoring.score` total (N/A weight redistributed, half-up, 2 dp).
   `critical_flag` = value of `critical`.

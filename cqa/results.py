@@ -7,7 +7,7 @@ import json
 import re
 from pathlib import Path
 
-from . import config, db, evaluations
+from . import config, db, evaluations, importer
 
 SCHEMA_VERSION = "1.0"
 # Our checklist ids -> the organisers' criterion codes (same order and weights as the checklist PDF).
@@ -25,12 +25,20 @@ def _value(item: dict):
     return f["verdict"] == "yes"
 
 
-def _turns(item: dict) -> list[int]:
-    """1-based positions in the original transcript array (our mid m<N> is exactly that)."""
+def _turns(item: dict, speakers: list[str]) -> list[int]:
+    """1-based positions in the original transcript array (our mid m<N> is exactly that).
+    Evidence quotes first, else the checked range. A criterion with neither (N/A, "no gross errors")
+    gets the turns that were checked: all operator turns for `critical`, the client's request for N/A."""
     mids = [e.get("msg") for e in item.get("evidence") or []] or list(item.get("checked_range") or [])
     nums = {int(m.group(1)) for x in mids if isinstance(x, str) and (m := _MID.match(x))}
     if len(mids) == 2 and not item.get("evidence") and len(nums) == 2:  # checked_range: the whole span
         nums = set(range(min(nums), max(nums) + 1))
+    if not nums:
+        if item["criterion_id"] == "c08":
+            nums = {i + 1 for i, sp in enumerate(speakers) if sp == "operator"}
+        else:  # client turns before the operator's first reply
+            first_op = next((i for i, sp in enumerate(speakers) if sp == "operator"), len(speakers))
+            nums = {i + 1 for i, sp in enumerate(speakers[:first_op]) if sp == "client"}
     return sorted(nums)
 
 
@@ -45,7 +53,7 @@ def _error(cid: str, msg: str) -> dict:
     return {"conversation_id": cid, "status": "error", "criteria": [], "score": None, "error": msg}
 
 
-def _record(cid: str, ev: dict | None) -> dict:
+def _record(cid: str, ev: dict | None, speakers: list[str] = ()) -> dict:
     if not ev:
         return _error(cid, "Диалог не оценён.")
     items = {i["criterion_id"]: i for i in ev["result"]["criteria"]}
@@ -59,7 +67,7 @@ def _record(cid: str, ev: dict | None) -> dict:
         "conversation_id": cid,
         "status": "ok",
         "criteria": [{"criterion_id": code, "value": _value(items[k]), "rationale": _rationale(items[k]),
-                      "evidence_turns": _turns(items[k])} for k, code in CODES.items()],
+                      "evidence_turns": _turns(items[k], list(speakers))} for k, code in CODES.items()],
         "score": {"final_score": score["total"], "critical_flag": _value(items["c08"]) is True},
     }
 
@@ -86,7 +94,7 @@ def build(group_id: str, team_name: str) -> dict:
         evals[cid] = evaluations.load(last["id"]) if last and last["id"] else None
     return {"schema_version": SCHEMA_VERSION, "team_name": team_name,
             "model": _model([e for e in evals.values() if e]),
-            "results": [_record(cid, evals[cid]) for cid in ids]}
+            "results": [_record(cid, evals[cid], [m["speaker"] for m in importer.messages(cid)]) for cid in ids]}
 
 
 def write(group_id: str, out: Path, team_name: str | None = None) -> dict:

@@ -25,7 +25,7 @@ def test_results_file():
     assert ok["status"] == "ok" and [c["criterion_id"] for c in ok["criteria"]] == CODES
     for c in ok["criteria"]:
         assert c["value"] in ALLOWED[c["criterion_id"]] and type(c["value"]) in (bool, int, type(None))
-        assert isinstance(c["rationale"], str) and all(isinstance(t, int) and t >= 1 for t in c["evidence_turns"])
+        assert isinstance(c["rationale"], str) and c["evidence_turns"] and all(isinstance(t, int) and t >= 1 for t in c["evidence_turns"])
     critical = next(c["value"] for c in ok["criteria"] if c["criterion_id"] == "critical")
     assert ok["score"]["critical_flag"] is critical and 0 <= ok["score"]["final_score"] <= 100
 
