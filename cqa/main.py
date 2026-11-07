@@ -5,7 +5,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from . import analytics, checklist, config, db, evaluations, importer, results, signals, traces
+from . import analytics, checklist, config, db, evaluations, importer, insights, results, signals, traces
 
 config.setup_logging()
 
@@ -68,6 +68,18 @@ class GoldIn(BaseModel):
     criterion_id: str
     label: str | None = None  # yes | no | na | step ("15"); empty removes
     note: str = ""
+
+
+class StressIn(BaseModel):
+    conversation_id: str
+    mutation: str
+    text: str | None = None  # custom: the operator line to insert
+    after_mid: str | None = None
+
+
+class TestDriveIn(BaseModel):
+    criterion: dict
+    conversation_ids: list[str] | None = None
 
 
 class ChecklistIn(BaseModel):
@@ -232,6 +244,49 @@ def publish_checklist(body: ChecklistIn, request: Request):
     version = _guard(checklist.save, body.checklist, who(request), body.note)
     _, warnings = checklist.lint(body.checklist)
     return {"version": version, "warnings": warnings}
+
+
+@app.post("/api/checklists/test-drive")
+async def test_drive(body: TestDriveIn):
+    """Run a draft criterion on a few dialogs before publishing it. Nothing is saved."""
+    try:
+        return await insights.test_drive(body.criterion, body.conversation_ids)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc))
+
+
+@app.get("/api/checklist-health")
+def checklist_health():
+    return insights.checklist_health()
+
+
+# ---------- stress test ----------
+
+@app.get("/api/stress-tests/kinds")
+def stress_kinds():
+    return [{"id": k, "title": v["title"], "expect": {c: sorted(x) for c, x in (v["expect"] or {}).items()}}
+            for k, v in insights.STRESS.items()]
+
+
+@app.post("/api/stress-tests")
+async def run_stress_test(body: StressIn):
+    try:
+        return await insights.stress_test(body.conversation_id, body.mutation,
+                                          {"text": body.text, "after_mid": body.after_mid})
+    except LookupError as exc:
+        raise HTTPException(404, str(exc).strip("'\""))
+    except ValueError as exc:
+        raise HTTPException(422, str(exc))
+
+
+@app.get("/api/stress-tests")
+def list_stress_tests(conversation_id: str | None = None):
+    return insights.stress_tests(conversation_id)
+
+
+@app.get("/api/stress-tests/summary")
+def stress_summary():
+    return insights.stress_summary()
 
 
 # ---------- traces, gold labels, analytics ----------

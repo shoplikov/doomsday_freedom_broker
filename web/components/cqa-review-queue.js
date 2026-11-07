@@ -1,4 +1,4 @@
-import { api, errorBox, esc, getRole, icon, loading, pageHead, plural } from "../api.js";
+import { api, errorBox, esc, fmt, getRole, icon, loading, pageHead, plural } from "../api.js";
 
 // Reviewer inbox: open appeals + low-confidence AI verdicts. Decisions are made on the dialog card.
 class CqaReviewQueue extends HTMLElement {
@@ -33,11 +33,12 @@ class CqaReviewQueue extends HTMLElement {
                 <span class="small faint">${esc(a.filed_by)} · ${esc(String(a.created_at).slice(0, 16).replace("T", " "))}</span></div>
                 <p class="body">«${esc(a.comment)}»</p></div>${go}
             </div>`).join("") : empty("Апелляций нет", "Когда оператор оспорит оценку, она появится здесь.")}</section>
-        <section class="card"><div class="card-head"><h2>Спорные вердикты <span class="faint">${q.low_confidence.length}</span></h2><p>Модели разошлись во мнениях</p></div>
+        <section class="card"><div class="card-head"><h2>Спорные вердикты <span class="faint">${q.low_confidence.length}</span></h2><p>Сверху — сильнее всего меняют итог</p></div>
           ${q.low_confidence.length ? q.low_confidence.map((x) => `
             <div class="q-item" data-href="${open(x.conversation_id)}" tabindex="0" role="link">
               <span class="ico info" title="Согласие моделей">${Math.round(x.confidence * 100)}%</span>
-              <div><div class="row tight"><b class="mono">${esc(x.conversation_id)}</b><span class="badge">${esc(x.criterion_id)}</span></div>
+              <div><div class="row tight"><b class="mono">${esc(x.conversation_id)}</b><span class="badge">${esc(x.criterion_id)}</span>
+                ${x.impact ? `<span class="badge ${x.impact >= 10 ? "warn" : ""}" title="Насколько изменится итог, если верен другой голос моделей">±${fmt(x.impact)} к итогу</span>` : '<span class="badge" title="Другой голос не меняет итог">итог не меняется</span>'}</div>
                 <p class="body">${esc(x.title)}</p>
                 <p class="small faint">Голоса: ${Object.entries(x.votes || {}).map(([k, v]) => `${esc({ inspector: "M1", advocate: "M2", judge: "M3" }[k] ?? k)} ${esc(v)}`).join(" · ")}</p></div>${go}
             </div>`).join("") : empty("Всё согласовано", "Модели согласны во всех вердиктах. Новые спорные случаи появятся после оценки.")}</section>

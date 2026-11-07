@@ -6,6 +6,8 @@ const roleName = { inspector: "M1 Инспектор (строгий)", advocate
 const voteText = (v) => ({ yes: "да", no: "нет", na: "н/п" }[v] ?? v);
 const pretty = (text) => { try { return JSON.stringify(JSON.parse(text), null, 2); } catch { return text ?? ""; } };
 const MIN_REASON = 10;
+const labelText = (v, type) => v == null ? "—" : type === "flag" ? ({ yes: "Нарушение", no: "Нет нарушений" }[v] ?? v)
+  : ({ yes: "Да", no: "Нет", na: "Не применимо" }[v] ?? `${v} ${plural(Number(v), "балл", "балла", "баллов")}`);
 
 // Dialog card: transcript (+ audio) on the left, evaluation with evidence on the right.
 // Operator can appeal a criterion; Reviewer decides appeals and low-confidence items.
@@ -59,10 +61,12 @@ class CqaDialogView extends HTMLElement {
           <p class="lead">${esc(channelText[d.channel] ?? d.channel)} · ${esc(d.language)} · ${d.messages.length} ${plural(d.messages.length, "сообщение", "сообщения", "сообщений")}
             (оператор ${counts.operator ?? 0}, клиент ${counts.client ?? 0})</p></div>
         <div class="actions">
+          <button data-act="stress" title="Внести в диалог нарушение и проверить, заметит ли его ИИ" aria-expanded="${Boolean(this.stress?.open)}">${icon("shield")}Проверка на прочность</button>
           <button data-act="evaluate" class="${ev ? "" : "primary"}">${icon("refresh")}${ev ? "Переоценить" : "Оценить диалог"}</button>
         </div>
       </header>
       <div data-flash></div>
+      <div data-stress>${this.stress?.open ? this.stressHtml() : ""}</div>
       <div class="split">
         <section class="card sticky-col" aria-label="Переписка">
           <div class="transcript-head"><h2>Переписка</h2>
@@ -84,6 +88,8 @@ class CqaDialogView extends HTMLElement {
 
   bind() {
     this.querySelector('[data-act="evaluate"]').onclick = () => this.evaluate();
+    this.querySelector('[data-act="stress"]').onclick = () => this.toggleStress();
+    this.bindStress();
     this.querySelector("[data-raw]").onchange = (e) => { this.showRaw = e.target.checked; this.render(); };
     this.querySelectorAll("[data-mid]").forEach((b) => (b.onclick = () => this.jump(b.dataset.mid)));
     this.querySelectorAll("[data-goto]").forEach((b) => (b.onclick = () =>
@@ -158,13 +164,96 @@ class CqaDialogView extends HTMLElement {
     } catch (e) { box.innerHTML = `<span class="err">${esc(e.message)}</span>`; }
   }
 
+  // ---- Stress test: break the dialog on purpose (the right answer is known) and see whether the AI notices ----
+  async toggleStress() {
+    this.stress = this.stress ?? { open: false, kind: "side_deal", result: null, running: false };
+    this.stress.open = !this.stress.open;
+    if (this.stress.open && !this.stress.kinds) {
+      try {
+        [this.stress.kinds, this.stress.history] = await Promise.all([
+          api.get("/api/stress-tests/kinds"),
+          api.get(`/api/stress-tests?conversation_id=${encodeURIComponent(this.id_)}`)]);
+        this.stress.result = this.stress.history[0] ?? null;
+      } catch (e) { this.flash(e.message); this.stress.open = false; }
+    }
+    this.render();
+    if (this.stress.open) this.querySelector("[data-stress]").scrollIntoView({ block: "nearest" });
+  }
+
+  stressHtml() {
+    const st = this.stress;
+    const ops = this.data.messages;
+    const firstOp = this.data.messages.find((m) => m.speaker === "operator")?.mid;
+    return `<section class="card stress" aria-label="Проверка на прочность">
+      <div class="card-head"><h2>Проверка на прочность</h2>
+        <p>Внесите в копию диалога нарушение — ИИ оценит её заново. Правильный ответ известен заранее, исходный диалог не меняется.</p></div>
+      <div class="seg" role="radiogroup" aria-label="Что сломать">${(st.kinds || []).map((k) =>
+        `<label><input type="radio" name="stress-kind" value="${esc(k.id)}" data-stress-kind ${k.id === st.kind ? "checked" : ""}>${esc(k.title)}</label>`).join("")}</div>
+      ${st.kind === "custom" ? `<div class="stress-custom">
+        <div class="field"><label for="stress-text">Реплика оператора</label>
+          <textarea id="stress-text" rows="2" maxlength="1000" placeholder="Например: Могу помочь быстрее, напишите мне в WhatsApp, по номеру +7 701…">${esc(st.text ?? "")}</textarea></div>
+        <div class="field"><label for="stress-after">Вставить после</label><select id="stress-after">${ops.map((m) =>
+          `<option value="${esc(m.mid)}" ${m.mid === (st.after ?? firstOp) ? "selected" : ""}>${esc(m.mid)} · ${esc(speakerText[m.speaker] ?? m.speaker)}: ${esc(m.text_masked.slice(0, 50))}</option>`).join("")}</select></div></div>` : ""}
+      <div class="row" style="margin-top:14px"><button class="primary" data-stress-run ${st.running ? "disabled" : ""}>${icon("shield")}${st.running ? "Модели читают изменённый диалог…" : "Сломать и проверить"}</button>
+        ${(st.history || []).length ? `<span class="small faint">Прошлые проверки:</span>${st.history.slice(0, 6).map((h, i) =>
+          `<button class="chip" data-stress-hist="${i}" title="${esc(String(h.created_at ?? "").slice(0, 16).replace("T", " "))}">${h.ok === true ? "✓" : h.ok === false ? "✗" : "•"} ${esc(h.title)}</button>`).join("")}` : ""}</div>
+      <div data-stress-result>${st.result ? this.stressResultHtml(st.result) : ""}</div>
+    </section>`;
+  }
+
+  stressResultHtml(r) {
+    const tone = r.ok === true ? "ok" : r.ok === false ? "bad" : "info";
+    const head = r.ok === true ? `ИИ заметил: «${esc(r.title)}»` : r.ok === false ? `ИИ не заметил: «${esc(r.title)}»`
+      : "Вот как ИИ оценил диалог с вашей репликой";
+    return `<div class="alert ${tone}" style="margin-top:16px">${icon(r.ok === false ? "alert" : "check")}<div><b>${head}.</b>
+        ${r.ok === false ? "Это повод уточнить формулировку критерия или промпт: случай сохранён." : ""}</div></div>
+      <div class="stress-grid">
+        <div><div class="small faint" style="margin-bottom:6px">Что изменили</div>${r.changed.map((m) => `
+          <div class="msg ${esc(m.speaker)} changed"><div class="meta"><b>${esc(speakerText[m.speaker] ?? m.speaker)}</b><span class="mid">${esc(m.mid)}</span>
+            ${m.ts_raw ? `<span>${esc(m.ts_raw)}</span>` : ""}<span class="badge warn">изменено</span></div><div class="bubble">${esc(m.text)}</div></div>`).join("")}</div>
+        <div class="table-wrap"><table class="compact"><thead><tr><th>Критерий</th><th>Было</th><th>Стало</th>${r.ok == null ? "" : "<th>Ожидалось</th>"}<th class="num">Согласие</th></tr></thead>
+          <tbody>${r.checks.map((c) => `<tr><td><span class="faint mono">${esc(c.criterion_id)}</span> ${esc(c.title)}</td>
+            <td>${esc(labelText(c.before, c.type))}</td>
+            <td><b class="${c.ok === false ? "err" : c.ok ? "good" : ""}">${esc(labelText(c.after, c.type))}</b></td>
+            ${r.ok == null ? "" : `<td>${(c.expected || []).map((x) => esc(labelText(x, c.type))).join(" или ")} ${c.ok ? "✓" : "✗"}</td>`}
+            <td class="num">${Math.round((c.confidence ?? 0) * 100)}%</td></tr>
+            <tr class="sub"><td colspan="${r.ok == null ? 4 : 5}" class="small">${esc(c.rationale ?? "")}
+              ${(c.evidence || []).map((e) => `<span class="faint"> ${esc(e.msg)}: «${esc(e.quote)}»</span>`).join("")}</td></tr>`).join("")}</tbody></table></div>
+      </div>`;
+  }
+
+  bindStress() {
+    const box = this.querySelector("[data-stress]");
+    if (!box || !this.stress?.open) return;
+    const keep = () => {
+      this.stress.text = box.querySelector("#stress-text")?.value ?? this.stress.text;
+      this.stress.after = box.querySelector("#stress-after")?.value ?? this.stress.after;
+    };
+    box.querySelectorAll("[data-stress-kind]").forEach((r) => (r.onchange = () => { keep(); this.stress.kind = r.value; this.render(); }));
+    box.querySelectorAll("[data-stress-hist]").forEach((b) => (b.onclick = () => { this.stress.result = this.stress.history[Number(b.dataset.stressHist)]; this.render(); }));
+    box.querySelector("[data-stress-run]").onclick = async () => {
+      keep();
+      const st = this.stress;
+      if (st.kind === "custom" && !(st.text ?? "").trim()) { box.querySelector("#stress-text").focus(); return; }
+      st.running = true; this.render();
+      try {
+        st.result = await api.post("/api/stress-tests", { conversation_id: this.id_, mutation: st.kind, text: st.text, after_mid: st.after });
+        st.history = [st.result, ...(st.history || [])];
+      } catch (e) { st.result = null; this.flash(`Проверка не удалась: ${e.message}`); }
+      st.running = false;
+      this.render();
+      this.querySelector("[data-stress-result]")?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    };
+  }
+
   signalsHtml(s) {
     const lp = (p) => Object.entries(p || {}).map(([k, v]) => `${k} ${v}%`).join(", ") || "—";
     return `<div class="signals small">
       <span class="badge" title="Языки клиента">Клиент: ${esc(lp(s.language_profile.client))}</span>
       <span class="badge" title="Языки оператора">Оператор: ${esc(lp(s.language_profile.operator))}</span>
-      ${s.first_operator_reply ? `<button class="chip" data-mid="${esc(s.first_operator_reply.mid)}">первый ответ ${esc(s.first_operator_reply.mid)}</button>` : ""}
-      ${s.operator_reply_gaps.length ? `<span class="badge warn" title="Долгие паузы перед ответом оператора">Паузы: ${s.operator_reply_gaps.map((g) => `${esc(g.before)} ${g.seconds} с`).join(", ")}</span>` : ""}
+      ${s.first_operator_reply ? `<button class="chip" data-mid="${esc(s.first_operator_reply.mid)}" title="Отсчёт от передачи чата оператору">первый ответ ${esc(s.first_operator_reply.mid)}${s.first_operator_reply.seconds_after_reaching_operator != null ? ` · ${s.first_operator_reply.seconds_after_reaching_operator} с` : ""}</button>` : ""}
+      ${(s.operator_waits_over_2_min || []).length ? `<span class="badge warn" title="Клиент ждал ответа оператора больше 2 минут">Паузы: ${s.operator_waits_over_2_min.map((g) => `${esc(g.operator_reply)} ${g.seconds} с${g.operator_warned_before ? " (предупредил)" : ""}`).join(", ")}</span>` : ""}
+      ${(s.identity_verified_events || []).length ? `<span class="badge ok" title="Системное сообщение о проверке личности">Личность подтверждена: ${s.identity_verified_events.map(esc).join(", ")}</span>` : ""}
       ${s.risk_hits.length ? `<span class="badge bad" title="Сообщения с рискованными словами">Риск: ${s.risk_hits.map((r) => esc(r.mid)).join(", ")}</span>` : ""}
     </div>`;
   }

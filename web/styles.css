@@ -508,3 +508,15 @@ audio { width: 100%; margin-bottom: 12px; }
   .hbar { grid-template-columns: 110px 1fr 48px; }
   .toolbar .sep { display: none; }
 }
+
+/* Stress test */
+.stress { margin-bottom: 16px; }
+.stress .seg { max-width: 100%; }
+.stress-custom { display: grid; grid-template-columns: 2fr 1fr; gap: 12px; margin-top: 14px; }
+.stress-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: 16px; margin-top: 14px; align-items: start; }
+.msg.changed .bubble { box-shadow: inset 0 0 0 2px var(--warn); }
+tr.sub td { border-top: 0; padding-top: 0; color: var(--text-2); }
+@media (max-width: 860px) { .stress-custom, .stress-grid { grid-template-columns: 1fr; } }
+.warn-text { color: var(--warn); }
+.hbar.crit-health { grid-template-columns: minmax(160px, 260px) minmax(80px, 1fr) 72px minmax(160px, 1.4fr); }
+@media (max-width: 860px) { .hbar.crit-health { grid-template-columns: 1fr 64px; } .hbar.crit-health .meter { grid-column: 1 / -1; grid-row: 2; } .hbar.crit-health > .small { grid-column: 1 / -1; } }

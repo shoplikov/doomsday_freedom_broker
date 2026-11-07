@@ -1,4 +1,4 @@
-import { api, errorBox, esc, icon, loading, pageHead, statusText } from "../api.js";
+import { api, errorBox, esc, icon, loading, pageHead, plural, statusText } from "../api.js";
 
 const STATUS_COLORS = { auto_accepted: "var(--primary)", reviewed: "var(--info)", needs_review: "var(--warn)", failed: "var(--bad)" };
 const ROLE_NAMES = { inspector: "M1 Инспектор", advocate: "M2 Адвокат", judge: "M3 Судья" };
@@ -15,7 +15,8 @@ class CqaAnalytics extends HTMLElement {
   }
 
   async load(version) {
-    const a = await api.get(`/api/analytics?checklist_version=${version}`);
+    const [a, health, stress] = await Promise.all([api.get(`/api/analytics?checklist_version=${version}`),
+      api.get("/api/checklist-health"), api.get("/api/stress-tests/summary")]);
     const pct = (v) => (v == null ? "—" : `${v}%`);
     const acc = a.gold.accuracy_pct;
     const best = Math.max(acc.inspector ?? -1, acc.advocate ?? -1);
@@ -42,6 +43,9 @@ class CqaAnalytics extends HTMLElement {
         ${kpi("Средний итог", a.avg_total ?? "—", `грубых ошибок: ${a.gross_errors}`)}
       </div>
       <div class="alert ${tone}" style="margin-top:16px">${icon(tone === "ok" ? "check" : "alert")}<div><b>Вывод.</b> ${esc(verdict)}</div></div>
+
+      ${this.healthHtml(health)}
+      ${this.stressHtml(stress)}
 
       <div class="grid-2 gap-top">
         <section class="card"><h2 style="margin-bottom:14px">Статусы оценок</h2>
@@ -86,6 +90,37 @@ class CqaAnalytics extends HTMLElement {
       ${this.listHtml("Где M1 и M2 разошлись", a.disagreements, (d) => `итог ${esc(d.final)} · согласие ${Math.round((d.confidence ?? 0) * 100)}% · ${esc(statusText[d.status] ?? d.status)}`)}
       </div>`;
     this.querySelector("[data-version]").onchange = (e) => this.load(e.target.value);
+  }
+
+  // Which criteria the models keep arguing about: usually a sign the wording is ambiguous.
+  healthHtml(h) {
+    const rows = h.criteria.filter((c) => c.dialogs);
+    const pct = (v) => (v == null ? "—" : `${Math.round(v * 100)}%`);
+    const bad = rows.filter((c) => c.alert);
+    return `<section class="card gap-top"><div class="card-head"><h2>Здоровье чек-листа <span class="faint small">v${h.checklist_version} · ${h.dialogs} ${plural(h.dialogs, "диалог", "диалога", "диалогов")}</span></h2>
+        <p>Если три модели часто расходятся по критерию, его формулировка, скорее всего, неоднозначна</p></div>
+      ${!rows.length ? '<p class="faint">Оцените несколько диалогов активной версией чек-листа.</p>' : `
+      ${bad.length ? `<div class="alert warn" style="margin-bottom:14px">${icon("alert")}<div><b>Стоит уточнить:</b> ${bad.map((c) => `${esc(c.criterion_id)} ${esc(c.title)}`).join(", ")}.
+        Откройте критерий в <a href="#/checklist">чек-листе</a>, перепишите формулировку и нажмите «Тест-драйв»: станет видно, перестали ли модели спорить.</div></div>`
+        : `<div class="alert ok" style="margin-bottom:14px">${icon("check")}<div>Модели редко спорят: формулировки однозначны.</div></div>`}
+      <div class="hbars">${rows.map((c) => `
+        <div class="hbar crit-health"><span><span class="faint mono">${esc(c.criterion_id)}</span> ${esc(c.title)}</span>
+          <span class="meter ${c.alert ? "bad" : c.split_rate >= h.split_alert / 2 ? "warn" : ""}" title="Модели разошлись в ${c.split} из ${c.dialogs}"><i style="width:${Math.max(2, (c.split_rate ?? 0) * 100)}%"></i></span>
+          <em>${pct(c.split_rate)} спор</em>
+          <span class="small faint">н/п ${pct(c.na_rate)} · апелляций ${c.appeals}${c.appeals ? `, выиграно ${c.appeals_won}` : ""}${c.examples.length ? ` · ${c.examples.slice(0, 3).map((e) =>
+            `<a class="mono" href="#/dialog/${encodeURIComponent(e.conversation_id)}">${esc(e.conversation_id)}</a>`).join(" ")}` : ""}</span></div>`).join("")}</div>`}
+    </section>`;
+  }
+
+  stressHtml(s) {
+    const kinds = Object.entries(s.by_mutation);
+    return `<section class="card gap-top"><div class="card-head"><h2>Проверка на прочность <span class="faint small">${s.passed} из ${s.runs} пойманы</span></h2>
+        <p>Нарушения, которые мы специально вносили в диалоги (кнопка в карточке диалога)</p></div>
+      ${kinds.length ? `<div class="hbars">${kinds.map(([, k]) => `
+        <div class="hbar"><span>${esc(k.title)}</span><span class="meter ${k.passed < k.runs ? "warn" : ""}"><i style="width:${(100 * k.passed) / k.runs}%"></i></span>
+          <em>${k.passed} / ${k.runs}</em></div>`).join("")}</div>`
+        : '<p class="faint">Ещё не запускали. Откройте любой диалог и нажмите «Проверка на прочность».</p>'}
+    </section>`;
   }
 
   // Criteria x metrics, each cell shaded by its percentage (like a contribution graph).

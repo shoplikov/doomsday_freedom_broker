@@ -218,3 +218,18 @@ def test_full_evaluation_cost_tokens_and_cache_on_openai_path(fake, monkeypatch)
     assert len(calls) == 3 and ev2["cost_usd"] == 0 and all(i["cached"] for i in ev2["result"]["criteria"])
     roles = {r["role"]: r for r in analytics.compute()["calls"]}
     assert roles["judge"]["tokens_in"] >= 1_000_000
+
+
+def test_near_verbatim_quote_is_snapped_to_the_real_text_without_retry(fake):
+    # a dropped letter / suffix (common in Kazakh) is repaired from the cited message, not re-asked
+    slip = [{"msg": "m2", "quote": "Здравствуйте! Меня зовут Айгерм."}]
+    f = fake({"inspector": [[c01(True, evidence=slip)]], "advocate": [[c01(True)]], "judge": [[c01(True)]]})
+    res = run(["c01"])[0]["c01"]
+    assert f.roles().count("inspector") == 1
+    assert res["roles"]["inspector"]["evidence"][0]["quote"] == "Здравствуйте! Меня зовут Айгерим."
+
+
+def test_invented_quote_is_not_snapped():
+    r = pipeline.snap_quotes({"evidence": [{"msg": "m2", "quote": "Добрый день, чем помочь?"}]},
+                             {"m2": "Здравствуйте! Меня зовут Айгерим."})
+    assert r["evidence"][0]["quote"] == "Добрый день, чем помочь?"

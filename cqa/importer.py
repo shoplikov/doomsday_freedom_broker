@@ -12,6 +12,10 @@ from . import config, db, privacy, signals
 
 log = logging.getLogger(__name__)
 SPEAKERS = {"client", "operator", "bot", "system"}
+# Other spellings of the four roles, so an unseen dataset with "agent" / "customer" is still read right.
+SPEAKER_ALIASES = {"agent": "operator", "support": "operator", "manager": "operator", "оператор": "operator",
+                   "customer": "client", "user": "client", "клиент": "client", "assistant": "bot", "ai": "bot",
+                   "бот": "bot", "event": "system", "система": "system"}
 _CLOCK = re.compile(r"^(?:(\d+):)?(\d{1,2}):(\d{2})(?:\.\d+)?$")
 
 
@@ -40,8 +44,9 @@ def normalize(record: dict) -> tuple[dict, list[dict]]:
     mapping: dict = {}
     msgs = []
     for i, turn in enumerate(turns):
-        speaker = str(turn.get("speaker", "")).strip().lower()
-        text = str(turn.get("text") or "")
+        speaker = str(turn.get("speaker") or turn.get("role") or "").strip().lower()
+        speaker = SPEAKER_ALIASES.get(speaker, speaker)
+        text = str(turn.get("text") or turn.get("message") or "")
         msgs.append({
             "conversation_id": cid,
             "idx": i,

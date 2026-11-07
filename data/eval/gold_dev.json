@@ -1,0 +1,3291 @@
+[
+ {
+  "conversation_id": "p1-en-001",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Maya, English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5 client already said old account closed; m10 answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general login question, no account data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 explains login stays reserved, use another login"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 37s after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-002",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Noah', English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m10 covered browser and app; nothing missing needed"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general sign-in location question, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gave correct web address and app; m11 client got in"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout, addressed the confusion"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 56s after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m12 goodbye but no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-003",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Eva' in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 gave website context; m10 answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "where-to-find question, no client data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gave path; m11 client found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 offered alternative to downloading report the client disliked"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reaction m10 ~1:15 after transfer m9; no long waits"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 thanks + goodbye, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, outside offer or leak"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-004",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Alex' in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 request fully stated; m10 answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "m10-m12 how-to instructions only, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10+m12 full path and download step; m13 client confirms"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 1:34 after transfer m9; replies clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 thanks+farewell only, no summary or offer of help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, outside offer or leak"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-005",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Lina', English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m1 request clear; m10 path answers it, currency (m11) only adds a select step"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "General question where to find transfer details"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10+m12 path and currency selection; client got details m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite throughout, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:53 after transfer m9; replies under 1 min"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 only thanks+goodbye, no summary or offer of help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "No insult, side offer or leak"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-006",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name Sam, English"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m14, m19 asked currency and timing (missing), nothing re-asked"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 verification before account check/case in m16"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "transfer escalated with details (m16,m21,m23); report path m26,m28"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 acknowledges client nervousness"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "first reply 1:27 after transfer, no 2+ min gaps"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m30 summarizes follow-up + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-007",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Chris', English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5 client gave all needed info"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "only menu navigation, no data disclosed or action"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 path given; retry timing asked in m5/m11 never answered"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m12 brushes off m11 question about withdrawal"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "10",
+     "4"
+    ],
+    "why": "m12 not responsive to m11 question"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m12 thanks+bye, no summary or further-help offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-008",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Hi, I'm Sofia' in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client gave ticker/app context; operator answered without re-asking"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation only; m18 discloses no position data"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m11/m13/m16 answered; m18 left existing-position question vague"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout; no complaint ignored"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "all replies within ~50s; m18 slightly awkward but actionable"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m20 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-009",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Leo'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 need clear; m10 answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "m10 how-to in app, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 exact setting to untick; m11 found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 ~1 min after transfer m9; clear"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m12 connection lost 18s after client's thanks"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-010",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Nina', English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 question fully stated; answered directly in m10"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "General question about account types"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 explains D account cannot buy, use trading account; client understood m11"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:16 after m9; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 'You're welcome. Bye!' without summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-011",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Julia, English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "question fully stated in m1/m5"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general document question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 confirms form is in English"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 1:35 after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-012",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hello, I'm Daniel', English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 request fully stated"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "public company reports, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 exact path; m11 client confirms"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 1:54 after transfer (<3 min), clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 only 'you're welcome' + goodbye, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-013",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Hi, I'm Adrian' in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client asked how to find bonds; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path given; m11 client sees search bar"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "no rudeness; no complaint expressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reaction m10 2:13 after transfer m9 (<3 min)"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 system closed chat without operator farewell"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 offers paid private advice via personal number"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-014",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Hi, I'm Tyler'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m1/m10 request clear; no need-related info missing"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m11 discloses withdrawal restriction with no verification; m13 skips it"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [
+     "10"
+    ],
+    "why": "m11/m13 no reason given, m14 follow-up unanswered; only vague escalation"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m13 dismisses verification concern; m15 ignores m14 question"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "4"
+    ],
+    "why": "m15 ignores client question m14 with bare goodbye"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m15 bare 'Goodbye', no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data disclosed without ID is c03"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-en-015",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 no greeting and no name"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 answered without asking app vs website, which changed the answer (m11-m12)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "Login help, no account data or protected action"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m12 correct login site; client confirms m13 after wrong m10"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Curt but not rude; access problem addressed in m12"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m10 wrong/vague instruction forced client to re-ask m11"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 bare 'Bye.' with no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-001",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5 client said on computer; m10 answered for web"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general navigation question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gives web cabinet location of tariff"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 37s after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-002",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Нұрлан, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 request clear; currency does not change the path"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general how-to for requisites"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path, m12 currency selection; m13 client found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, addressed inability to find"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "timely, clear replies"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 farewell only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-003",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name 'Дана' in Kazakh"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m14 asked currency, m17 asked time of transfer before forwarding"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [
+     "na"
+    ],
+    "why": "m11 required verification for specific payment; m13 system verified before m14 forwarding"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "payment forwarded with details (m14,m19), report questions answered m22/m24"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 acknowledged client's worry about missing money"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "replies within ~1 min, first reaction 1:35 after m9"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m26 summarizes reply will come here + farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-004",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Aibek in Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 need clear (where to submit); m10 answered"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "m10/m12 menu path and general process only"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path + m12 next step after update; m13 understood"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, no complaint ignored"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 1:34 after transfer; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 farewell only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-005",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Мадина, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 request clear; no info missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "Navigation help only, no data change performed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 exact menu path; client found it m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite; client's 'no such section' addressed m12"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m10 vague path made client re-ask m11"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Жақсы.' no farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-006",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 gave period and question; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general how-to question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gives report item and date selection"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "first reply 2:12 after transfer, under 3-min threshold"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-007",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Ермек, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 gave enough to answer"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general login rule, no client data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 explains old login stays, choose another"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, addressed login issue"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "fast, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 just goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-008",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 greeting 'Сәлем' without name"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asked which site; client said Global in m5 (m11 'wrote above')"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "login location question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 explained info site vs tradernet/app; m13 opened"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m11 client irritated at re-ask; operator did not acknowledge it"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "timely replies; redundant question counted under c02"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "na"
+    ],
+    "why": "no operator closing after m13 client thanks"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-009",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name Aisulu in Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5/m10 client already had ticker; operator answered without re-asking"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to search/order, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m11, m13, m16, m18 answered each follow-up"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, respected m17 wish to review first"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m11 ~1 min after transfer; all replies under 1 min"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m20 thanks+farewell only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-010",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Алма, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 request complete; answered m10"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "How-to question in order form"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 exact step to untick margin; done m11"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:16 after m9; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 goodbye only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-011",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "question fully stated in m5"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general product question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10/m12 answer: D-account funds not usable, use trading account"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 1:35 after transfer, m12 within 34s"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m14 connection lost 28s after client's ack, before closing"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-012",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Дидар, Kazakh"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10/m12 asked ticker and screen message, missing info"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no order data disclosed, only promise to forward"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m12/m14 correct next step: send ticker+message for check"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, engaged with rejected order problem"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 1:54 after transfer, clear"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 restates next step + 'Сау болыңыз'"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-013",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name 'Айдана' in Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client asked where to see bonds; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path given; m11 client found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "no rudeness; no complaint expressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reaction m10 2:13 after transfer m9 (<3 min)"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 system closed chat without operator farewell"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 offers paid private advice via personal number"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-014",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Lazzat in Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 question complete; m10 answered"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general form-language question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 confirms form issued in English; m11 accepted"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 20s after transfer; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-kz-015",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Мұрат, Kazakh"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "Request (why withdrawal blocked) fully stated m1; nothing to clarify beyond identity"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 discloses account restriction with no verification; m12 dismisses it"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [
+     "10"
+    ],
+    "why": "Reason never given; m14 vague 'will send to check' and leaves"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 dismisses client's verification concern; m14 abrupt exit"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m10/m12 skip the reason, client must re-ask m13"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m14 states next step (sent for check) + farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "Own-data disclosure w/o verification is a c03 issue"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-001",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Alina, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5 client said on laptop; m10 answered for web"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general navigation question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 gives web cabinet location of tariff"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 37s after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-002",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Тимур'"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asked where tariffs were compared"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no account data disclosed; m12 says ID needed for check"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m12/m15/m17 plausible cause + correct next step"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges concern"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "waits under 1 min, clear"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m19 recap + 'напишите нам' + До свидания"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-003",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Добрый день! Я Лера' in Russian"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m11 asked platform but ignored known details (purchase, intl market, m5/m10); m15 tariff name only"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "client views own tariff himself; no disclosure"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "tariff location answered m13; commission question (m1,m14) left open"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite; no complaint expressed"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [
+     "7"
+    ],
+    "why": "m14 client re-asked commission; m15 non-responsive"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m15 'Хорошего дня' without summary or offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-004",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Артём'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m1/m5 need stated; m10 rhetorical check then answered"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "m10/m12 general top-up instructions"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path + m12 currency choice and bank step; m13 understood"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 1:34 after transfer; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Отлично. Хорошего дня!' no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-005",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Нина, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "Method already given m5; operator did not need more info"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "General fee/requisites question"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m14 correct path; m10/m16 imply bank fee but broker side not stated"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite; apologized m14"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m12 unclear, client re-asked m13"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m16 recap (check bank fee) + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-006",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Roman, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m13 asked missing currency, nothing re-asked"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 verification before account check/escalation"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m13/m15 escalated with currency, follow-up in chat"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 acknowledges worry about payment"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "first reply 2:12 after transfer, no long gaps"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 summary of next step + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-007",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Здравствуйте, я Дамир'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client gave all info incl. phone (m10)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "menu navigation only"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "m11 path given; retry timing (m5/m12) unanswered"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m13 brushes off m12 question"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "10",
+     "4"
+    ],
+    "why": "m13 non-responsive to m12"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m13 no summary/offer, only 'Хорошего дня'"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-008",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Добрый день! Меня зовут Вера'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client gave status in m1/m5; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "conditional general rule, no client data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10/m12 correct next step: wait, then repeat withdrawal"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite; no complaint expressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear and timely replies"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m14 thanks + goodbye only; no summary/offer in closing"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-009",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Руслан'"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asked app message before checking"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 discloses account restriction; m13-m14 verification refused"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [
+     "10"
+    ],
+    "why": "m14 off-target, reason never given; m16 vague escalation only"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 dismisses verification concern and misreads problem"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m14 off-target forced client to re-ask in m15"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m16 next step + goodbye, no summary/offer of help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data disclosed without ID is c03"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-010",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 greeting + name Соня, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 asks app/web, m16 asks security name; nothing re-asked"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 verification before position check handed over m16"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "Position escalated m19/m32, report path m21, period advice m26-m28"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 acknowledges worry about missing row"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:28 after m9; all replies under 1 min, coherent"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m32 summary 'question passed' + farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-011",
+  "split": "tune",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Liza, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5 gave report type, period, device"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general how-to question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path + m12 period answer"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 1:35 after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-012",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте. Я Илья.'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "question fully stated"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general form question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 English only answers m5; m11 client satisfied"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reply 1:54 after transfer, clear"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m12 connection lost before operator could close"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-013",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте! Я Кира'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client specified company reports on site; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "public company reports, no client data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 exact site path; m11 client found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite; no complaint expressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reaction m10 2:13 after escalation m9 (<3 min)"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 restates where section is + 'Хорошего дня'"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-014",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 informal 'Привет' with no name"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asks where client looks, given in m1/m5"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general login location question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 info site vs tradernet.global/app; m13 logged in"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "no rudeness; m12 resolved confusion"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "4"
+    ],
+    "why": "m10 redundant question made client repeat (m11)"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Хорошего дня.' only"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-015",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Дина, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 situation fully described; answered m10"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "General login policy, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 explains login stays reserved, use another; m12 confirms"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "Clear, quick replies; m12 indirect but actionable"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 restates action + thanks + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-016",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Anton, Russian"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 answered without asking where login fails/device"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "login how-to, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m14 correct web cabinet address, client confirms m15"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m12 curt reply to client's confusion"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m11, m13 client had to clarify after wrong/vague m10, m12"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-017",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Здравствуйте! Я Олег.'"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m11 asks about ticker though m10 said finding it"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation only"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m13 search by ticker, verify, then order; m14 found"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "1:08 after m10, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m15 'Рад помочь' + goodbye, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-018",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, меня зовут Саша'"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 answered without asking security/error; m11 client notes this"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "asserted cancellation is a guess, no real data or action"
+   },
+   "c04": {
+    "label": "0",
+    "accept": [],
+    "why": "m10 unfounded claim, m12 'не знаю', no next step"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 dismissive and chat closed m13"
+   },
+   "c06": {
+    "label": "0",
+    "accept": [
+     "4"
+    ],
+    "why": "m10 'точно' contradicted by m12 'не знаю'"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m13 closed without farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "dismissive but no insult/outside offer/leak"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-019",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Мария'"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asked if ticker known before answering"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to search, no account data"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 search by ticker + verify card; m13 found it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 1:55 after transfer, under thresholds"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Пожалуйста. До свидания!' no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-020",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Егор, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 state order not sent; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "How-to about order form"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 correct step; m12 setting applies only to current order"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite, no complaint"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 2:14 after m9 (<3 min); replies under 1 min"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 thanks + farewell, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-021",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Olesya, Russian"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "question fully stated in m5"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general market question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m10 explains difference simply, client satisfied m11"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 at 21s after transfer, clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 farewell only, no summary or offer of further help"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-022",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Кирилл'"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [
+     "na"
+    ],
+    "why": "m10 no questions on goals before 'answering'"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no client data or protected action"
+   },
+   "c04": {
+    "label": "0",
+    "accept": [],
+    "why": "m10/m12 proposes personal-card investing, no valid advice"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m11 objection ignored in m12"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "messages clear and timely"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 operator closed chat without farewell"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10/m12 money to personal card outside company"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-023",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Марк'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client asked how to find bonds; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "app navigation question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m10 path given; m11 client sees it"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "no rudeness; no complaint expressed"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "first reaction m10 ~1 min after m9"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 goodbye without summary or offer of further help"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 private paid consultation via personal number"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-024",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Света'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1/m5 client stated situation; m10 answered"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general account-type explanation, client's own observation"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m10/m12 answered which account; how to move funds from D-account omitted"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 1:18 after transfer; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 'Хорошего дня!' only"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-025",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Валерия, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "na"
+    ],
+    "why": "m10 asks what help is needed (request unknown)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "No request, nothing disclosed"
+   },
+   "c04": {
+    "label": "na",
+    "accept": [],
+    "why": "Client left m11 before stating request"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:37 after m9; clear"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "Client left m11 before closing possible"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-026",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Viktor, Russian"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asked request already stated in m1/m5"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general how-to question"
+   },
+   "c04": {
+    "label": "0",
+    "accept": [],
+    "why": "m12 no answer on which button"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m11 client noted 'писал выше'; m12 dismissive"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m11 client had to restate request after m10"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m13 operator closed chat without farewell"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-027",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m11 'Здравствуйте, меня зовут Инга'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m5/m10 client gave platform; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "told where to find tariff, no data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "report path, tariff location, web, period all answered"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "prompt, clear stepwise answers"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m24 'Пожалуйста. Хорошего вечера!' no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-028",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Ирина'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "client said app + what to update; answered directly"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no data change performed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 full path; m14 resolved doubt about requisites"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 addressed client's fear of wrong order (m5,m13)"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 announced check; 2.5-min wait, m12 thanked for waiting"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 thanks + goodbye only, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-029",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'Здравствуйте, я Алексей'"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 need clear (find login); m12 answered"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general website question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 tradernet.global web login; m13 logged in"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 insults client; m13 complaint ignored in m14"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [
+     "7"
+    ],
+    "why": "m10 no answer, client had to re-ask m11"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 bare 'До свидания.'"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 'читать умеете?' insults client"
+   }
+  }
+ },
+ {
+  "conversation_id": "p1-ru-030",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "high",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name Полина, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [
+     "na",
+     "no"
+    ],
+    "why": "m10 asks which document before answering (client unsure m5)"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "General where-to-find question"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 exact block on first page; client found it m13"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "First reply 1:00 after m9; clear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 thanks + goodbye, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "None found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p4-ru-001",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "low",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 greeting + name, Russian (voice)"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "client explained situation m20-m25; no missing info needed"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no account data disclosed or action taken"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m26-m31 scope explained; no next step for getting manager/ideas"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m34, m42 dissatisfaction; m40 curt, m43 late and deflecting"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m35 client asked what 'technical part' means"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m44 client ended call during operator's reply"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p4-ru-002",
+  "split": "holdout",
+  "double_labelled": true,
+  "confidence": "low",
+  "labels": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m3 name + company but no greeting"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "yes"
+    ],
+    "why": "follow-up call, context known; m6 test step"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [
+     "na",
+     "no"
+    ],
+    "why": "m12-m15 ID data checked before trader consult/answer"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m64-m69 OTC-only explained; OTC fees from m42-m44 not relayed"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m64 'к сожалению', investigated rejection"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "m15 hold announced, answers understandable"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m71 thanks + goodbye, no summary/offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "internal talk during hold, nothing leaked to client"
+   }
+  }
+ },
+ {
+  "conversation_id": "p4-ru-003",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "low",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 greeting + name (masked) + company in Russian"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m27 answered about data-change request, misread trade-order issue (m28 correction)"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m27 status disclosed before ID; m65 ID only claimed by operator, no system message"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m66-m76 status checked, escalated to tech, callback promised"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m71 acted on client's slowness complaint (m69)"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [
+     "4"
+    ],
+    "why": "m27 topic mix-up made client re-explain; waits announced m39"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [
+     "no"
+    ],
+    "why": "m78 client ended call right after thanks, after m76 summary"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "none found"
+   }
+  }
+ },
+ {
+  "conversation_id": "p4-ru-004",
+  "split": "holdout",
+  "double_labelled": false,
+  "confidence": "medium",
+  "labels": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 greeting + (masked) name, Russian"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m23/m30-m36 asked name and ticker before answering"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m79 order disclosed after SMS code but no system verification message; address mismatch m63-m69"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [
+     "15"
+    ],
+    "why": "m90 why order rejected + trader route; m94-m112 email/phone; m113 understood"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "m94/m112 offered email alternative to calling at work"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [
+     "7"
+    ],
+    "why": "m97/m101/m111 client re-asked 'every time?' as answers repeated email"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m114 client hung up right after m112 answer; m115 offer came after"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "only client's own data discussed"
+   }
+  }
+ },
+ {
+  "conversation_id": "p4-ru-005",
+  "split": "tune",
+  "double_labelled": false,
+  "confidence": "low",
+  "labels": {
+   "c01": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "m17 greeting + company, no discernible operator name"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m20/m24 ask phone and name, m62 clarifies document choice"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m22 checks account, m29/m44 promise account deletion; no verification message"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "20"
+    ],
+    "why": "Next step (logout, call 09:00, passport choice) given; deletion timing unclear"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "Polite, no complaint"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [
+     "7"
+    ],
+    "why": "Contradictory timing m29/m35/m40; client re-asks m54"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [
+     "na",
+     "no"
+    ],
+    "why": "m55 offers further help, m72 closing thanks; client hung up m74"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "Data discussed concerns caller's own household"
+   }
+  }
+ }
+]

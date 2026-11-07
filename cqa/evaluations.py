@@ -6,7 +6,7 @@ import json
 import logging
 import uuid
 
-from . import checklist, config, db, importer, llm, pipeline, scoring, signals
+from . import checklist, config, db, importer, insights, llm, pipeline, scoring, signals
 
 log = logging.getLogger(__name__)
 RUNS: dict[str, dict] = {}  # ponytail: in-memory batch progress; lost on restart, results are in the DB
@@ -203,7 +203,10 @@ def review_queue() -> dict:
             if item["status"] in ("needs_review", "failed") and not item.get("decision"):
                 low.append({"evaluation_id": ev["id"], "conversation_id": ev["conversation_id"],
                             "criterion_id": item["criterion_id"], "title": item["title"],
-                            "confidence": item["confidence"], "status": item["status"], "votes": item["votes"]})
+                            "confidence": item["confidence"], "status": item["status"], "votes": item["votes"],
+                            "impact": insights.review_impact(ev, item["criterion_id"])})
+    # Biggest possible change of the total first: a reviewer's minute goes where it moves the score most.
+    low.sort(key=lambda x: (-(x["impact"] or 0), x["evaluation_id"]))
     return {"appeals": appeals, "low_confidence": low}
 
 

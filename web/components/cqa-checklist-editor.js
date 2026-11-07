@@ -227,6 +227,11 @@ class CqaChecklistEditor extends HTMLElement {
           ${c.na_allowed ? this.field("na_condition", "Когда критерий неприменим", ta("na_condition", c.na_condition, "Например: запрос не требовал раскрытия данных клиента или защищённых действий.")) : ""}
         </div></div>`}
 
+      <div class="editor-section"><header><h3>Тест-драйв</h3><p>Прогоните критерий в этой редакции на нескольких диалогах до публикации. Сначала берутся диалоги, где модели по нему спорили.</p></header>
+        <div class="fields"><div class="row"><button type="button" class="sm" data-act="test-drive" ${this.driving ? "disabled" : ""}>${icon("flask")}${this.driving ? "Модели читают диалоги…" : "Проверить на 5 диалогах"}</button>
+          <span class="small faint">около минуты, ничего не сохраняется</span></div>
+          <div data-drive>${this.driveHtml(c)}</div></div></div>
+
       <div class="editor-section"><header><h3>Код критерия</h3><p>Технический идентификатор. По нему связаны эталонная разметка и файл results.json.</p></header>
         <div class="fields">
           ${this.field("id", "Код", `<input id="f-id" data-path="id" value="${esc(c.id)}" class="mono" style="max-width:220px" spellcheck="false" autocomplete="off">`,
@@ -234,6 +239,39 @@ class CqaChecklistEditor extends HTMLElement {
         </div></div>`;
     this.bindEditor();
     this.refresh();
+  }
+
+  driveHtml(c) {
+    const r = this.drives?.[c._k];
+    if (!r) return "";
+    if (r.error) return `<p class="err small">${esc(r.error)}</p>`;
+    const lbl = (v) => v == null ? "—" : c.type === "flag" ? ({ yes: "Нарушение", no: "Нет нарушений" }[v] ?? v)
+      : ({ yes: "Да", no: "Нет", na: "Не применимо" }[v] ?? `${v} ${plural(Number(v), "балл", "балла", "баллов")}`);
+    const stale = r.fingerprint !== comparable(c);
+    return `<div class="alert ${r.changed ? "warn" : "ok"}">${icon(r.changed ? "alert" : "check")}<div>
+        <b>Изменится ${r.changed} ${plural(r.changed, "вердикт", "вердикта", "вердиктов")} из ${r.dialogs}.</b>
+        Модели единогласны в ${r.unanimous} из ${r.dialogs}${r.unanimous < r.dialogs ? " — где спорят, формулировку стоит уточнить" : ""}.
+        ${stale ? '<br><span class="faint">Критерий изменён после проверки — запустите заново.</span>' : ""}</div></div>
+      ${(r.warnings || []).length ? `<p class="small warn-text">${r.warnings.map(esc).join("; ")}</p>` : ""}
+      <div class="table-wrap"><table class="compact"><thead><tr><th>Диалог</th><th>Сейчас</th><th>С новой редакцией</th><th class="num">Согласие</th></tr></thead>
+        <tbody>${r.rows.map((x) => x.error ? `<tr><td class="mono">${esc(x.conversation_id)}</td><td colspan="3" class="err">${esc(x.error)}</td></tr>` : `<tr>
+          <td><a class="mono" href="#/dialog/${encodeURIComponent(x.conversation_id)}">${esc(x.conversation_id)}</a></td>
+          <td>${esc(lbl(x.before))}</td><td><b>${esc(lbl(x.after))}</b>${x.before != null && x.before !== x.after ? ' <span class="badge warn">изменится</span>' : ""}</td>
+          <td class="num">${Math.round((x.confidence ?? 0) * 100)}%</td></tr>
+          <tr class="sub"><td colspan="4" class="small">${esc(x.rationale ?? "")}${x.na_reason ? ` <span class="faint">Не применимо: ${esc(x.na_reason)}</span>` : ""}</td></tr>`).join("")}</tbody></table></div>`;
+  }
+
+  async testDrive() {
+    const c = this.cur;
+    const key = c._k;
+    this.drives = this.drives ?? {};
+    this.driving = true; this.renderEditor();
+    try {
+      const fp = comparable(c);
+      this.drives[key] = { ...(await api.post("/api/checklists/test-drive", { criterion: clean(c) })), fingerprint: fp };
+    } catch (e) { this.drives[key] = { error: e.message }; }
+    this.driving = false;
+    if (this.cur?._k === key) { this.renderEditor(); this.querySelector("[data-drive]")?.scrollIntoView({ block: "nearest", behavior: "smooth" }); }
   }
 
   atomsHtml(c) {
@@ -294,6 +332,7 @@ class CqaChecklistEditor extends HTMLElement {
       });
     });
     box.querySelectorAll("[data-type]").forEach((r) => (r.onchange = () => this.setType(r.value)));
+    box.querySelector('[data-act="test-drive"]')?.addEventListener("click", () => this.testDrive());
     box.querySelectorAll("[data-rule]").forEach((r) => (r.onchange = () => { c.rule = r.value; this.refresh(); }));
     box.querySelectorAll("[data-rm-atom]").forEach((b) => (b.onclick = () => { c.atoms.splice(Number(b.dataset.rmAtom), 1); this.renderEditor(); }));
     box.querySelectorAll("[data-rm-step]").forEach((b) => (b.onclick = () => { c.scale.splice(Number(b.dataset.rmStep), 1); this.renderEditor(); }));

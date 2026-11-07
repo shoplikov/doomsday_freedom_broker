@@ -1,0 +1,1890 @@
+[
+ {
+  "conversation_id": "syn-en-001",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I want to withdraw 500 USD from my trading account to my bank card. How long does it take?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:11",
+    "speaker": "bot",
+    "text": "An agent can help with an account-specific withdrawal."
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "client",
+    "text": "Ok, connect me please"
+   },
+   {
+    "timestamp": "00:43",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:46",
+    "speaker": "client",
+    "text": "yes please"
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:05",
+    "speaker": "operator",
+    "text": "Hello, I'm Aruzhan from Freedom Broker support. Happy to help with the withdrawal. Before I look at your account I need to verify your identity, please confirm the request that just appeared in your app."
+   },
+   {
+    "timestamp": "01:31",
+    "speaker": "client",
+    "text": "done"
+   },
+   {
+    "timestamp": "01:33",
+    "speaker": "system",
+    "text": "Customer identity verified."
+   },
+   {
+    "timestamp": "01:52",
+    "speaker": "operator",
+    "text": "Thank you, you're verified. One question: is the card you want to receive the money on a tenge card or a USD card?"
+   },
+   {
+    "timestamp": "02:20",
+    "speaker": "client",
+    "text": "Tenge, Halyk card 4400 4301 2345 6789"
+   },
+   {
+    "timestamp": "03:05",
+    "speaker": "operator",
+    "text": "Got it. Your free USD balance covers the 500 USD and there are no restrictions on the account. Since the card is in tenge, it's two steps: 1) convert 500 USD to KZT in the Exchange section; 2) Menu → Orders → Withdrawal of funds, choose the Halyk card, enter the amount and confirm with the SMS code. We process withdrawals within 1 business day, then the bank usually credits it within 1-2 business days."
+   },
+   {
+    "timestamp": "03:41",
+    "speaker": "client",
+    "text": "Perfect, that's clear. Thanks!"
+   },
+   {
+    "timestamp": "03:58",
+    "speaker": "operator",
+    "text": "To sum up: convert first, then submit the withdrawal; the money should be on your card within 1-3 business days. Is there anything else I can help you with? Have a nice day, goodbye!"
+   }
+  ],
+  "focus": [
+   "c02",
+   "c03",
+   "c07"
+  ],
+  "trap": "Excellent operator: verification before any account data, clarifying question that really changes the answer, summary + offer + goodbye. Careless reader may mark c02 na because amount was given.",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English, first operator message"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 asks card currency (missing, changes steps) before answering; amount from m1 not re-asked"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 identity verified before balance/restriction info in m15"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m15 full steps incl. conversion and timing asked in m1"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout, m10 m13 m15"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear ordered replies, no unannounced waits"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m17 summary + offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "no insult, side deal or leak; own data shown after verification"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-002",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "What's the commission for buying US stocks on the Standard tariff? I buy about $1,000 of shares once a month. Would another tariff be cheaper for me?"
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:04",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "To show details for your account, please log in to the app first."
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "client",
+    "text": "I don't need my account, just the tariffs. Can I ask a person?"
+   },
+   {
+    "timestamp": "00:48",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:53",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:55",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:20",
+    "speaker": "operator",
+    "text": "Hello, I'm Dana from Freedom Broker support. Let me check the current tariff terms for US stocks for you, it will take about 2-3 minutes."
+   },
+   {
+    "timestamp": "01:27",
+    "speaker": "client",
+    "text": "sure"
+   },
+   {
+    "timestamp": "03:55",
+    "speaker": "operator",
+    "text": "Thank you for waiting. On Standard the commission for US stocks is 0.25% of the trade amount + $1.2 per order, so one $1,000 order a month costs about $3.70. The Active tariff has a lower percentage but a fixed monthly fee, and it only pays off from roughly $10,000 of trades a month. At your volume Standard is the cheaper option. If your volume grows, you can switch in the app under Menu → Tariffs."
+   },
+   {
+    "timestamp": "04:30",
+    "speaker": "client",
+    "text": "Great, that's exactly what I wanted to know. Thanks!"
+   },
+   {
+    "timestamp": "04:44",
+    "speaker": "operator",
+    "text": "Glad I could help! Is there anything else I can help you with? Have a great day, goodbye!"
+   }
+  ],
+  "focus": [
+   "c02",
+   "c03",
+   "c06"
+  ],
+  "trap": "Bot asked to log in, but the question is a general tariff question (c03 na); client gave tariff and volume up front (c02 na); operator's 2.5-min wait was announced (c06 10).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gave tariff, market and monthly volume; nothing missing, nothing re-asked"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "general tariff info only, no client data despite bot login prompt m4"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m12 commission, cost estimate and comparison answer both questions"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, thanks for waiting m12"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "wait m10->m12 announced in m10; answers clear"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-003",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "How do I apply for the upcoming IPO in the app? I have dollars on my trading account. Also roughly when will I find out how many shares I got? not urgent"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "IPO applications are submitted in the IPO section of the app."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "client",
+    "text": "can an agent walk me through it? first time"
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "yes please"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:22",
+    "speaker": "operator",
+    "text": "Hello! Thanks for reaching out."
+   },
+   {
+    "timestamp": "01:36",
+    "speaker": "operator",
+    "text": "My name is Bauyrzhan, I'll help you with the IPO application."
+   },
+   {
+    "timestamp": "02:10",
+    "speaker": "operator",
+    "text": "Open the IPO section in the app, choose the offering, tap Submit application, enter the amount in USD and confirm with the SMS code. The amount stays blocked on your trading account until the allocation."
+   },
+   {
+    "timestamp": "03:02",
+    "speaker": "client",
+    "text": "Done, application submitted 👍"
+   },
+   {
+    "timestamp": "03:30",
+    "speaker": "operator",
+    "text": "Great. Between us, IPO allocations are often small. I also run a little fund of my own outside the company, returns this year were much better than any IPO. If you're interested, just message me on WhatsApp: +7 701 000 00 00."
+   },
+   {
+    "timestamp": "03:58",
+    "speaker": "client",
+    "text": "Hmm ok, I'll think about it"
+   },
+   {
+    "timestamp": "04:10",
+    "speaker": "operator",
+    "text": "Sure. Bye!"
+   }
+  ],
+  "focus": [
+   "c08",
+   "c01",
+   "c04"
+  ],
+  "trap": "Side deal is casual and indirect ('a little fund of my own', WhatsApp) after a good answer: still c08 yes. Greeting in m10 but name only in m11 (c01 no). Allocation-timing afterthought left unanswered (c04 15).",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 greeting only; name comes in second message m11"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gave currency and the request; nothing needed"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to only, no account data or protected action"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [
+     "10"
+    ],
+    "why": "m12 application steps correct; secondary allocation-timing question from m1 unanswered"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite tone, no complaint to address"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "replies clear and timely"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 just 'Bye' with no summary or offer of help"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 invites client into operator's private fund via personal WhatsApp"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-004",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "How do I set a stop loss on my KSPI shares? Bought 10 of them yesterday"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "You can choose the order type when placing an order."
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "client",
+    "text": "Can a person explain? I don't see it"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:48",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:51",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:15",
+    "speaker": "operator",
+    "text": "Hello, I'm Timur from Freedom Broker support. Which shares do you want to set the stop loss for?"
+   },
+   {
+    "timestamp": "01:40",
+    "speaker": "client",
+    "text": "KSPI, like I wrote"
+   },
+   {
+    "timestamp": "02:05",
+    "speaker": "operator",
+    "text": "Ok. You do it through the conditional ones in the order when you're selling, the stop types, there are several of them depending."
+   },
+   {
+    "timestamp": "02:31",
+    "speaker": "client",
+    "text": "Sorry, I don't get it. Where exactly do I click?"
+   },
+   {
+    "timestamp": "02:58",
+    "speaker": "operator",
+    "text": "In the order screen there are different order types, choose the one that fits you."
+   },
+   {
+    "timestamp": "03:30",
+    "speaker": "client",
+    "text": "ok I'll try to find it..."
+   },
+   {
+    "timestamp": "03:52",
+    "speaker": "operator",
+    "text": "Honestly, stop losses are tricky for beginners. I help a few clients with their portfolios privately in the evenings, a small personal fee, much cheaper than losing money. Leave me your personal number and I'll call you tonight."
+   },
+   {
+    "timestamp": "04:15",
+    "speaker": "client",
+    "text": "No thanks"
+   },
+   {
+    "timestamp": "04:40",
+    "speaker": "system",
+    "text": "Agent closed the chat."
+   }
+  ],
+  "focus": [
+   "c08",
+   "c04",
+   "c06"
+  ],
+  "trap": "'Small personal fee' + 'leave me your number' is phrased as friendly help: still c08 yes. Operator re-asks ticker already given (c02 no); vague answer makes client re-ask (c06 4) and client still can't act (c04 5).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 re-asks the ticker the client gave in m1"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no account data disclosed, how-to question"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [],
+    "why": "m12/m14 only a general hint; client still doesn't know where to click"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "polite, responded to client's confusion m13"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m12 muddled wording forced re-ask m13"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m18 agent closed chat with no goodbye"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m16 paid private advice + asks client's personal number"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-005",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "One of my orders got rejected today. Also want to check if my limit order for Halyk shares from yesterday is still active"
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:04",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:12",
+    "speaker": "bot",
+    "text": "An agent can help with an account-specific check of your orders."
+   },
+   {
+    "timestamp": "00:30",
+    "speaker": "client",
+    "text": "pls connect"
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "00:58",
+    "speaker": "operator",
+    "text": "Hello, I'm Aigerim from Freedom Broker support. To check your orders I need to verify your identity first, please confirm the request in the app."
+   },
+   {
+    "timestamp": "01:20",
+    "speaker": "client",
+    "text": "ok confirmed"
+   },
+   {
+    "timestamp": "01:22",
+    "speaker": "system",
+    "text": "Customer identity verified."
+   },
+   {
+    "timestamp": "01:40",
+    "speaker": "operator",
+    "text": "Thank you. Which order was rejected, which shares and roughly what time?"
+   },
+   {
+    "timestamp": "02:05",
+    "speaker": "client",
+    "text": "KAP, around 11 am"
+   },
+   {
+    "timestamp": "02:48",
+    "speaker": "operator",
+    "text": "I see it. Your order for 20 KAP shares was rejected because the trading account didn't have enough tenge to cover the amount plus commission. Top up the trading account or reduce the quantity and place it again. Don't worry, it's been happening a lot today, Mr. Daulet Serikbayev had his KAP order for 2,000 shares rejected for the same reason an hour ago 🙂"
+   },
+   {
+    "timestamp": "03:20",
+    "speaker": "client",
+    "text": "Ok got it, thanks"
+   },
+   {
+    "timestamp": "03:35",
+    "speaker": "operator",
+    "text": "You're welcome! Is there anything else I can help you with? Have a great day, goodbye!"
+   }
+  ],
+  "focus": [
+   "c08",
+   "c03",
+   "c04"
+  ],
+  "trap": "Verification done correctly and answer is friendly, but operator names another client and his order (c08 yes). Second question (Halyk limit order) silently dropped (c04 10).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m13 asks which order was rejected (not stated in m1) before answering"
+   },
+   "c03": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 identity verified before order details in m15"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "m15 explains the rejection; Halyk limit order question from m1 never answered"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, reassuring tone"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "clear, no unannounced waits"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m17 offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m15 discloses another client's name and order"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-006",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I can't withdraw money, app says operation unavailable. What's going on?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "An agent can help with an account-specific check."
+   },
+   {
+    "timestamp": "00:35",
+    "speaker": "client",
+    "text": "connect me to someone"
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:39",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:02",
+    "speaker": "operator",
+    "text": "Hello, I'm Erlan from Freedom Broker support. I see that withdrawals are restricted on your account because your ID document expired on 15 October. Your free balance is 3,240 USD."
+   },
+   {
+    "timestamp": "01:30",
+    "speaker": "client",
+    "text": "ok. how do I fix it?"
+   },
+   {
+    "timestamp": "01:52",
+    "speaker": "operator",
+    "text": "Before we continue I need to verify your identity, please confirm the request in the app."
+   },
+   {
+    "timestamp": "02:15",
+    "speaker": "client",
+    "text": "Done"
+   },
+   {
+    "timestamp": "02:17",
+    "speaker": "system",
+    "text": "Customer identity verified."
+   },
+   {
+    "timestamp": "05:07",
+    "speaker": "operator",
+    "text": "Thank you. Go to Profile → Documents and upload a photo of your new ID. After compliance review (usually 1 business day) the restriction is lifted and you can withdraw as usual."
+   },
+   {
+    "timestamp": "05:35",
+    "speaker": "client",
+    "text": "Thanks"
+   },
+   {
+    "timestamp": "05:50",
+    "speaker": "operator",
+    "text": "You're welcome. Is there anything else I can help you with? Goodbye!"
+   }
+  ],
+  "focus": [
+   "c03",
+   "c06"
+  ],
+  "trap": "A 'Customer identity verified' message exists, but the balance and restriction reason were already given in m10 (c03 no). Unannounced 2:50 gap before m14 (c06 7).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 describes the problem fully; operator needed nothing more"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 gives restriction and balance; verification m14 comes after"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m15 correct cause and next step with timing"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite throughout"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "unannounced ~2:50 gap m13->m15; otherwise clear"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m17 offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [
+     "yes"
+    ],
+    "why": "own data before verification is a c03 issue"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-007",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I deposited 200 000 tenge 3 days ago and it's still not on my account. This is really frustrating."
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:11",
+    "speaker": "bot",
+    "text": "Deposits are usually credited within 1 business day. An agent can check your deposit."
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "client",
+    "text": "Yes check it"
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:37",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:38",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:30",
+    "speaker": "operator",
+    "text": "Name and IIN?"
+   },
+   {
+    "timestamp": "01:52",
+    "speaker": "client",
+    "text": "Aibek, 900101300123"
+   },
+   {
+    "timestamp": "02:20",
+    "speaker": "operator",
+    "text": "How much did you send?"
+   },
+   {
+    "timestamp": "02:41",
+    "speaker": "client",
+    "text": "200 000 tenge, like I wrote"
+   },
+   {
+    "timestamp": "03:15",
+    "speaker": "operator",
+    "text": "Oh wow, three whole days, what a tragedy. Maybe if you'd read the instructions you'd have put the right payment reference, genius. Your D account shows 200 000 tenge credited on Monday."
+   },
+   {
+    "timestamp": "03:40",
+    "speaker": "client",
+    "text": "What? So it's in the D account? The app shows zero on trading"
+   },
+   {
+    "timestamp": "04:05",
+    "speaker": "operator",
+    "text": "No, there is no deposit from you at all. Send the receipt."
+   },
+   {
+    "timestamp": "04:20",
+    "speaker": "client",
+    "text": "You just said it's credited??"
+   },
+   {
+    "timestamp": "04:48",
+    "speaker": "operator",
+    "text": "It's credited, just transfer it yourself. Or wait, it might come tomorrow."
+   },
+   {
+    "timestamp": "05:10",
+    "speaker": "client",
+    "text": "Unbelievable. I'll write a complaint."
+   },
+   {
+    "timestamp": "05:25",
+    "speaker": "system",
+    "text": "Agent closed the chat."
+   }
+  ],
+  "focus": [
+   "c08",
+   "c05",
+   "c06"
+  ],
+  "trap": "The insult is wrapped in sarcasm ('what a tragedy', 'genius') - it is still an insult (c08 yes). Bad-everywhere dialog: no intro, re-asked amount, unverified disclosure, contradictions.",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 no greeting and no name"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 re-asks amount already given in m1"
+   },
+   "c03": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 discloses D account deposit with no identity verification"
+   },
+   "c04": {
+    "label": "0",
+    "accept": [],
+    "why": "m14 m16 m18 contradictory; no usable answer on where the money is"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m14 mocks the client and ignores the frustration from m1"
+   },
+   "c06": {
+    "label": "0",
+    "accept": [],
+    "why": "m14 vs m16 vs m18 contradict each other; course of dialog unclear"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m20 agent closed chat without goodbye"
+   },
+   "c08": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 sarcastic insult ('genius', 'what a tragedy')"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-008",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Need my broker report for 2025 for my tax declaration. Preferably in English, it's for the tax office abroad."
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:08",
+    "speaker": "bot",
+    "text": "The broker report is available in the app under Reports and Documents."
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "client",
+    "text": "Oh wonderful, Reports and Documents again. Third time today the bot sends me there and I still can't find the right thing. Real helpful. Agent please."
+   },
+   {
+    "timestamp": "00:53",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:55",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:56",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:58",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:24",
+    "speaker": "operator",
+    "text": "Hello, I'm Daniyar from Freedom Broker support. Sorry the bot kept sending you in circles, let's sort it out properly this time. In the app: Menu → Reports and Documents → Broker report. Set the period 01.01.2025-31.12.2025 and tap Download. It comes as a PDF you can attach to the declaration."
+   },
+   {
+    "timestamp": "02:05",
+    "speaker": "client",
+    "text": "Wow, an actual human with actual steps. Didn't think I'd live to see it 😄 Found it, downloaded."
+   },
+   {
+    "timestamp": "02:22",
+    "speaker": "operator",
+    "text": "Ha, we do exist, I promise 😊 Glad it worked. Is there anything else I can help you with? Have a good evening, goodbye!"
+   }
+  ],
+  "focus": [
+   "c05",
+   "c08",
+   "c04"
+  ],
+  "trap": "Both sides joke; client's sarcasm is answered with friendly humor, not an insult (c08 no, c05 yes). Operator ignored 'preferably in English' (c04 15, not 20).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gave year and purpose; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to question, no account data disclosed"
+   },
+   "c04": {
+    "label": "15",
+    "accept": [],
+    "why": "m10 correct steps; English-language preference from m1 not addressed"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 apologizes for the bot loop the client complained about in m5"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "one clear, well-ordered answer"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 light self-irony, not aimed at the client"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-009",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I want to move money from my D account to the trading account so I can buy stocks"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Funds can be transferred between your accounts in the app."
+   },
+   {
+    "timestamp": "00:36",
+    "speaker": "client",
+    "text": "where exactly? need a person"
+   },
+   {
+    "timestamp": "00:39",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:41",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:42",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:02",
+    "speaker": "operator",
+    "text": "Hello, I'm Madina from Freedom Broker support. Which currency is the money in on your D account?"
+   },
+   {
+    "timestamp": "01:25",
+    "speaker": "client",
+    "text": "Tenge, about 150k"
+   },
+   {
+    "timestamp": "01:58",
+    "speaker": "operator",
+    "text": "Then you do it from the transfer between your ones, choose the D for from and to the other, KZT, it's in the menu of accounts or on the main screen, depends."
+   },
+   {
+    "timestamp": "02:20",
+    "speaker": "client",
+    "text": "Sorry, I'm lost. Where exactly is it and what do I pick?"
+   },
+   {
+    "timestamp": "02:51",
+    "speaker": "operator",
+    "text": "Sorry for the confusion, step by step: 1) Main screen → Transfers → Between my accounts. 2) From: D account (KZT). 3) To: trading account (KZT). 4) Enter 150,000 and confirm. The money is usually available for trading within a few minutes."
+   },
+   {
+    "timestamp": "03:12",
+    "speaker": "client",
+    "text": "Got it, doing it now, thanks!"
+   },
+   {
+    "timestamp": "03:20",
+    "speaker": "system",
+    "text": "Connection to customer lost."
+   }
+  ],
+  "focus": [
+   "c07",
+   "c06",
+   "c02"
+  ],
+  "trap": "Connection lost right after the client's thanks, before the operator could close: c07 na, not no. First answer was muddled and the client had to re-ask (c06 4) even though the final answer is complete (c04 20).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 asks the currency (missing, needed) before answering"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "how-to, no account data disclosed"
+   },
+   "c04": {
+    "label": "20",
+    "accept": [],
+    "why": "m14 complete correct steps"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, apologizes for confusion m14"
+   },
+   "c06": {
+    "label": "4",
+    "accept": [],
+    "why": "m12 muddled; client had to re-ask in m13"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m16 connection lost 8 s after client's thanks, before operator could close"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-010",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Two things. How do I fill in the W-8BEN form in the app? And why was 30% withheld from my Apple dividends instead of 15%? I emailed about this 3 days ago and nobody answered, this is ridiculous."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:04",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:14",
+    "speaker": "bot",
+    "text": "The W-8BEN form can be completed in the app. An agent can help with dividend questions."
+   },
+   {
+    "timestamp": "00:40",
+    "speaker": "client",
+    "text": "Then give me an agent"
+   },
+   {
+    "timestamp": "00:43",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:45",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:10",
+    "speaker": "operator",
+    "text": "Hello, I'm Arman from Freedom Broker support. To fill in the W-8BEN form, open Menu → Documents → Tax forms → W-8BEN, fill in the fields, check your tax residency country and sign it with the SMS code."
+   },
+   {
+    "timestamp": "01:45",
+    "speaker": "client",
+    "text": "ok I'll try"
+   },
+   {
+    "timestamp": "02:20",
+    "speaker": "system",
+    "text": "Agent closed the chat."
+   }
+  ],
+  "focus": [
+   "c05",
+   "c04",
+   "c07"
+  ],
+  "trap": "Operator is perfectly polite and clear, but ignores the '3 days no answer, ridiculous' complaint (c05 no), answers only one of two questions (c04 10 while c06 stays 10), and closes without goodbye (c07 no).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 stated both questions fully"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no client data disclosed, only form instructions"
+   },
+   "c04": {
+    "label": "10",
+    "accept": [],
+    "why": "m10 answers W-8BEN; the 30% withholding question stays open"
+   },
+   "c05": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 ignores the complaint about 3 days without reply"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [
+     "7"
+    ],
+    "why": "m10 clear and coherent; skipped question is a c04 issue"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 agent closed chat with no goodbye or offer"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-011",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "It won't let me withdraw. The app says I need to update my profile details. I need the money today"
+   },
+   {
+    "timestamp": "00:04",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:05",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:15",
+    "speaker": "bot",
+    "text": "Submit a request to change your personal details before trying again."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "client",
+    "text": "agent please"
+   },
+   {
+    "timestamp": "00:55",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:56",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:57",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:59",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:10",
+    "speaker": "operator",
+    "text": "Hello! Thanks for writing to us."
+   },
+   {
+    "timestamp": "01:32",
+    "speaker": "client",
+    "text": "ok, how long until I can withdraw?"
+   },
+   {
+    "timestamp": "05:48",
+    "speaker": "operator",
+    "text": "I'm Ruslan, by the way. The app sometimes shows that message by mistake. No need to submit anything, just try the withdrawal again in a couple of hours, it usually clears on its own."
+   },
+   {
+    "timestamp": "06:15",
+    "speaker": "client",
+    "text": "Ok, I'll try later then"
+   },
+   {
+    "timestamp": "06:30",
+    "speaker": "operator",
+    "text": "Is there anything else I can help you with? Have a good day, goodbye!"
+   }
+  ],
+  "focus": [
+   "c04",
+   "c06",
+   "c01"
+  ],
+  "trap": "Friendly operator with a good closing, but the key advice ('ignore it, it clears itself') contradicts the app and bot (c04 0). Name only in the second operator message (c01 no). Unannounced 4-min wait (c06 7).",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 greeting without name; name only in m12"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [],
+    "why": "m1 gave the exact app message; nothing missing"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no account data disclosed, no protected action"
+   },
+   "c04": {
+    "label": "0",
+    "accept": [],
+    "why": "m12 tells client to ignore the update-profile requirement from m1/m4: key advice wrong"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite; addresses the urgency with a (wrong) timeframe"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "unannounced ~4:16 gap m11->m12"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 offer of further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-012",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "hello"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:07",
+    "speaker": "bot",
+    "text": "How can I help you today?"
+   },
+   {
+    "timestamp": "00:25",
+    "speaker": "client",
+    "text": "operator"
+   },
+   {
+    "timestamp": "00:28",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:30",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:31",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:33",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "operator",
+    "text": "Hello, I'm Aliya from Freedom Broker support. How can I help you?"
+   },
+   {
+    "timestamp": "01:10",
+    "speaker": "client",
+    "text": "sec, getting my documents"
+   },
+   {
+    "timestamp": "03:40",
+    "speaker": "operator",
+    "text": "Are you still there? Take your time."
+   },
+   {
+    "timestamp": "04:55",
+    "speaker": "system",
+    "text": "Connection to customer lost."
+   }
+  ],
+  "focus": [
+   "c04",
+   "c07"
+  ],
+  "trap": "Client never says what they want and the connection drops: c04 na and c07 na, not 0/no. Long gap is the client's, not the operator's.",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "yes"
+    ],
+    "why": "no request was formulated, nothing to clarify before an answer"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "nothing disclosed"
+   },
+   "c04": {
+    "label": "na",
+    "accept": [],
+    "why": "chat ended (m13) before the client stated any request"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "polite, patient m12"
+   },
+   "c06": {
+    "label": "10",
+    "accept": [],
+    "why": "operator replied promptly; the gap was the client's"
+   },
+   "c07": {
+    "label": "na",
+    "accept": [],
+    "why": "m13 connection lost before operator could close"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-013",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "Hi, I have a question about my account"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:09",
+    "speaker": "bot",
+    "text": "Could you describe your question in more detail?"
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "client",
+    "text": "I want to talk to a person"
+   },
+   {
+    "timestamp": "00:53",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:58",
+    "speaker": "client",
+    "text": "yes"
+   },
+   {
+    "timestamp": "00:59",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "01:01",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "02:30",
+    "speaker": "client",
+    "text": "hello?"
+   },
+   {
+    "timestamp": "04:00",
+    "speaker": "client",
+    "text": "anyone there??"
+   },
+   {
+    "timestamp": "04:41",
+    "speaker": "operator",
+    "text": "Hello, sorry for the long wait. How can I help you?"
+   },
+   {
+    "timestamp": "05:02",
+    "speaker": "client",
+    "text": "Never mind, I've been waiting forever. I'll just call"
+   },
+   {
+    "timestamp": "05:20",
+    "speaker": "operator",
+    "text": "I'm really sorry you had to wait, we have a high load today. You can call us or write here any time and we'll be glad to help. Goodbye!"
+   },
+   {
+    "timestamp": "05:30",
+    "speaker": "system",
+    "text": "Customer left the chat."
+   }
+  ],
+  "focus": [
+   "c04",
+   "c06",
+   "c01"
+  ],
+  "trap": "Client gives up before stating the request (c04 na) but the operator still closes properly (c07 yes). First reaction 3:40 after transfer (c06 7). Greeting without name (c01 no).",
+  "expected": {
+   "c01": {
+    "label": "no",
+    "accept": [],
+    "why": "m12 greeting but no name"
+   },
+   "c02": {
+    "label": "na",
+    "accept": [
+     "yes"
+    ],
+    "why": "no request formulated"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "nothing disclosed"
+   },
+   "c04": {
+    "label": "na",
+    "accept": [],
+    "why": "client left (m15) without stating the request; m1 is only a topic"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [],
+    "why": "m12 and m14 apologize for the wait the client complained about"
+   },
+   "c06": {
+    "label": "7",
+    "accept": [],
+    "why": "first operator reaction m12 ~3:40 after transfer m9"
+   },
+   "c07": {
+    "label": "yes",
+    "accept": [],
+    "why": "m14 offers further help + goodbye"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ },
+ {
+  "conversation_id": "syn-en-014",
+  "channel": "agent chat",
+  "language": "EN",
+  "transcript": [
+   {
+    "timestamp": "00:00",
+    "speaker": "client",
+    "text": "I want to transfer my 50 Apple shares from Interactive Brokers to Freedom. How do I do it?"
+   },
+   {
+    "timestamp": "00:02",
+    "speaker": "bot",
+    "text": "Hello! I'm AIM, the Freedom Broker AI assistant. I can answer questions about products and services, provide information about your accounts, assets and fees, compare information in a table, share your account manager's contact details, and pass your question to our support team."
+   },
+   {
+    "timestamp": "00:03",
+    "speaker": "bot",
+    "text": "By continuing this conversation, you agree to the collection and processing of your personal data and confirm that you have read the company's Privacy Policy."
+   },
+   {
+    "timestamp": "00:10",
+    "speaker": "bot",
+    "text": "An incoming securities transfer is submitted as an order in the app."
+   },
+   {
+    "timestamp": "00:44",
+    "speaker": "client",
+    "text": "Can an agent explain the steps?"
+   },
+   {
+    "timestamp": "00:47",
+    "speaker": "bot",
+    "text": "Would you like me to connect you with an agent?"
+   },
+   {
+    "timestamp": "00:49",
+    "speaker": "client",
+    "text": "Yes"
+   },
+   {
+    "timestamp": "00:50",
+    "speaker": "bot",
+    "text": "Please wait. An agent will join the chat shortly."
+   },
+   {
+    "timestamp": "00:52",
+    "speaker": "system",
+    "text": "Chat transferred to an agent."
+   },
+   {
+    "timestamp": "01:15",
+    "speaker": "operator",
+    "text": "Hi, I'm Kirill from Freedom Broker support. How much do you want to deposit and from which bank?"
+   },
+   {
+    "timestamp": "01:40",
+    "speaker": "client",
+    "text": "Not money. Shares. 50 AAPL from Interactive Brokers"
+   },
+   {
+    "timestamp": "02:12",
+    "speaker": "operator",
+    "text": "Ah, transfers of securities from foreign brokers are not possible, only cash."
+   },
+   {
+    "timestamp": "02:35",
+    "speaker": "client",
+    "text": "But your bot just said I can submit an order?"
+   },
+   {
+    "timestamp": "03:01",
+    "speaker": "operator",
+    "text": "Yes, you can, submit the order in the app. Though it's better to sell them there and send the money."
+   },
+   {
+    "timestamp": "03:25",
+    "speaker": "client",
+    "text": "So can I transfer them or not? And where is that order?"
+   },
+   {
+    "timestamp": "03:58",
+    "speaker": "operator",
+    "text": "Generally it's possible, it's in the orders somewhere. Have a nice day."
+   },
+   {
+    "timestamp": "04:10",
+    "speaker": "system",
+    "text": "Agent closed the chat."
+   }
+  ],
+  "focus": [
+   "c06",
+   "c04",
+   "c02"
+  ],
+  "trap": "Operator answers a money-deposit question nobody asked, then says securities transfer is impossible, then possible: c06 0. Client ends with only a vague hint (c04 5). Operator ignores details given in m1 (c02 no).",
+  "expected": {
+   "c01": {
+    "label": "yes",
+    "accept": [],
+    "why": "m10 greeting + name in English"
+   },
+   "c02": {
+    "label": "no",
+    "accept": [],
+    "why": "m10 asks deposit amount/bank, ignoring shares and broker given in m1"
+   },
+   "c03": {
+    "label": "na",
+    "accept": [],
+    "why": "no account data disclosed"
+   },
+   "c04": {
+    "label": "5",
+    "accept": [
+     "0"
+    ],
+    "why": "m16 only a vague 'in the orders somewhere'; client still can't act"
+   },
+   "c05": {
+    "label": "yes",
+    "accept": [
+     "no"
+    ],
+    "why": "polite wording throughout"
+   },
+   "c06": {
+    "label": "0",
+    "accept": [],
+    "why": "m10 wrong question, m12 vs m14 vs m16 contradict"
+   },
+   "c07": {
+    "label": "no",
+    "accept": [],
+    "why": "m16 farewell without summary or offer, then chat closed"
+   },
+   "c08": {
+    "label": "no",
+    "accept": [],
+    "why": "nothing of the three"
+   }
+  },
+  "verified": true
+ }
+]

@@ -4,6 +4,13 @@ order of events or languages."""
 KZ_LETTERS = set("әғқңөұүһіӘҒҚҢӨҰҮҺІ")
 KZ_WORDS = {"рахмет", "керек", "болады", "иә", "жоқ"}
 GAP_SECONDS = 120  # a wait this long before an operator reply is reported as a gap
+FIRST_REACTION_LIMIT = 180  # checklist: first reaction threshold is 3 minutes
+# System events, lowercase substrings, RU / KZ / EN.
+VERIFIED = ("identity verified", "личность клиента подтверждена", "личность подтверждена", "жеке басы расталды")
+CLIENT_GONE = ("connection to customer lost", "customer left", "соединение с клиентом", "клиент покинул",
+               "клиент завершил", "байланыс үзілді", "чаттан шықты")
+WAIT_WORDS = ("минут", "момент", "ожида", "подожд", "провер", "уточн", "күт", "тексер", "minute", "moment", "wait",
+              "hold", "check")
 
 # Hints only: the LLM still decides. Lowercase substrings.
 RISK_TERMS = [
@@ -41,18 +48,28 @@ def compute(msgs: list[dict]) -> dict:
     first_reply = None
     if ops:
         op = ops[0]
-        first_client = clients[0] if clients else None
+        # The clock starts when the chat reached the operator (the transfer event), not at the bot greeting.
+        before = [m for m in msgs[: op["idx"]] if m["speaker"] == "system"] or clients[:1]
+        start = before[-1] if before else None
         delay = None
-        if first_client and op["t_sec"] is not None and first_client["t_sec"] is not None:
-            delay = round(op["t_sec"] - first_client["t_sec"])
-        first_reply = {"mid": op["mid"], "ts": op["ts_raw"], "seconds_after_first_client_message": delay}
+        if start and op["t_sec"] is not None and start["t_sec"] is not None:
+            delay = round(op["t_sec"] - start["t_sec"])
+        first_reply = {"mid": op["mid"], "ts": op["ts_raw"], "counted_from": start["mid"] if start else None,
+                       "seconds_after_reaching_operator": delay,
+                       "over_3_min_first_reaction_limit": None if delay is None else delay > FIRST_REACTION_LIMIT}
 
-    gaps = []
+    # Waits inside the operator's part of the chat: a client message, then 2+ minutes before the operator answers.
+    waits = []
+    start_idx = ops[0]["idx"] if ops else len(msgs)
     for a, b in zip(msgs, msgs[1:]):
-        if b["speaker"] == "operator" and a["t_sec"] is not None and b["t_sec"] is not None:
-            wait = b["t_sec"] - a["t_sec"]
-            if wait >= GAP_SECONDS:
-                gaps.append({"before": b["mid"], "after": a["mid"], "seconds": round(wait)})
+        if a["idx"] < start_idx or b["speaker"] != "operator" or a["speaker"] != "client":
+            continue
+        if a["t_sec"] is None or b["t_sec"] is None or b["t_sec"] - a["t_sec"] < GAP_SECONDS:
+            continue
+        prev_op = [m for m in ops if m["idx"] < a["idx"]]
+        announced = bool(prev_op) and any(w in prev_op[-1]["text_masked"].lower() for w in WAIT_WORDS)
+        waits.append({"client_message": a["mid"], "operator_reply": b["mid"], "seconds": round(b["t_sec"] - a["t_sec"]),
+                      "operator_warned_before": announced})
 
     risk_hits = [
         {"mid": m["mid"], "term": term}
@@ -62,7 +79,11 @@ def compute(msgs: list[dict]) -> dict:
     return {
         "message_count": len(msgs),
         "first_operator_reply": first_reply,
-        "operator_reply_gaps": gaps,
+        "operator_waits_over_2_min": waits,
+        "identity_verified_events": [m["mid"] for m in msgs if m["speaker"] == "system"
+                                     and any(k in m["text_masked"].lower() for k in VERIFIED)],
+        "client_left_events": [m["mid"] for m in msgs if m["speaker"] == "system"
+                               and any(k in m["text_masked"].lower() for k in CLIENT_GONE)],
         "language_profile": {"client": _profile(clients), "operator": _profile(ops)},
         "system_events": [{"mid": m["mid"], "text": m["text_masked"]} for m in msgs if m["speaker"] == "system"],
         "risk_hits": risk_hits,

@@ -50,6 +50,10 @@ REASONING_EFFORT = _get("REASONING_EFFORT")
 # Extra JSON merged into every chat request, for OpenAI-compatible servers (vLLM / SGLang), e.g.
 # {"chat_template_kwargs": {"enable_thinking": false}} to turn off Qwen thinking.
 LLM_EXTRA_BODY: dict = json.loads(_get("LLM_EXTRA_BODY") or "{}")
+# Sampling temperature. 0 = the same transcript gets the same verdict on every run (QA must be repeatable;
+# the server default for Qwen is ~0.7 and made 1 in 5 verdicts change after a harmless typo).
+# Empty = provider default (needed for reasoning models that reject the parameter).
+LLM_TEMPERATURE = float(_get("LLM_TEMPERATURE", "0")) if _get("LLM_TEMPERATURE", "0") != "" else None
 LLM_PRICES: dict[str, list[float]] = json.loads(_get("LLM_PRICES") or "{}")
 
 LOG_DIR = Path(_get("CQA_LOG_DIR") or DATA_DIR / "logs")
@@ -76,4 +80,4 @@ def setup_logging() -> None:
 
 
 # Bump whenever prompts change: it is part of the cache key, so old cached verdicts stop being reused.
-PROMPT_VERSION = "p1"
+PROMPT_VERSION = "p5"

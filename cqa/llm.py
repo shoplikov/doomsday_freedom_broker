@@ -36,6 +36,8 @@ def parse_json(text: str) -> dict:
 
 async def chat_json(model: str, messages: list[dict]) -> tuple[dict, dict, str]:
     extra = {"reasoning_effort": config.REASONING_EFFORT} if config.REASONING_EFFORT else {}
+    if config.LLM_TEMPERATURE is not None and not config.REASONING_EFFORT:
+        extra["temperature"] = config.LLM_TEMPERATURE
     resp = await _openai().chat.completions.create(
         model=model, messages=messages, response_format={"type": "json_object"},
         extra_body=config.LLM_EXTRA_BODY or None, **extra,
