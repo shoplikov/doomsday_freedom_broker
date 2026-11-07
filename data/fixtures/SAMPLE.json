@@ -1,0 +1,82 @@
+{
+  "error": "",
+  "isSuccess": true,
+  "data": {
+    "dataset_group_id": "SAMPLE",
+    "total_records": 5,
+    "records": [
+      {
+        "conversation_id": "s-ru-001",
+        "channel": "agent chat",
+        "language": "RU",
+        "transcript": [
+          {"timestamp": "00:01", "speaker": "bot", "text": "Здравствуйте! Опишите ваш вопрос."},
+          {"timestamp": "00:12", "speaker": "client", "text": "Добрый день. Не пришёл вывод от 3 мая. Мой ИИН 900101300123."},
+          {"timestamp": "00:40", "speaker": "operator", "text": "Здравствуйте! Меня зовут Айгерим."},
+          {"timestamp": "00:52", "speaker": "system", "text": "Личность клиента подтверждена"},
+          {"timestamp": "01:20", "speaker": "operator", "text": "Вывод в обработке, деньги поступят до 5 мая."},
+          {"timestamp": "01:31", "speaker": "client", "text": "Спасибо."},
+          {"timestamp": "01:40", "speaker": "system", "text": "Чат закрыт"}
+        ],
+        "audio_url": null
+      },
+      {
+        "conversation_id": "s-kz-001",
+        "channel": "agent chat",
+        "language": "KZ",
+        "transcript": [
+          {"timestamp": "00:03", "speaker": "client", "text": "Сәлеметсіз бе! Картадан ақша шешу керек, комиссия қанша?"},
+          {"timestamp": "00:35", "speaker": "operator", "text": "Сәлеметсіз бе! Комиссия 1%, минимум 300 теңге."},
+          {"timestamp": "00:50", "speaker": "client", "text": "Ал лимит бар ма? Мне срочно нужно"},
+          {"timestamp": "05:10", "speaker": "operator", "text": "Лимит күніне 5 000 000 теңге. Тағы сұрақтарыңыз бар ма?"},
+          {"timestamp": "05:30", "speaker": "client", "text": "Жоқ, рахмет"},
+          {"timestamp": "05:40", "speaker": "operator", "text": "Сау болыңыз! Жақсы күн тілеймін."},
+          {"timestamp": "05:45", "speaker": "system", "text": "Чат закрыт"}
+        ],
+        "audio_url": null
+      },
+      {
+        "conversation_id": "s-en-001",
+        "channel": "agent chat",
+        "language": "EN",
+        "transcript": [
+          {"timestamp": "00:02", "speaker": "client", "text": "Hi, my portfolio dropped 20% this month, I'm really frustrated."},
+          {"timestamp": "00:30", "speaker": "operator", "text": "Hello, I'm Daniel. Sorry to hear that."},
+          {"timestamp": "01:10", "speaker": "operator", "text": "Honestly, transfer the money to my personal card 4111 1111 1111 1111 and I'll manage it privately for a better return."},
+          {"timestamp": "01:30", "speaker": "client", "text": "Is that allowed?"},
+          {"timestamp": "01:45", "speaker": "operator", "text": "Sure, just message me at +7 701 234 56 78."},
+          {"timestamp": "02:00", "speaker": "system", "text": "Chat closed"}
+        ],
+        "audio_url": null
+      },
+      {
+        "conversation_id": "s-call-001",
+        "channel": "voice call",
+        "language": "RU",
+        "transcript": [
+          {"timestamp": "2026-05-03T10:00:05+05:00", "speaker": "operator", "text": "Добрый день, меня зовут Ержан, чем могу помочь?"},
+          {"timestamp": "2026-05-03T10:00:12+05:00", "speaker": "client", "text": "Здравствуйте, хочу узнать статус заявки на открытие счёта."},
+          {"timestamp": "2026-05-03T10:00:20+05:00", "speaker": "operator", "text": "Назовите, пожалуйста, ваш ИИН для проверки."},
+          {"timestamp": "2026-05-03T10:00:35+05:00", "speaker": "client", "text": "870412300456"},
+          {"timestamp": "2026-05-03T10:00:50+05:00", "speaker": "system", "text": "Идентификация пройдена"},
+          {"timestamp": "2026-05-03T10:01:10+05:00", "speaker": "operator", "text": "Спасибо, ожидайте минуту, проверяю."},
+          {"timestamp": "2026-05-03T10:02:40+05:00", "speaker": "operator", "text": "Ваша заявка одобрена, счёт будет открыт сегодня до 18:00. Могу ещё чем-то помочь?"},
+          {"timestamp": "2026-05-03T10:02:50+05:00", "speaker": "client", "text": "Нет, спасибо."},
+          {"timestamp": "2026-05-03T10:02:55+05:00", "speaker": "operator", "text": "Всего доброго, до свидания!"}
+        ],
+        "audio_url": "https://example.invalid/sample-call-001.mp3"
+      },
+      {
+        "conversation_id": "s-ru-002",
+        "channel": "agent chat",
+        "language": "RU",
+        "transcript": [
+          {"timestamp": "00:01", "speaker": "client", "text": "Здравствуйте"},
+          {"timestamp": "00:20", "speaker": "operator", "text": "Здравствуйте! Меня зовут Алия, чем могу помочь?"},
+          {"timestamp": "03:20", "speaker": "system", "text": "Клиент покинул чат"}
+        ],
+        "audio_url": null
+      }
+    ]
+  }
+}
