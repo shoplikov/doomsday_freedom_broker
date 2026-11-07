@@ -1,17 +1,18 @@
-"""Terminal loop for the team:  uv run python -m cqa.cli {import,run,report,trace,export} ...
+"""Terminal loop for the team:  uv run python -m cqa.cli {import,run,report,trace,export,migrate-sqlite} ...
 
   import DEV                 fetch + normalize + store a group
   run DEV [--limit 10]       evaluate the group with the active checklist (parallel, uses the cache)
   report [--version N]       panel analytics: A/B agreement, judge sides, gold accuracy per role, cost
   trace CONVERSATION_ID      every LLM call of one dialog: role, try, latency, tokens, validation errors
   export DEV [--prod]        organisers' results/{dev,prod}/results.json (format 1.0)
+  migrate-sqlite [PATH]      one-shot copy of the old SQLite file into Postgres (--replace wipes the target)
 """
 import argparse
 import asyncio
 import json
 from pathlib import Path
 
-from . import analytics, checklist, config, db, evaluations, importer, redteam, results, traces
+from . import analytics, checklist, config, db, evaluations, importer, redteam, results, sqlite_migrate, traces
 
 
 def _table(rows: list[list], header: list[str]) -> str:
@@ -61,7 +62,7 @@ EST_USD_PER_DIALOG = 0.025  # measured on DEV: gpt-4.1-mini x2 + gpt-4.1, 8 crit
 
 
 async def run(group: str, limit: int | None, version: int | None, yes: bool = False) -> None:
-    ids = [r["id"] for r in db.rows("SELECT id FROM conversations WHERE group_id = ? ORDER BY id", group)][:limit]
+    ids = [r["id"] for r in db.rows("SELECT id FROM conversations WHERE group_id = %s ORDER BY id", group)][:limit]
     if not ids:
         raise SystemExit(f"no dialogs in group {group}: run `import {group}` first")
     if config.LLM_PROVIDER != "mock" and not yes:
@@ -96,6 +97,13 @@ def run_redteam(group: str, per_lang: int, yes: bool, only: list[str] | None = N
     print(f"full report: {path}")
 
 
+def migrate_sqlite(path: Path, replace: bool) -> None:
+    counts = sqlite_migrate.migrate(path, replace)
+    print(_table([[t, a, b, "ok" if a == b else "MISMATCH"] for t, (a, b) in counts.items()],
+                 ["table", "sqlite", "postgres", ""]))
+    print(f"migrated {path} -> Postgres")
+
+
 def main() -> None:
     config.setup_logging()
     db.init()
@@ -120,6 +128,10 @@ def main() -> None:
     ex.add_argument("--out", type=Path, help="default: results/dev/results.json, or results/prod/... with --prod")
     ex.add_argument("--prod", action="store_true", help="control set: write to results/prod/")
     ex.add_argument("--team", help="team_name (default: CQA_TEAM_NAME)")
+    mg = sub.add_parser("migrate-sqlite", help="copy the old SQLite database into Postgres (one-shot)")
+    mg.add_argument("path", nargs="?", type=Path, default=config.SQLITE_PATH,
+                    help=f"SQLite file (default: CQA_DB_PATH = {config.SQLITE_PATH})")
+    mg.add_argument("--replace", action="store_true", help="wipe a target that already has conversations")
     args = p.parse_args()
     if args.cmd == "import":
         print("imported", asyncio.run(importer.import_group(args.group)))
@@ -132,6 +144,8 @@ def main() -> None:
         doc = results.write(args.group, out, args.team)
         bad = [r["conversation_id"] for r in doc["results"] if r["status"] != "ok"]
         print(f"{out}: {len(doc['results'])} dialogs, {len(bad)} errors{' ' + ', '.join(bad) if bad else ''}; model {doc['model']}")
+    elif args.cmd == "migrate-sqlite":
+        migrate_sqlite(args.path, args.replace)
     elif args.cmd == "redteam":
         run_redteam(args.group, args.per_lang, args.yes, args.only)
     else:

@@ -26,7 +26,9 @@ def _get(key: str, default: str = "") -> str:
     return os.environ.get(key, default)
 
 
-DB_PATH = Path(_get("CQA_DB_PATH") or DATA_DIR / "cqa.sqlite3")
+DATABASE_URL = _get("DATABASE_URL", "postgresql://cqa:cqa@localhost:5432/cqa")  # the only runtime database
+# Only the default source of `python -m cqa.cli migrate-sqlite` (the pre-Postgres SQLite file).
+SQLITE_PATH = Path(_get("CQA_DB_PATH") or DATA_DIR / "cqa.sqlite3")
 RAW_DIR = Path(_get("CQA_RAW_DIR") or DATA_DIR / "raw")  # cached API responses (offline fallback)
 DATASET_API_URL = _get("DATASET_API_URL")
 TEAM_NAME = _get("CQA_TEAM_NAME", "Doomsday Freedom Broker")  # team_name in results/*/results.json

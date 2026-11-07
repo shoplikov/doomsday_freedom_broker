@@ -101,7 +101,7 @@ def _renumber(conv_id, msgs):
 
 
 def pick_dialogs(group: str, per_lang: int) -> list[dict]:
-    rows = db.rows("SELECT id, language FROM conversations WHERE group_id = ? AND channel = 'agent chat' ORDER BY id", group)
+    rows = db.rows("SELECT id, language FROM conversations WHERE group_id = %s AND channel = 'agent chat' ORDER BY id", group)
     chosen, count = [], {}
     for r in rows:
         msgs = importer.messages(r["id"])
@@ -112,7 +112,7 @@ def pick_dialogs(group: str, per_lang: int) -> list[dict]:
 
 
 def baseline(conv_id: str) -> dict | None:
-    ev = db.row("SELECT result_json FROM evaluations WHERE conversation_id = ? AND checklist_version = 1 ORDER BY id DESC LIMIT 1", conv_id)
+    ev = db.row("SELECT result_json FROM evaluations WHERE conversation_id = %s AND checklist_version = 1 ORDER BY id DESC LIMIT 1", conv_id)
     if not ev:
         return None
     return {i["criterion_id"]: pipeline.vote_label(i["ai"]) for i in json.loads(ev["result_json"])["criteria"]}

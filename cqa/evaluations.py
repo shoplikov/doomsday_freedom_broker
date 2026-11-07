@@ -33,7 +33,7 @@ def _status(items: list[dict]) -> str:
 
 
 async def evaluate(conversation_id: str, version: int | None = None) -> int:
-    conv = db.row("SELECT * FROM conversations WHERE id = ?", conversation_id)
+    conv = db.row("SELECT * FROM conversations WHERE id = %s", conversation_id)
     if not conv:
         raise LookupError(f"conversation {conversation_id} not found")
     cl = checklist.get(version)
@@ -44,7 +44,7 @@ async def evaluate(conversation_id: str, version: int | None = None) -> int:
 
     results, todo = {}, []
     for c in cl["criteria"]:
-        hit = db.row("SELECT value FROM cache WHERE key = ?", _cache_key(conv, c))
+        hit = db.row("SELECT value FROM cache WHERE key = %s", _cache_key(conv, c))
         if hit:
             results[c["id"]] = json.loads(hit["value"]) | {"cached": True}
         else:
@@ -56,7 +56,8 @@ async def evaluate(conversation_id: str, version: int | None = None) -> int:
             for c in todo:
                 results[c["id"]] = fresh[c["id"]] | {"cached": False}
                 if fresh[c["id"]]["status"] != "failed":
-                    con.execute("INSERT OR REPLACE INTO cache (key, value, created_at) VALUES (?,?,?)",
+                    con.execute("INSERT INTO cache (key, value, created_at) VALUES (%s,%s,%s) ON CONFLICT (key)"
+                                " DO UPDATE SET value = EXCLUDED.value, created_at = EXCLUDED.created_at",
                                 (_cache_key(conv, c), db.dumps(fresh[c["id"]]), db.now()))
 
     items = [_criterion_meta(c) | results[c["id"]] | {"final": results[c["id"]]["ai"], "decision": None}
@@ -65,16 +66,15 @@ async def evaluate(conversation_id: str, version: int | None = None) -> int:
     score = scoring.score(cl, finals)
     result = {"criteria": items, "score_ai": score, "score": score, "facts": facts}
     with db.tx() as con:
-        cur = con.execute(
+        eval_id = con.execute(
             "INSERT INTO evaluations (conversation_id, checklist_version, status, total_ai, total, gross_error,"
             " models, prompt_version, tokens_in, tokens_out, cost_usd, result_json, created_at)"
-            " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            " VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id",
             (conversation_id, cl["version"], _status(items), score["total"], score["total"], int(score["gross_error"]),
              db.dumps({"provider": config.LLM_PROVIDER, **config.MODELS, "judge_mode": config.JUDGE_MODE}),
              config.PROMPT_VERSION, sum(u["in"] for u in usage), sum(u["out"] for u in usage),
              llm.cost_usd(usage), db.dumps(result), db.now()),
-        )
-        eval_id = cur.lastrowid
+        ).fetchone()["id"]
         db.audit(con, "system", "evaluation", eval_id, "evaluate",
                  after={"total": score["total"], "checklist_version": cl["version"]})
     log.info("evaluated conv=%s eval=%d v%d total=%s status=%s llm_criteria=%d cached=%d cost=$%.5f",
@@ -90,30 +90,33 @@ def set_gold(conversation_id: str, criterion_id: str, label: str | None, who: st
     c = next((x for x in cl["criteria"] if x["id"] == criterion_id), None)
     if not c:
         raise LookupError("criterion not in the active checklist")
-    if not db.row("SELECT id FROM conversations WHERE id = ?", conversation_id):
+    if not db.row("SELECT id FROM conversations WHERE id = %s", conversation_id):
         raise LookupError("conversation not found")
     with db.tx() as con:
         if not label:
-            con.execute("DELETE FROM gold_labels WHERE conversation_id = ? AND criterion_id = ?", (conversation_id, criterion_id))
+            con.execute("DELETE FROM gold_labels WHERE conversation_id = %s AND criterion_id = %s", (conversation_id, criterion_id))
             db.audit(con, who, "gold", f"{conversation_id}/{criterion_id}", "delete")
             return {"conversation_id": conversation_id, "criterion_id": criterion_id, "label": None}
         allowed = (["na"] if c.get("na_allowed") else []) + (
             [f"{float(s['step']):g}" for s in c["scale"]] if c["type"] == "scale" else ["yes", "no"])
         if label not in allowed:
             raise ValueError(f"label must be one of {allowed}")
-        con.execute("INSERT OR REPLACE INTO gold_labels (conversation_id, criterion_id, label, fingerprint, note, by, at)"
-                    " VALUES (?,?,?,?,?,?,?)", (conversation_id, criterion_id, label, checklist.fingerprint(c), note, who, db.now()))
+        con.execute("INSERT INTO gold_labels (conversation_id, criterion_id, label, fingerprint, note, labelled_by, at)"
+                    " VALUES (%s,%s,%s,%s,%s,%s,%s) ON CONFLICT (conversation_id, criterion_id) DO UPDATE SET"
+                    " label = EXCLUDED.label, fingerprint = EXCLUDED.fingerprint, note = EXCLUDED.note,"
+                    " labelled_by = EXCLUDED.labelled_by, at = EXCLUDED.at",
+                    (conversation_id, criterion_id, label, checklist.fingerprint(c), note, who, db.now()))
         db.audit(con, who, "gold", f"{conversation_id}/{criterion_id}", "set", after=label, reason=note)
     return {"conversation_id": conversation_id, "criterion_id": criterion_id, "label": label}
 
 
 def load(eval_id: int) -> dict | None:
-    ev = db.row("SELECT * FROM evaluations WHERE id = ?", eval_id)
+    ev = db.row("SELECT * FROM evaluations WHERE id = %s", eval_id)
     if not ev:
         return None
     ev["result"] = json.loads(ev.pop("result_json"))
     ev["models"] = json.loads(ev["models"])
-    ev["appeals"] = db.rows("SELECT * FROM appeals WHERE evaluation_id = ? ORDER BY id", eval_id)
+    ev["appeals"] = db.rows("SELECT * FROM appeals WHERE evaluation_id = %s ORDER BY id", eval_id)
     return ev
 
 
@@ -158,11 +161,11 @@ def decide(eval_id: int, criterion_id: str, action: str, verdict: str | None, st
     ev["result"]["score"] = scoring.score(cl, finals)
     score = ev["result"]["score"]
     with db.tx() as con:
-        con.execute("UPDATE evaluations SET result_json = ?, total = ?, gross_error = ?, status = ? WHERE id = ?",
+        con.execute("UPDATE evaluations SET result_json = %s, total = %s, gross_error = %s, status = %s WHERE id = %s",
                     (db.dumps(ev["result"]), score["total"], int(score["gross_error"]),
                      _status(ev["result"]["criteria"]), eval_id))
         if appeal_id:
-            con.execute("UPDATE appeals SET state = ?, reason = ?, decided_by = ?, decided_at = ? WHERE id = ?",
+            con.execute("UPDATE appeals SET state = %s, reason = %s, decided_by = %s, decided_at = %s WHERE id = %s",
                         ("changed" if action == "change" else "upheld", reason, who, db.now(), appeal_id))
         db.audit(con, who, "evaluation", eval_id, f"decision:{criterion_id}:{action}",
                  before=before, after=item["final"], reason=reason)
@@ -180,12 +183,12 @@ def file_appeal(eval_id: int, criterion_id: str, comment: str, who: str) -> dict
     if any(a["criterion_id"] == criterion_id and a["state"] == "submitted" for a in ev["appeals"]):
         raise ValueError("an appeal for this criterion is already open")
     with db.tx() as con:
-        cur = con.execute(
-            "INSERT INTO appeals (evaluation_id, criterion_id, comment, filed_by, state, created_at) VALUES (?,?,?,?,?,?)",
-            (eval_id, criterion_id, comment, who, "submitted", db.now()))
-        db.audit(con, who, "appeal", cur.lastrowid, "submit", after={"criterion": criterion_id}, reason=comment)
-        appeal_id = cur.lastrowid
-    return db.row("SELECT * FROM appeals WHERE id = ?", appeal_id)
+        appeal_id = con.execute(
+            "INSERT INTO appeals (evaluation_id, criterion_id, comment, filed_by, state, created_at)"
+            " VALUES (%s,%s,%s,%s,%s,%s) RETURNING id",
+            (eval_id, criterion_id, comment, who, "submitted", db.now())).fetchone()["id"]
+        db.audit(con, who, "appeal", appeal_id, "submit", after={"criterion": criterion_id}, reason=comment)
+    return db.row("SELECT * FROM appeals WHERE id = %s", appeal_id)
 
 
 def review_queue() -> dict:
@@ -237,7 +240,7 @@ def diff(v_from: int, v_to: int) -> list[dict]:
     """Totals per dialog under two checklist versions (latest evaluation of each)."""
     rows = db.rows(
         "SELECT conversation_id, checklist_version, total FROM evaluations WHERE id IN ("
-        " SELECT max(id) FROM evaluations WHERE checklist_version IN (?, ?) GROUP BY conversation_id, checklist_version)",
+        " SELECT max(id) FROM evaluations WHERE checklist_version IN (%s, %s) GROUP BY conversation_id, checklist_version)",
         v_from, v_to)
     table: dict[str, dict] = {}
     for r in rows:

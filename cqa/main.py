@@ -15,6 +15,7 @@ async def lifespan(_app):
     db.init()
     checklist.ensure_seed()
     yield
+    db.close()
 
 
 app = FastAPI(title="CQA · Conversation Quality Analytics", lifespan=lifespan)
@@ -78,7 +79,7 @@ class ChecklistIn(BaseModel):
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "provider": config.LLM_PROVIDER, "models": config.MODELS, "judge_mode": config.JUDGE_MODE,
+    return {"ok": True, "db": "postgres", "provider": config.LLM_PROVIDER, "models": config.MODELS, "judge_mode": config.JUDGE_MODE,
             "trust_threshold": config.TRUST_THRESHOLD, "dataset_api": bool(config.DATASET_API_URL)}
 
 
@@ -97,7 +98,7 @@ def list_conversations(language: str | None = None, channel: str | None = None, 
     sql = ("SELECT c.id, c.group_id, c.channel, c.language, c.audio_url, e.id AS evaluation_id, e.total, e.status,"
            " e.gross_error, e.checklist_version FROM conversations c"
            " LEFT JOIN evaluations e ON e.id = (SELECT max(id) FROM evaluations WHERE conversation_id = c.id)"
-           " WHERE (? IS NULL OR c.language = ?) AND (? IS NULL OR c.channel = ?) AND (? IS NULL OR c.group_id = ?)"
+           " WHERE (%s::text IS NULL OR c.language = %s) AND (%s::text IS NULL OR c.channel = %s) AND (%s::text IS NULL OR c.group_id = %s)"
            " ORDER BY c.id")
     return db.rows(sql, language, language, channel, channel, group_id, group_id)
 
@@ -110,13 +111,13 @@ def results_file(group_id: str):
 
 @app.get("/api/conversations/{conversation_id}")
 def get_conversation(conversation_id: str):
-    conv = db.row("SELECT id, group_id, channel, language, audio_url, imported_at FROM conversations WHERE id = ?",
+    conv = db.row("SELECT id, group_id, channel, language, audio_url, imported_at FROM conversations WHERE id = %s",
                   conversation_id)
     if not conv:
         raise HTTPException(404, "conversation not found")
     msgs = importer.messages(conversation_id)
     evals = db.rows("SELECT id, checklist_version, total, total_ai, status, created_at FROM evaluations"
-                    " WHERE conversation_id = ? ORDER BY id DESC", conversation_id)
+                    " WHERE conversation_id = %s ORDER BY id DESC", conversation_id)
     return {**conv, "messages": msgs, "signals": signals.compute(msgs), "evaluations": evals,
             "latest": evaluations.load(evals[0]["id"]) if evals else None}
 
@@ -143,7 +144,7 @@ def get_evaluation(eval_id: int):
 @app.post("/api/runs")
 async def start_run(body: RunIn):  # async on purpose: the batch task must start on the event loop
     ids = body.conversation_ids or [r["id"] for r in db.rows(
-        "SELECT id FROM conversations WHERE (? IS NULL OR group_id = ?) ORDER BY id", body.group_id, body.group_id)]
+        "SELECT id FROM conversations WHERE (%s::text IS NULL OR group_id = %s) ORDER BY id", body.group_id, body.group_id)]
     if not ids:
         raise HTTPException(404, "no conversations to evaluate: import a dataset first")
     if body.checklist_version and not checklist.get(body.checklist_version):
@@ -169,12 +170,12 @@ def file_appeal(body: AppealIn, request: Request):
 @app.get("/api/appeals")
 def list_appeals(state: str | None = None):
     return db.rows("SELECT a.*, e.conversation_id FROM appeals a JOIN evaluations e ON e.id = a.evaluation_id"
-                   " WHERE (? IS NULL OR a.state = ?) ORDER BY a.id DESC", state, state)
+                   " WHERE (%s::text IS NULL OR a.state = %s) ORDER BY a.id DESC", state, state)
 
 
 @app.post("/api/appeals/{appeal_id}/decision")
 def decide_appeal(appeal_id: int, body: DecisionIn, request: Request):
-    appeal = db.row("SELECT * FROM appeals WHERE id = ?", appeal_id)
+    appeal = db.row("SELECT * FROM appeals WHERE id = %s", appeal_id)
     if not appeal:
         raise HTTPException(404, "appeal not found")
     if appeal["state"] != "submitted":
@@ -250,7 +251,7 @@ def get_trace(trace_id: int):
 
 @app.get("/api/gold")
 def list_gold(conversation_id: str | None = None):
-    return db.rows("SELECT * FROM gold_labels WHERE (? IS NULL OR conversation_id = ?) ORDER BY conversation_id, criterion_id",
+    return db.rows("SELECT * FROM gold_labels WHERE (%s::text IS NULL OR conversation_id = %s) ORDER BY conversation_id, criterion_id",
                    conversation_id, conversation_id)
 
 
@@ -268,7 +269,7 @@ def get_analytics(checklist_version: int | None = None):
 
 @app.get("/api/audit")
 def audit(limit: int = 200):
-    return db.rows("SELECT * FROM audit ORDER BY id DESC LIMIT ?", limit)
+    return db.rows("SELECT * FROM audit ORDER BY id DESC LIMIT %s", limit)
 
 
 # The UI is plain static files: the same files can ship as a Dynamics 365 HTML web resource.

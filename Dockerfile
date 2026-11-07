@@ -20,7 +20,8 @@ ENV LLM_PROVIDER=mock
 CMD ["pytest", "-q", "-p", "no:cacheprovider"]
 
 FROM base AS app
-# Mutable state lives outside the code: SQLite, logs, cached API responses -> one volume.
+# Data lives in Postgres (DATABASE_URL, see docker-compose.yml). Logs and cached API responses -> one volume.
+# CQA_DB_PATH is only the default source of `cqa.cli migrate-sqlite` (the pre-Postgres SQLite file).
 ENV CQA_DB_PATH=/var/cqa/cqa.sqlite3 CQA_LOG_DIR=/var/cqa/logs CQA_RAW_DIR=/var/cqa/raw
 RUN useradd --create-home --uid 10001 cqa && mkdir -p /var/cqa && chown -R cqa /var/cqa
 USER cqa

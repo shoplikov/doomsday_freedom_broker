@@ -23,7 +23,7 @@ def compute(version: int | None = None) -> dict:
     cl = checklist.get(version)
     evals = db.rows(
         "SELECT e.*, c.language, c.channel FROM evaluations e JOIN conversations c ON c.id = e.conversation_id"
-        " WHERE e.id IN (SELECT max(id) FROM evaluations WHERE checklist_version = ? GROUP BY conversation_id)",
+        " WHERE e.id IN (SELECT max(id) FROM evaluations WHERE checklist_version = %s GROUP BY conversation_id)",
         cl["version"])
     gold = {(g["conversation_id"], g["criterion_id"]): g for g in db.rows("SELECT * FROM gold_labels")}
     fingerprints = {c["id"]: checklist.fingerprint(c) for c in cl["criteria"]}
@@ -105,10 +105,11 @@ def compute(version: int | None = None) -> dict:
 
     conv_ids = [ev["conversation_id"] for ev in evals]
     calls = db.rows(
-        "SELECT role, count(*) AS calls, sum(attempt > 1) AS retries, sum(error IS NOT NULL) AS errors,"
-        " avg(latency_ms) AS avg_ms, max(latency_ms) AS max_ms, sum(tokens_in) AS tokens_in, sum(tokens_out) AS tokens_out"
-        f" FROM traces WHERE conversation_id IN ({','.join('?' * len(conv_ids)) or 'NULL'}) GROUP BY role",
-        *conv_ids)
+        "SELECT role, count(*) AS calls, count(*) FILTER (WHERE attempt > 1) AS retries, count(error) AS errors,"
+        " avg(latency_ms)::float AS avg_ms, max(latency_ms) AS max_ms,"
+        " sum(tokens_in)::bigint AS tokens_in, sum(tokens_out)::bigint AS tokens_out"
+        " FROM traces WHERE conversation_id = ANY(%s::text[]) GROUP BY role ORDER BY role",
+        conv_ids)
     total_gold = sum(c["gold_n"] for c in criteria)
     panel_ok = sum(per[c["criterion_id"]]["gold_final_ok"] for c in criteria)
     role_acc = {role: _pct(sum(per[c["criterion_id"]][f"gold_{role}_ok"] for c in criteria),
