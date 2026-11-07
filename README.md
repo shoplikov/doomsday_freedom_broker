@@ -62,3 +62,4 @@ Re-running is free for unchanged criteria (cache). `cli run` with real models as
 - [docs/DEMO.md](docs/DEMO.md): 5-minute demo script, control-round runbook, jury Q&A
 - [docs/DECISIONS.md](docs/DECISIONS.md): decisions made and still open
 - [docs/VALIDATION.md](docs/VALIDATION.md): how we prove the three-model panel works (gold set, metrics, decision rules)
+- [docs/DEPLOY.md](docs/DEPLOY.md): environments (`main` → prod, `dev` → :8080), CI/CD, releases and rollback, server and DB backups

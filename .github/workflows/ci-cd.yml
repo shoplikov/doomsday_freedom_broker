@@ -1,11 +1,20 @@
 name: CI/CD
 
+# main -> prod  http://<host>/      + GitHub Release vYYYY.MM.DD.<run>
+# dev  -> dev   http://<host>:8080/ (no release)
+# Rollback: Actions -> CI/CD -> Run workflow on main, ref = an old release tag.
+
 on:
   push:
     branches: [main, dev]
   pull_request:
     branches: [main, dev]
   workflow_dispatch:
+    inputs:
+      ref:
+        description: "Tag or commit to deploy (empty = branch head). Use a release tag to roll back."
+        required: false
+        default: ""
 
 concurrency:
   group: ci-cd-${{ github.ref }}
@@ -16,6 +25,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
       - uses: astral-sh/setup-uv@v6
       - name: Tests
         run: |
@@ -29,12 +40,31 @@ jobs:
     if: github.event_name != 'pull_request' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev')
     runs-on: ubuntu-latest
     environment: ${{ github.ref_name == 'main' && 'production' || 'development' }}
+    permissions:
+      contents: write # create release tags
     env:
-      # main -> http://<host>/ , dev -> http://<host>:8080/
       APP_DIR: ${{ github.ref_name == 'main' && '/opt/doomsday_freedom_broker' || '/opt/doomsday_freedom_broker-dev' }}
       APP_PORT: ${{ github.ref_name == 'main' && '80' || '8080' }}
+      # A new release only for a normal push to main, not for a manual (re)deploy or rollback.
+      NEW_RELEASE: ${{ github.ref_name == 'main' && github.event_name == 'push' }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+          fetch-depth: 0
+
+      - name: Work out version
+        id: version
+        run: |
+          SHA=$(git rev-parse HEAD)
+          if [ "$NEW_RELEASE" = "true" ]; then
+            VERSION="v$(date -u +%Y.%m.%d).${{ github.run_number }}"
+          else
+            VERSION=$(git describe --tags --exact-match 2>/dev/null || echo "${{ github.ref_name }}-${SHA::7}")
+          fi
+          echo "sha=$SHA" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Deploying $VERSION ($SHA) to ${{ github.ref_name == 'main' && 'prod' || 'dev' }}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Configure SSH
         env:
@@ -50,6 +80,7 @@ jobs:
 
       - name: Sync code to server
         run: |
+          printf '%s %s %s\n' "${{ steps.version.outputs.version }}" "${{ steps.version.outputs.sha }}" "$(date -u +%FT%TZ)" > RELEASE
           rsync -az --delete \
             --exclude '.git' --exclude '.env' --exclude 'data/raw' --exclude 'data/logs' \
             --exclude 'data/*.sqlite3*' --exclude 'data/fixtures/DEV.json' \
@@ -64,3 +95,13 @@ jobs:
           ssh target 'for i in $(seq 1 30); do
               curl -fsS http://127.0.0.1:'"${APP_PORT}"'/api/health && exit 0; sleep 2; done
             echo "App did not become healthy"; cd '"${APP_DIR}"' && docker compose ps && docker compose logs --tail 80; exit 1'
+
+      - name: Create GitHub Release
+        if: env.NEW_RELEASE == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ steps.version.outputs.version }}" \
+            --target "${{ steps.version.outputs.sha }}" \
+            --title "${{ steps.version.outputs.version }}" \
+            --generate-notes
