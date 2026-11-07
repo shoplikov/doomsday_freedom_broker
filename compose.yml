@@ -1,0 +1,15 @@
+services:
+  app:
+    build: .
+    image: cqa:latest
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    ports:
+      - "80:8000"
+    volumes:
+      - cqa-state:/app/state
+
+volumes:
+  cqa-state:

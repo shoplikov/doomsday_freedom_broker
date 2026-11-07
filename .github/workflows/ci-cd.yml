@@ -1,0 +1,65 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-cd-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  APP_DIR: /opt/doomsday_freedom_broker
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: Tests
+        run: |
+          uv sync --frozen
+          uv run pytest -q
+      - name: Docker build
+        run: docker build -t cqa:ci .
+
+  deploy:
+    needs: build
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure SSH
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
+          printf 'Host target\n  HostName %s\n  User %s\n  IdentityFile ~/.ssh/deploy_key\n  IdentitiesOnly yes\n' \
+            "$SSH_HOST" "${{ secrets.SSH_USER }}" > ~/.ssh/config
+
+      - name: Sync code to server
+        run: |
+          rsync -az --delete \
+            --exclude '.git' --exclude '.env' --exclude 'data/raw' --exclude 'data/logs' \
+            --exclude 'data/*.sqlite3*' --exclude 'data/fixtures/DEV.json' \
+            ./ "target:${APP_DIR}/"
+
+      - name: Build and restart
+        run: |
+          ssh target "cd ${APP_DIR} && docker compose up -d --build --remove-orphans && docker image prune -f"
+
+      - name: Health check
+        run: |
+          ssh target 'for i in $(seq 1 30); do
+              curl -fsS http://127.0.0.1/api/health && exit 0; sleep 2; done
+            echo "App did not become healthy"; cd '"${APP_DIR}"' && docker compose ps && docker compose logs --tail 80; exit 1'
