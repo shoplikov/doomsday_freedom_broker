@@ -80,4 +80,4 @@ def setup_logging() -> None:
 
 
 # Bump whenever prompts change: it is part of the cache key, so old cached verdicts stop being reused.
-PROMPT_VERSION = "p5"
+PROMPT_VERSION = "p6"

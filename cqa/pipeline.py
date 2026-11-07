@@ -276,6 +276,13 @@ def coerce(r: dict) -> dict:
     return r
 
 
+RESAMPLE_TEMPERATURE = 0.7
+
+
+def _has_items(data) -> bool:
+    return isinstance(data, dict) and isinstance(data.get("criteria"), list) and bool(data["criteria"])
+
+
 def _cid(x) -> str:
     s = str(x or "").strip().lower()
     return f"c{int(s):02d}" if s.isdigit() else s
@@ -297,9 +304,17 @@ async def call_role(role, criteria, msgs, facts, ctx, briefs=None, feedback=None
         else:
             global _sem
             _sem = _sem or asyncio.Semaphore(config.CONCURRENCY)
+            # Greedy decoding is repeatable but can get stuck on an empty "{}"; a retry samples instead.
+            temp = RESAMPLE_TEMPERATURE if attempt > 1 else None
             async with _sem:
-                data, usage, text = await llm.chat_json(model, messages)
+                data, usage, text = await llm.chat_json(model, messages, temp)
             ctx["usage"].append(usage | {"role": role})
+            if not _has_items(data):
+                log.warning("empty answer conv=%s role=%s try=%d: resampling", ctx["conversation_id"], role, attempt)
+                async with _sem:
+                    data, usage2, text = await llm.chat_json(model, messages, RESAMPLE_TEMPERATURE)
+                ctx["usage"].append(usage2 | {"role": role})
+                usage = {**usage, "in": usage["in"] + usage2["in"], "out": usage["out"] + usage2["out"]}
     except Exception as exc:  # provider failure after SDK retries: no answer, criteria go to retry / review
         error = f"{type(exc).__name__}: {exc}"
         log.exception("LLM call failed conv=%s role=%s", ctx["conversation_id"], role)

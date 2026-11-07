@@ -36,7 +36,8 @@ class FakeLLM:
     def __init__(self, script):
         self.script, self.calls = script, []
 
-    async def __call__(self, model, messages):
+    async def __call__(self, model, messages, temperature=None):
+        self.temps = getattr(self, "temps", []) + [temperature]
         task = messages[2]["content"]
         role = next(r for r in ("inspector", "advocate", "judge") if f"ROLE: {r.upper()}" in task)
         attempt = sum(1 for c in self.calls if c[0] == role)
@@ -198,7 +199,7 @@ def test_full_evaluation_cost_tokens_and_cache_on_openai_path(fake, monkeypatch)
     monkeypatch.setattr(config, "LLM_PRICES", {"small": [1.0, 2.0], "big": [10.0, 20.0]})
     calls = []
 
-    async def realistic(model, messages):  # answers like a model would, from what is in the prompt
+    async def realistic(model, messages, temperature=None):  # answers like a model would, from what is in the prompt
         calls.append(model)
         line = re.compile(r"^\[(m\d+) (\S+) (\w+)\] (.*)$")
         msgs = [{"conversation_id": "cost-1", "mid": m[1], "speaker": m[3], "text_masked": m[4]}
@@ -233,3 +234,11 @@ def test_invented_quote_is_not_snapped():
     r = pipeline.snap_quotes({"evidence": [{"msg": "m2", "quote": "Добрый день, чем помочь?"}]},
                              {"m2": "Здравствуйте! Меня зовут Айгерим."})
     assert r["evidence"][0]["quote"] == "Добрый день, чем помочь?"
+
+
+def test_empty_greedy_answer_is_resampled_at_once(fake):
+    # temperature 0 sometimes yields just "{}": sample again in the same attempt instead of failing the dialog
+    f = fake({"inspector": ["{}", [c01(True)]], "advocate": [[c01(True)]], "judge": [[c01(True)]]})
+    res = run(["c01"])[0]["c01"]
+    assert res["status"] == "auto_accepted" and f.roles().count("inspector") == 2
+    assert pipeline.RESAMPLE_TEMPERATURE in f.temps

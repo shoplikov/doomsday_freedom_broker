@@ -34,10 +34,12 @@ def parse_json(text: str) -> dict:
     return data if isinstance(data, dict) else {}
 
 
-async def chat_json(model: str, messages: list[dict]) -> tuple[dict, dict, str]:
+async def chat_json(model: str, messages: list[dict], temperature: float | None = None) -> tuple[dict, dict, str]:
+    """temperature: None = config.LLM_TEMPERATURE (0 by default); the pipeline passes a higher one to resample."""
     extra = {"reasoning_effort": config.REASONING_EFFORT} if config.REASONING_EFFORT else {}
-    if config.LLM_TEMPERATURE is not None and not config.REASONING_EFFORT:
-        extra["temperature"] = config.LLM_TEMPERATURE
+    t = config.LLM_TEMPERATURE if temperature is None else temperature
+    if t is not None and not config.REASONING_EFFORT:
+        extra["temperature"] = t
     resp = await _openai().chat.completions.create(
         model=model, messages=messages, response_format={"type": "json_object"},
         extra_body=config.LLM_EXTRA_BODY or None, **extra,
