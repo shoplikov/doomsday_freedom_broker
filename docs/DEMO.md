@@ -33,6 +33,7 @@ edit → lint → publish vN+1 → apply → diff. Target: under 5 minutes, no c
 
 ## Backup kit
 
+- [ ] Demo machine runs `docker compose up -d --build` from the stop-code commit; `docker compose ps` shows `healthy`
 - [ ] `data/cqa.sqlite3` with the full DEV results (the app works offline from it)
 - [ ] `data/raw/DEV.json` (auto-saved on import; offline re-import works)
 - [ ] Screen recording of the full 5 minutes

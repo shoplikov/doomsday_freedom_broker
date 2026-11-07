@@ -22,6 +22,8 @@ Short log. New decision → add a row; change one → strike through and add the
 | D-18 | 2026-11-07 | Real DEV data (`invoke.json`, `data/fixtures/DEV.json`) is NOT committed: it contains 5 real calls. Teammates load it via `DATASET_API_URL` (auto-cached in `data/raw/`) | The repo must be public; customer speech should not be published |
 | D-19 | 2026-11-07 | Real-model batch runs from the CLI need `--yes` and print a cost estimate | No accidental spending; the cache makes re-runs free |
 
+| D-20 | 2026-11-07 | Docker Compose: one `app` service (API + UI), named volume for SQLite/logs/cache, `test` profile runs pytest in the image | Same run on every laptop and the jury's machine; state survives restarts |
+
 ## Open (owner decides by the given hour)
 
 | ID | Question | Owner | By | Notes |

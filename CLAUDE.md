@@ -32,7 +32,9 @@ with quotes → code validates quotes and counts points → humans decide disput
 ## Commands
 
 ```bash
-uv sync
+docker compose up -d --build            # full app in a container (port CQA_PORT, default 8000)
+docker compose --profile test run --rm test
+uv sync                                  # local dev without Docker:
 uv run uvicorn cqa.main:app --reload     # http://localhost:8000, mock LLM by default
 uv run pytest -q                         # must stay green on main
 uv run --with playwright pytest tests/e2e -q   # browser demo flow; run before merging UI changes
