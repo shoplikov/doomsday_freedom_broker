@@ -284,6 +284,7 @@ td .id { font-family: "JetBrains Mono", monospace; font-size: 13px; }
 .alert.info { background: var(--info-soft); border-color: transparent; }
 .alert b { font-weight: 600; }
 .alert > div { flex: 1; min-width: 0; }
+.alert > svg { width: 18px; height: 18px; flex: none; margin-top: 1px; }
 details > summary { cursor: pointer; list-style: none; }
 details > summary::-webkit-details-marker { display: none; }
 .disclosure > summary { display: flex; align-items: center; gap: 10px; font-weight: 550; }
@@ -411,6 +412,7 @@ audio { width: 100%; margin-bottom: 12px; }
 .q-item:first-of-type { border-top: 0; }
 @media (hover: hover) { .q-item:hover { background: var(--surface-2); } }
 .q-item .ico { width: 34px; height: 34px; border-radius: 8px; display: grid; place-items: center; font-weight: 600; font-size: 13px; background: var(--warn-soft); color: var(--warn); font-variant-numeric: tabular-nums; }
+.q-item .ico svg { width: 18px; height: 18px; }
 .q-item .ico.info { background: var(--info-soft); color: var(--info); }
 .q-item .body { margin-top: 4px; color: var(--text); }
 .q-item .go { align-self: center; color: var(--text-3); }
