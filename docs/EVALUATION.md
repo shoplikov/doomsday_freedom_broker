@@ -172,3 +172,17 @@ Kimi-K2.6 (non-thinking, via an OpenAI-compatible proxy, judge on disputes) and 
 Paired, Kimi precedents vs panel: HOLDOUT +12 / −8, fresh +6 / −4. Same direction on all three measurements but not
 yet significant (p ≈ 0.4). It costs one embedding call and ~1.5k prompt tokens per call. A reviewer's decision can
 become a new precedent (not wired yet).
+
+### 5.6 Final choice: gpt-6.1-terra (low) + precedents, judge on disputes
+
+Same p7 prompts and checklist v5, precedent pool = TUNE only, `JUDGE_MODE=disputed` (the production setting):
+
+| Model + precedents | HOLDOUT macro | fresh macro | c02 fresh | c08 recall / false alarm (HOLDOUT) | total MAE (HOLDOUT / fresh) | p50 s | $ / dialog |
+|---|---|---|---|---|---|---|---|
+| gpt-6-luna (none) | 93.3 | 91.1 | 66.7 | 100 / 0 | 9.08 / 8.30 | 7.5–11 | 0.002 |
+| **gpt-6.1-terra (low)** | **93.2** | **96.9** | **91.7** | 100 / 3.7 | **7.07 / 2.22** | 13–18 | **0.023** |
+| gpt-6.1-sol (low, judge always) | — | 96.9 | 91.7 | — | — / 2.92 | 22 | 0.074 |
+
+- terra vs luna, paired: HOLDOUT +17 / −18 (a tie), fresh +14 / −3 (p ≈ 0.013). luna's misses on fresh are mostly c02.
+- terra matches sol on fresh at a third of the price, so terra is the production model.
+- Production run on 11-08 (prod server, 65 DEV + 10 control dialogs): 75 dialogs, $1.69 ($0.023 per dialog), 0 failed.

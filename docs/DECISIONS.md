@@ -27,6 +27,9 @@ Short log. New decision → add a row; change one → strike through and add the
 | D-21 | 2026-11-07 | Red team on real DEV chats is the cheap correctness check until gold labels exist; run it after every prompt or checklist change | 15/15 passed for $0.095; it showed the judge catching what both M1 and M2 missed |
 | D-23 | 2026-11-07 | ~~SQLite~~ → **PostgreSQL 16** is the only runtime DB (psycopg 3 + small pool, `DATABASE_URL`; `db` service in Compose). JSON and timestamps stay TEXT. Old SQLite files move over once with `cli migrate-sqlite`. Supersedes the SQLite part of D-01/D-15/D-20 | Prod and dev keep real review work (appeals, gold labels, decisions): a server database with `pg_dump` backups and concurrent writers is safer than a file in a volume; TEXT columns kept the code change small |
 
+| D-24 | 2026-11-08 | Production: **gpt-6.1-terra** (reasoning low) in all three roles, `CQA_APPROACH=precedents`, `JUDGE_MODE=disputed`. Supersedes the open D-03 / D-11 | Bench (EVALUATION §5.4–5.6): same fresh accuracy as gpt-6.1-sol (96.9) at a third of the price; gpt-6-luna is 10× cheaper but loses 5.8 points on fresh (p ≈ 0.013); $0.023 per dialog measured on prod |
+| D-25 | 2026-11-08 | Control round FBroker evaluated once, on the prod server, with the production setting; `results/prod/results.json` is exported from that same database | The jury sees in the UI exactly the verdicts in the results file |
+
 ## Open (owner decides by the given hour)
 
 | ID | Question | Owner | By | Notes |

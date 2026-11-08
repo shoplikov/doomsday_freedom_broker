@@ -1,104 +1,287 @@
+<div align="center">
+
 # CQA · Conversation Quality Analytics
 
-AI scoring of operator chats and calls (RU / KZ / EN) against an editable checklist.
-Every verdict has message-level evidence, plain code does the math, humans decide appeals.
-Built for the Freedom Broker CQA hackathon (brief: `initial_docs/`).
+**ИИ-оценка чатов и звонков операторов на русском, казахском и английском по редактируемому чек-листу.**
+У каждого вердикта есть цитата из диалога, баллы считает код, спорное решает человек.
 
-## Run with Docker (recommended for the team and the jury)
+![Python](https://img.shields.io/badge/python-3.12-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?logo=fastapi&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-4169E1?logo=postgresql&logoColor=white)
+![OpenAI](https://img.shields.io/badge/OpenAI-gpt--6.1--terra-412991?logo=openai&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker_Compose-ready-2496ED?logo=docker&logoColor=white)
 
-```bash
-cp .env.example .env                              # put OPENAI_API_KEY etc. here (optional: mock works without it)
-docker compose up -d --build                      # app + Postgres; http://localhost:8005  (other port: CQA_PORT=8790 docker compose up -d)
-docker compose --profile test run --rm test       # test suite inside the container
-docker compose exec app python -m cqa.cli report  # CLI inside the running app
-docker compose logs -f app                        # live logs (also in the volume: /var/cqa/logs/cqa.log)
-docker compose exec db psql -U cqa cqa            # SQL shell
-docker compose down                               # stop; data stays in the volumes (down -v wipes it)
+Команда **Dreamers** · хакатон Freedom Broker CQA
+
+</div>
+
+---
+
+## Что это
+
+Проверяющий в контакт-центре читает диалог и ставит оценки по 8 критериям: контакт, выявление потребности, идентификация, консультация, эмпатия, управление диалогом, завершение, грубые ошибки. CQA делает первичную оценку за ~15 секунд: вердикт, баллы, объяснение на русском и номера сообщений, на которых основан ответ. Человек тратит время только на спорные случаи. Оператор может оспорить любую оценку, проверяющий принимает решение, итог пересчитывается.
+
+```mermaid
+flowchart LR
+    API["API организаторов"] --> IMP["Импорт<br/>и маскирование"]
+    IMP --> AI["Три роли ИИ<br/>+ прецеденты"]
+    AI --> CODE["Код: проверка цитат<br/>и подсчёт баллов"]
+    CODE -->|"уверенно"| OK["Принято"]
+    CODE -.->|"спорно"| HUM["Проверяющий"]
+    OK --> RES[("results.json<br/>и интерфейс")]
+    HUM --> RES
+
+    classDef ai fill:#6d28d9,stroke:#4c1d95,color:#fff
+    classDef code fill:#0f766e,stroke:#134e4a,color:#fff
+    class AI ai
+    class CODE,IMP code
 ```
 
-The `app` container serves the API and the UI; data lives in PostgreSQL (`db` service, `pgdata` volume, not
-published to the host). Logs and cached API responses live in the `cqa-data` volume.
-`./data/fixtures` is mounted read-only, so a local `DEV.json` copy works offline in the container too.
-The container runs as a non-root user and has a health check on `/api/health`.
+## Результаты
 
-## Run locally (for development)
+Точность считается как доля критериев, где ответ системы совпал с эталоном. Эталон мы сделали сами (раздел [«Как мы измеряли качество»](#как-мы-измеряли-качество)).
+
+| Набор | Что это | Точность |
+|---|---|---|
+| HOLDOUT, 109 случаев | Половина данных, на которой мы ни разу не настраивали промпты | **93.2 %** |
+| Fresh, 24 диалога | Новые диалоги, написанные после заморозки системы | **96.9 %** |
+| Грубые ошибки (c08) | Доля пойманных нарушений | **100 %** |
+
+| Стоимость и скорость | Значение |
+|---|---|
+| Модель | `gpt-6.1-terra`, reasoning effort `low`, все три роли |
+| Цена одного диалога | **$0.023** (реальный прогон на проде, 75 диалогов за $1.69) |
+| Время на диалог | 13–18 с, диалоги идут параллельно |
+| 10 контрольных диалогов | ≈ 1–2 минуты |
+
+## Как оценивается диалог
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant C as Код
+    participant P as Прецеденты
+    participant I as Инспектор
+    participant A as Адвокат
+    participant J as Судья
+
+    C->>C: маскирование ИИН, карт, телефонов
+    C->>C: факты: паузы, первый ответ, события, риски
+    C->>P: найти похожие решённые диалоги
+    P-->>C: 4 случая на критерий, с ответом и причиной
+    par параллельно
+        C->>I: строгая оценка 8 критериев
+    and
+        C->>A: самое сильное честное доказательство за оператора
+    end
+    I-->>C: вердикты, цитаты m1…mN
+    A-->>C: вердикты, цитаты m1…mN
+    C->>C: цитата есть в сообщении? ответ допустим?
+    alt роли разошлись
+        C->>J: оба ответа + диалог
+        J-->>C: решение по спорным критериям
+    end
+    C->>C: баллы, N/A, округление, уверенность
+    Note over C: низкая уверенность → очередь проверяющего
+```
+
+Модель вызывается только в шагах с ролями. Всё остальное делает код, покрытый тестами.
+
+**Почему три роли.** Инспектор ищет нарушения, Адвокат ищет честные доказательства в пользу оператора. Если строгий и мягкий читатель согласны, вердикт надёжен. Если спорят, значит, место действительно неоднозначное: его разбирает Судья, а при низкой уверенности — человек. Все 8 критериев оцениваются одним вызовом на роль, поэтому выходит 2–3 вызова на диалог, а не 24.
+
+**Почему прецеденты.** Сильная модель почти не ошибается в чтении диалога. Её ошибки — в трактовке правил: например, переспросить уже известное — это «Нет», а не N/A. Переписывать чек-лист под каждую ошибку оказалось подгонкой: на отложенных данных точность падала. Поэтому модель видит 4 похожих диалога, которые уже решили проверяющие, с ответом и причиной. Среди них есть разные ответы, чтобы было видно, где проходит граница. Похожесть считается по эмбеддингам OpenAI, сам оцениваемый диалог в подборку не попадает.
+
+**Правила, которые система не нарушает:**
+1. Чек-лист — это данные, а не код: критерий меняется в интерфейсе без деплоя.
+2. Модель выносит суждение, баллы считает код (Decimal, округление «половина вверх», перераспределение N/A).
+3. Нет вердикта без реального номера сообщения: каждую цитату проверяет код.
+4. Спорное решает человек, все изменения пишутся в журнал аудита.
+5. Диалог оценивается на языке оригинала, личные данные маскируются до отправки в модель.
+
+## Возможности
+
+| Возможность | Где | Что даёт |
+|---|---|---|
+| Карточка с доказательствами | Диалог | Вердикт, баллы после N/A, объяснение, клик по цитате прокручивает к сообщению. У звонка перематывает аудио |
+| Апелляция и решение | Роли «Оператор» и «Проверяющий» | Оспорить критерий, решить с причиной, увидеть «ИИ: X → итог: Y» |
+| Версии чек-листа | «Чек-лист» | Правка или замена критерия, линтер расплывчатых слов, «Сохранить как vN+1», применить ко всем, разница итогов. Переоценивается только изменённый критерий |
+| Тест-драйв критерия | «Чек-лист» → критерий | Новая формулировка на 5 диалогах до публикации: какие вердикты изменятся, перестали ли модели спорить |
+| Проверка на прочность | Диалог | Вставить в копию диалога нарушение (сделка в обход компании, оскорбление, данные до идентификации или своя реплика) и проверить, заметит ли ИИ |
+| Здоровье чек-листа | «Аналитика» | По каждому критерию: как часто модели спорят и как часто люди отменяют ИИ |
+| Очередь по влиянию | «Проверка» | Неуверенные вердикты отсортированы по тому, на сколько баллов они двигают итог |
+| Трасса | Критерий → «Трасса» | Ответ каждой роли, полный промпт и сырой ответ модели, время, токены |
+| Выгрузка | Кнопка `results.json`, `GET /api/results/{group_id}` | Файл в формате организаторов 1.0 |
+
+## Как мы измеряли качество
+
+Эталонных ответов организаторы не дали, поэтому мы собрали три набора с известными ответами и одну команду, которая прогоняет их все: `cqa.cli bench`.
+
+| Набор | Что это | Почему ему можно верить |
+|---|---|---|
+| Эталон DEV | 65 DEV-диалогов, 520 меток, размечены вслепую (без ответа ИИ) | 12 диалогов размечены дважды, совпадение 95.8 % |
+| Синтетика | 72 диалога на RU / KZ / EN, в каждом сложная ловушка | Ответ известен по построению, каждый перечитан вторым человеком |
+| Мутации | Диалог, сломанный специально: убрано приветствие, вставлено оскорбление и т.п. | Нужный критерий обязан измениться, безобидная правка не должна менять ничего |
+
+```mermaid
+flowchart LR
+    T["TUNE<br/>улучшаем"] -->|"новая версия"| H["HOLDOUT<br/>только цифры"]
+    H -->|"улучшение подтвердилось"| F["Fresh<br/>24 новых диалога"]
+    H -.->|"не подтвердилось"| R["Откат"]
+    F ==> S["Финальная версия"]
+```
+
+Каждые две версии сравниваются по одним и тем же ячейкам: сколько ответов исправлено, сколько сломано, и знаковый тест, чтобы не принять шум за улучшение.
+
+### Путь: 7 версий промптов, 2 подхода, 10 моделей
+
+| Шаг | Что изменили | HOLDOUT | Fresh |
+|---|---|---|---|
+| p1, локальная Qwen 27B | Базовая версия | 81.7 % | 75.0 % |
+| p4–p5 | Температура 0, N/A как явный ответ, факты от кода, сначала обоснование, потом решение | — | — |
+| p6–p7 | c08 разбит на 5 конкретных вопросов, подсказки о рисках на RU/KZ/EN, чек-лист v5 | 92.5 % | 91.7 % |
+| Сравнение моделей | Qwen, gpt-4.1-mini, gpt-5.4-mini, gpt-6-luna, gpt-6.1-terra, gpt-6.1-sol, Kimi-K2.6 и др. | 88–94.6 % | 88–96.4 % |
+| Подход 2: прецеденты | Помог на всех 4 проверенных моделях, сильнее всего на c02 | | |
+| **Финал: terra + прецеденты** | | **93.2 %** | **96.9 %** |
+
+<details>
+<summary>Почему terra, а не sol или luna</summary>
+
+| Вариант (с прецедентами) | HOLDOUT | Fresh | Цена диалога |
+|---|---|---|---|
+| gpt-6-luna | 93.3 % | 91.1 % | $0.002 |
+| **gpt-6.1-terra (low)** | **93.2 %** | **96.9 %** | **$0.023** |
+| gpt-6.1-sol (low) | 94.6 % (без прецедентов) | 96.9 % | $0.074 |
+
+- sol даёт ту же точность на новых диалогах, но в 3 раза дороже.
+- luna на HOLDOUT равна terra, но на новых диалогах terra исправила 14 её ответов и сломала 3 (p = 0.013). На c02 luna даёт 66.7 % против 91.7 %.
+
+</details>
+
+Подробно, с цифрами по каждому шагу: [docs/EVALUATION.md](docs/EVALUATION.md).
+
+## Стек и развёртывание
+
+| Слой | Технология |
+|---|---|
+| Сервер | Python 3.12, FastAPI, uv |
+| База данных | PostgreSQL 16, psycopg 3 |
+| Интерфейс | HTML/CSS/JS, Web Components без сборки. Готов к встраиванию в Dynamics 365 как HTML web resource |
+| ИИ | OpenAI API: `gpt-6.1-terra` в ролях, `text-embedding-3-small` для прецедентов. Любой OpenAI-совместимый сервер (vLLM, SGLang) подключается через `OPENAI_BASE_URL` |
+| Запуск | Docker Compose: `app` + `db` |
+| CI/CD | GitHub Actions: тесты → сборка → деплой на AWS по ветке, релиз с тегом и откат |
+
+```mermaid
+flowchart LR
+    DEV["push в dev"] --> CI["GitHub Actions<br/>pytest + docker build"]
+    MAIN["push в main"] --> CI
+    CI -->|"dev"| S1["Стенд :8080"]
+    CI ==>|"main"| S2["Прод :80<br/>+ релиз vГГГГ.ММ.ДД.N"]
+    S2 -.->|"откат: запуск<br/>с тегом релиза"| CI
+```
+
+## Быстрый старт
+
+> [!TIP]
+> Без ключа API система работает в режиме `mock`: фальшивая модель с детерминированными ответами и 5 демо-диалогов `SAMPLE`.
 
 ```bash
-uv sync                      # Python 3.12 is installed automatically (.python-version)
-cp .env.example .env         # optional: works without it (mock LLM, offline SAMPLE data)
-# PostgreSQL: DATABASE_URL, default postgresql://cqa:cqa@localhost:5432/cqa. Quickest way to get one:
+cp .env.example .env               # ключ OpenAI и модели (можно оставить mock)
+docker compose up -d --build       # app + Postgres → http://localhost:8005
+```
+
+1. **Диалоги** → группа `SAMPLE` (или `DEV`, если задан `DATASET_API_URL`) → «Загрузить набор» → «Оценить все».
+2. Открыть диалог → нажать на цитату → роль **Оператор** → «Оспорить».
+3. Роль **Проверяющий** → «Решение» → итог пересчитан.
+4. **Чек-лист** → изменить критерий → «Сохранить как vN+1» → «Применить ко всем диалогам» → разница.
+
+<details>
+<summary>Запуск без Docker (для разработки)</summary>
+
+```bash
+uv sync
 docker run -d --name cqa-pg -e POSTGRES_USER=cqa -e POSTGRES_PASSWORD=cqa -e POSTGRES_DB=cqa -p 5432:5432 postgres:16-alpine
-uv run uvicorn cqa.main:app --reload
-# open http://localhost:8000
+uv run uvicorn cqa.main:app --reload          # http://localhost:8000
 ```
 
-1. **Диалоги** → group `SAMPLE` (5 demo dialogs) or `DEV` (65 real) → «Загрузить набор» → «Оценить все».
-2. Open a dialog → click evidence chips → switch role to **Оператор** → «Оспорить».
-3. Switch to **Проверяющий** → «Решение» → the total is recalculated.
-4. **Чек-лист** → edit or replace a criterion → «Сохранить как vN+1» → «Применить ко всем диалогам» → diff.
-5. On any criterion: «Трасса» (what M1, M2, M3 said, plus raw calls) and «эталон» (gold label). **Аналитика** shows whether the panel works.
+</details>
 
-Real data and models: set `DATASET_API_URL`, `LLM_PROVIDER=openai`, `OPENAI_API_KEY` and the
-`MODEL_*` variables in `.env` (see `.env.example`), then import group `DEV`.
+<details>
+<summary>Настройки модели в .env</summary>
+
+| Переменная | Значение на проде | Что делает |
+|---|---|---|
+| `LLM_PROVIDER` | `openai` | `mock` для работы без ключа |
+| `MODEL_INSPECTOR`, `MODEL_ADVOCATE`, `MODEL_JUDGE` | `gpt-6.1-terra` | Модель каждой роли |
+| `REASONING_EFFORT` | `low` | Глубина рассуждения reasoning-моделей |
+| `JUDGE_MODE` | `disputed` | Судья только при споре (`always` — всегда) |
+| `CQA_APPROACH` | `precedents` | `panel` — три роли без прецедентов |
+| `PRECEDENT_EMBED_MODEL` | `text-embedding-3-small` | Модель эмбеддингов для поиска похожих случаев |
+| `DATASET_API_URL` | ссылка с `{group_id}` | API организаторов |
+
+Полный список с комментариями: [.env.example](.env.example).
+
+</details>
+
+## Командная строка
 
 ```bash
-uv run pytest -q                                   # math, validator, 3-model panel on the OpenAI path (fake model), API flow
-                                                   # needs Postgres at TEST_DATABASE_URL (default as above); uses a throwaway schema
-uv run --with playwright pytest tests/e2e -q       # the whole demo in a real browser (uses /usr/bin/chromium)
-
-uv run python -m cqa.cli import DEV                # terminal loop: import, evaluate, analyse
-uv run python -m cqa.cli run DEV --limit 10
-uv run python -m cqa.cli report                    # A/B agreement, judge sides, gold accuracy per role, cost
-uv run python -m cqa.cli trace p1-kz-001           # every LLM call of one dialog
-uv run python -m cqa.cli redteam DEV               # break real chats on purpose, check verdicts flip (asks --yes)
-uv run python -m cqa.cli migrate-sqlite data/cqa.sqlite3   # one-shot: copy a pre-Postgres SQLite DB into Postgres
+docker compose exec app python -m cqa.cli import DEV          # загрузить группу
+docker compose exec app python -m cqa.cli run DEV --yes       # оценить (готовое берётся из кэша)
+docker compose exec app python -m cqa.cli report              # согласие ролей, точность по эталону, цена
+docker compose exec app python -m cqa.cli export DEV          # results/dev/results.json (--prod для results/prod)
+docker compose exec app python -m cqa.cli bench --split holdout --approach precedents --out results/bench/x.json
+docker compose exec app python -m cqa.cli bench-compare results/bench/a.json results/bench/b.json
 ```
 
-With `DATASET_API_URL` set, `DEV` is fetched from the organizers' API and cached in `data/raw/` (offline fallback).
-Real DEV data is never committed (it has real calls): keep a local copy in `data/fixtures/DEV.json` if needed.
-Logs: `data/logs/cqa.log`. Every LLM call (prompt, raw answer, latency, tokens, validation) is in the `traces` table
-and behind the «Трасса» button on each criterion.
+## Тесты
 
-## Beyond the brief: why you can trust the scores
+```bash
+docker compose --profile test run --rm test       # pytest в контейнере
+uv run pytest -q                                   # локально, нужен Postgres (TEST_DATABASE_URL)
+uv run --with playwright pytest tests/e2e -q       # весь сценарий демо в браузере
+```
 
-| Feature | Where | What it gives |
-|---|---|---|
-| **Stress test** | dialog card → «Проверка на прочность» | Break a copy of the dialog on purpose (side deal, insult, data before verification, no greeting, no closing, 5 silent minutes, or your own operator line) and watch whether the AI notices. The right answer is known by construction, so anyone can check the AI live. |
-| **Checklist health** | «Аналитика» | Per criterion: how often the three models disagree, how often humans overturned the AI. A criterion the models keep arguing about is worded ambiguously; the page names it. |
-| **Criterion test drive** | «Чек-лист» → criterion → «Тест-драйв» | Run an edited criterion on 5 dialogs before publishing (dialogs the models argued about first): which verdicts change, and whether the models now agree. |
-| **Review by impact** | «Проверка» | Uncertain verdicts sorted by how many points they can move the total, so a reviewer's minute goes where it matters. |
-| **Where the points went** | dialog card | One chip per criterion that lost points, biggest first, click to jump. |
-| **Measured accuracy** | `cli bench`, [docs/EVALUATION.md](docs/EVALUATION.md) | Every prompt or checklist change is measured on 65 DEV dialogs labelled blind, synthetic dialogs with planted traps, and broken-on-purpose copies; kept only if it also holds on a held-out half and on a fresh set written afterwards. Result: 81.7 → **92.5 %** criterion accuracy on the held-out half, 75.0 → **91.7 %** on the fresh set, every gross error caught. `cli gold-import` puts the blind labels into «Аналитика». |
+Тесты покрывают математику баллов (эталонные числа из чек-листа), проверку цитат, панель трёх ролей на фальшивой модели, API, выгрузку `results.json` и бенчмарк.
 
-## Model and cost (required by the brief)
+## Структура проекта
 
-| Role | Model (set in `.env`) | Calls per dialog |
-|---|---|---|
-| M1 Inspector | `MODEL_INSPECTOR` | 1 (+1 retry if invalid) |
-| M2 Advocate | `MODEL_ADVOCATE` | 1 (+1 retry if invalid) |
-| M3 Judge | `MODEL_JUDGE` | 1 (+1 retry if invalid); 0 for agreed criteria when `JUDGE_MODE=disputed` |
+```text
+cqa/
+  importer.py      импорт из API, нормализация, кэш ответа
+  privacy.py       маскирование личных данных: [IIN_1], [CARD_1] …
+  signals.py       факты для модели: паузы, события, подсказки о рисках
+  pipeline.py      промпты трёх ролей, проверка ответов, уверенность
+  precedents.py    поиск похожих решённых диалогов (подход 2)
+  llm.py           единственное место, где вызывается модель
+  scoring.py       вся математика баллов
+  evaluations.py   оценка, кэш, апелляции, решения, прогоны
+  checklist.py     версии чек-листа, линтер, отпечаток формулировки
+  insights.py      проверка на прочность, здоровье чек-листа, тест-драйв
+  bench.py         измерение качества на наборах с известными ответами
+  results.py       results.json в формате организаторов
+  main.py, cli.py  REST API и командная строка
+web/               интерфейс (Web Components), web/api.js — единственный fetch
+data/              чек-листы v1 и уточнённый; data/eval — эталон, сценарии, правила разметки
+results/prod/      результаты контрольного набора
+docs/              архитектура, контракты, оценка качества, деплой, презентация
+```
 
-Cost per evaluation is computed from real token usage × `LLM_PRICES` and shown on every card.
+## Результаты для организаторов
 
-**Measured on the full DEV set (65 dialogs, 2026-11-07):** M1/M2 `gpt-4.1-mini`, M3 `gpt-4.1`, `JUDGE_MODE=always`
-→ **≈ $0.023 per dialog** (all calls incl. retries), $1.50 for DEV, 2 min 50 s at `CONCURRENCY=8`, 0 failed,
-9 invented/missing quotes caught by the validator and fixed on retry, 7 dialogs sent to human review.
-Alternative `gpt-5-mini` ×2 + `gpt-5`: ≈ $0.058 and ~90 s per dialog, more unanimous answers.
-Re-running is free for unchanged criteria (cache). `cli run` with real models asks for `--yes` and shows an estimate.
+`results/prod/results.json` содержит 10 контрольных диалогов группы FBroker в формате 1.0. Оценка выполнена одним прогоном на прод-сервере, поэтому в интерфейсе видны те же оценки, что и в файле.
 
-## Results for the organisers
+> [!NOTE]
+> Реальные DEV-данные (в них есть записи звонков клиентов) в репозиторий не попадают. Они загружаются через API организаторов.
 
-`uv run python -m cqa.cli export DEV` writes `results/dev/results.json` in the organisers' format 1.0
-(`--prod` writes `results/prod/`). The same file is at `GET /api/results/{group_id}` and behind the
-«results.json» button on the dialog list. Mapping and rules: [docs/CONTRACTS.md §7](docs/CONTRACTS.md).
+## Документация
 
-## Docs
-
-- [CLAUDE.md](CLAUDE.md): rules for everyone (people and AI agents) working in this repo
-- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): pipeline, three-model panel, scoring, data model
-- [docs/CONTRACTS.md](docs/CONTRACTS.md): JSON shapes, REST API
-- [docs/PLAN.md](docs/PLAN.md): 4 lanes, ownership, hour-by-hour plan, cut rules
-- [docs/DEMO.md](docs/DEMO.md): 5-minute demo script, control-round runbook, jury Q&A
-- [docs/DECISIONS.md](docs/DECISIONS.md): decisions made and still open
-- [docs/VALIDATION.md](docs/VALIDATION.md): how we prove the three-model panel works (gold set, metrics, decision rules)
-- [docs/DEPLOY.md](docs/DEPLOY.md): environments (`main` → prod, `dev` → :8080), CI/CD, releases and rollback, server and DB backups
+| Документ | О чём |
+|---|---|
+| [docs/pitch/SLIDES.md](docs/pitch/SLIDES.md) | Кратко для слайдов и сценарий демо-видео |
+| [docs/pitch/SYSTEM.md](docs/pitch/SYSTEM.md) | Полное описание системы простым языком |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Пайплайн, панель трёх ролей, баллы, модель данных |
+| [docs/EVALUATION.md](docs/EVALUATION.md) | Бенчмарк, все итерации и сравнение моделей |
+| [docs/CONTRACTS.md](docs/CONTRACTS.md) | Форматы JSON и REST API |
+| [docs/DEPLOY.md](docs/DEPLOY.md) | Среды, CI/CD, релизы и откат, бэкапы |
+| [docs/DEMO.md](docs/DEMO.md) | Сценарий демо и ответы на вопросы жюри |
+| [docs/DECISIONS.md](docs/DECISIONS.md) | Принятые решения и почему |
