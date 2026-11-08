@@ -12,15 +12,19 @@ CLIENT_GONE = ("connection to customer lost", "customer left", "соединен
 WAIT_WORDS = ("минут", "момент", "ожида", "подожд", "провер", "уточн", "күт", "тексер", "minute", "moment", "wait",
               "hold", "check")
 
-# Hints only: the LLM still decides. Lowercase substrings.
-RISK_TERMS = [
-    # side deal / off-platform money
-    "на мою карту", "мне лично", "переведите мне", "мой личный", "личный номер", "в обход",
-    "маған жеке", "менің картама",
-    "my personal card", "my personal account", "transfer to me", "privately", "message me at",
-    # insults
-    "дурак", "идиот", "тупой", "ақымақ", "idiot", "stupid",
-]
+# Hints only: the LLM still decides. Lowercase substrings in OPERATOR messages, grouped by the gross error they hint at.
+RISK_TERMS = {
+    "side_deal": ["на мою карту", "мне лично", "переведите мне", "мой личный", "личный номер", "в обход", "whatsapp",
+                  "маған жеке", "менің картама", "my personal card", "my personal account", "transfer to me",
+                  "privately", "message me at"],
+    "insult": ["дурак", "идиот", "тупой", "ақымақ", "idiot", "stupid"],
+    # another person's data: family members, "Mr./Mrs. X", other clients
+    "another_person": ["другой клиент", "другого клиента", "у других клиентов", "супруг", "вашей жены", "вашего мужа",
+                       "мырза", "ханым", "жұбай", "әйеліңіз", "күйеуіңіз", "басқа клиент",
+                       "another client", "other client", "another customer", "your wife", "your husband"],
+    "internal_info": ["по секрету", "внутренн", "комплаенс", "между нами", "құпия", "ішкі ереже",
+                      "internal rule", "internal limit", "between us", "secret"],
+}
 
 
 def detect_lang(text: str) -> str | None:
@@ -72,8 +76,8 @@ def compute(msgs: list[dict]) -> dict:
                       "operator_warned_before": announced})
 
     risk_hits = [
-        {"mid": m["mid"], "term": term}
-        for m in ops for term in RISK_TERMS if term in m["text_masked"].lower()
+        {"mid": m["mid"], "kind": kind, "term": term}
+        for m in ops for kind, terms in RISK_TERMS.items() for term in terms if term in m["text_masked"].lower()
     ]
 
     return {
