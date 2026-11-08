@@ -33,7 +33,7 @@ RAW_DIR = Path(_get("CQA_RAW_DIR") or DATA_DIR / "raw")  # cached API responses 
 DATASET_API_URL = _get("DATASET_API_URL")
 # Fresh database: also seed data/checklist_clarified.json as the active v2 (tests turn it off to keep v1 only).
 SEED_CLARIFIED = _get("CQA_SEED_CLARIFIED", "1") != "0"
-TEAM_NAME = _get("CQA_TEAM_NAME", "Doomsday Freedom Broker")  # team_name in results/*/results.json
+TEAM_NAME = _get("CQA_TEAM_NAME", "Dreamers")  # team_name in results/*/results.json
 
 LLM_PROVIDER = _get("LLM_PROVIDER", "mock")  # mock | openai
 OPENAI_API_KEY = _get("OPENAI_API_KEY")

@@ -20,17 +20,18 @@
 Pinned dialogs (fill in on DEV): a KZ/RU code-switch chat ___, a call with audio ___,
 a gross-error chat ___, an N/A-heavy chat ___.
 
-## Control-round runbook (T+23:00 → T+24:00)
+## Control-round runbook (data at 11:00, stop-code at 12:00)
 
-1. **23:00** The control `group_id` is announced → «Загрузить набор» with that id (or `POST /api/datasets/{id}/import`).
-2. **23:01** «Оценить все» right away. Progress shows done/total/failed.
-3. **23:15** Failed dialogs: run them again (the run only redoes what is not cached).
-4. **23:20** Spot-check 3 cards (one per language). Clear the review queue for the pinned dialogs.
-5. **23:30** Export: `docker compose exec app python -m cqa.cli export <group> --out /var/cqa/results.json`,
+1. **11:00** The control `group_id` is announced → «Загрузить набор» with that id (or `POST /api/datasets/{id}/import`).
+2. **11:01** «Оценить все» right away. Progress shows done/total/failed.
+3. **11:15** Failed dialogs: run them again (the run only redoes what is not cached).
+4. **11:20** Spot-check 3 cards (one per language). Clear the review queue for the pinned dialogs.
+5. **11:30** Export: `docker compose exec app python -m cqa.cli export <group> --out /var/cqa/results.json`,
    then `docker compose cp app:/var/cqa/results.json results/prod/results.json` (or the «results.json» button
    on the dialog list). Check: exactly **10** records, errors included, IDs as in the API. Freeze: back up the DB.
-6. **23:40** Commit plus **push** `results/prod/results.json` before **24:00 stop-code** (a local commit does not
-   count; the repo must be public by then). After stop-code, processing and the criterion swap through the UI are
+6. **11:40** Commit plus **push** `results/prod/results.json` before **12:00 stop-code** (a local commit does not
+   count; the repo must be public by then). Commit only `results/prod/results.json` from the control data;
+   `results/dev/` is gitignored on purpose. After stop-code, processing and the criterion swap through the UI are
    still allowed (no code edits).
 
 **No batch API this hour**: batch jobs can take up to 24h. Use parallel calls (`CONCURRENCY`).
