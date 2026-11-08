@@ -30,8 +30,8 @@ a gross-error chat ___, an N/A-heavy chat ___.
    then `docker compose cp app:/var/cqa/results.json results/prod/results.json` (or the «results.json» button
    on the dialog list). Check: exactly **10** records, errors included, IDs as in the API. Freeze: back up the DB.
 6. **11:40** Commit plus **push** `results/prod/results.json` before **12:00 stop-code** (a local commit does not
-   count; the repo must be public by then). Commit only `results/prod/results.json` from the control data;
-   `results/dev/` is gitignored on purpose. After stop-code, processing and the criterion swap through the UI are
+   count; the repo must be public by then). Commit `results/prod/results.json` (control data) and `results/dev/results.json` (DEV, required by the
+   organizers' note); other files under `results/dev/` stay ignored. After stop-code, processing and the criterion swap through the UI are
    still allowed (no code edits).
 
 **No batch API this hour**: batch jobs can take up to 24h. Use parallel calls (`CONCURRENCY`).
