@@ -124,3 +124,30 @@ macro points, so it is not memorised from TUNE.
   Every one of these goes to the review queue when the three roles disagree, so a human sees it before it counts.
 - **Speed:** p7 takes ~150 s per dialog on the shared Qwen server. The
   10 control dialogs run in parallel well inside the hour.
+
+### 5.4 Same pipeline, other models (OpenAI API)
+
+The p7 prompts and checklist v5 unchanged, only the model behind all three roles swapped (11-08, HOLDOUT 109 items
+and the fresh set 24 items, judge always called). Prices are OpenAI list prices per 1M tokens (input / output).
+
+| Model (reasoning effort) | $/1M in / out | HOLDOUT macro | fresh macro | c08 recall | HOLDOUT MAE | p50 s/dialog | $ / dialog |
+|---|---|---|---|---|---|---|---|
+| Qwen `qwen3.8-27b` (p7, shared server) | own GPU | 92.5 | 91.7 | 100 / 100 | 7.68 | 148 | 0 |
+| **gpt-6.1-sol (low)** | 2 / 10 | **94.6** | **96.4** | 100 / 100 | **6.14** | 17 | 0.04 |
+| gpt-6.1-terra (low) | 1 / 5 | 93.2 | 95.3 | 100 / 100 | 7.61 | 23 | 0.02 |
+| gpt-6.1-terra (none) | 1 / 5 | 92.8 | 93.8 | 100 / 100 | 7.28 | 25 | 0.02 |
+| gpt-6-luna (none) | 0.10 / 0.50 | 91.4 | 92.2 | 100 / 100 | 9.32 | 14 | 0.002 |
+| gpt-4.1-mini | 0.40 / 1.60 | 91.1 | 88.5 | **95.5** / 100 | 6.80 | 15 | 0.008 |
+| gpt-5.4-mini (none) | 0.75 / 4.50 | 88.3 | 88.0 | 100 / 100 | 8.55 | 9 | 0.016 |
+
+- gpt-6.1-sol vs Qwen p7, paired cells: HOLDOUT +28 / −17, fresh +12 / −3 (together +40 / −20, sign test p ≈ 0.01).
+  Biggest gains: c04 82 → 93 (Qwen said "fully resolved" when part of the questions were left open), c06 84 → 88.
+- With a strong model the panel adds little: sol inspector alone 95.0 on HOLDOUT, judge needed in 12 of 109
+  dialogs when it is called only on a dispute (`JUDGE_MODE=disputed`, same accuracy, about a third fewer calls).
+- The errors of gpt-6.1-terra are different from Qwen's (24 cells fixed, 22 broken on HOLDOUT): c04 better, c02 worse.
+  Its c02 misses are one pattern (the operator re-asked a known detail, the model said N/A instead of "no"). A c02
+  wording that says so was tried on TUNE and did not help (97.2 → 96.3), so it was dropped.
+- gpt-4.1-mini missed a gross error on HOLDOUT; gpt-5.4-mini is fast but the weakest. Both are out.
+- Reasoning models reject `temperature` unless `reasoning_effort` is `none`; with `low` the harmless-edit flip rate
+  stayed 0 %. gpt-6.1-sol does not accept `none`.
+- Data: personal data is masked before any call (`cqa/privacy.py`), but transcripts do leave our server.
