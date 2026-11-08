@@ -109,3 +109,15 @@ def test_traces_gold_and_analytics():
         a2 = client.get("/api/analytics", params={"checklist_version": v}).json()
         assert next(c for c in a2["criteria"] if c["criterion_id"] == "c01")["gold_n"] == 0
         assert client.post("/api/gold", json={"conversation_id": "s-kz-001", "criterion_id": "c01", "label": ""}).json()["label"] is None
+
+
+def test_fresh_install_seeds_organizers_v1_and_clarified_active_v2(fresh_database_url, monkeypatch):
+    from cqa import checklist, config, db
+    monkeypatch.setattr(config, "DATABASE_URL", fresh_database_url())
+    monkeypatch.setattr(config, "SEED_CLARIFIED", True)
+    db.init()
+    checklist.ensure_seed()
+    assert [v["version"] for v in checklist.versions()] == [2, 1]
+    active = checklist.get()
+    assert active["version"] == 2 and {c["id"] for c in active["criteria"]} == {c["id"] for c in checklist.get(1)["criteria"]}
+    assert checklist.lint(active)[0] == []

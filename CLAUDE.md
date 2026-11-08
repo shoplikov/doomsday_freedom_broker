@@ -10,7 +10,9 @@ with quotes → code validates quotes and counts points → humans decide disput
 ## The five rules (never break)
 
 1. **The checklist is data, never code.** Criteria live in versioned JSON (`data/checklist_v1.json`
-   is the seed; new versions are rows in `checklists`). A criterion change = UI save, no deploy.
+   is the organizers' seed, `data/checklist_clarified.json` our clearer wording of it, seeded as the active v2 on a
+   fresh install; new versions are rows in `checklists`). A criterion change = UI save, no deploy.
+   Measure wording changes on the bench before publishing (docs/EVALUATION.md).
 2. **The model judges, code counts.** The LLM never computes points, totals or rounding.
    All math is in `cqa/scoring.py` (Decimal, half-up, 2 dp, N/A redistribution).
 3. **No verdict without a real message ID.** Every quote is checked against the cited message by
