@@ -13,6 +13,8 @@
 
 Команда **Dreamers** · хакатон Freedom Broker CQA
 
+**[▶ Демо-видео](docs/demo/dreamers-demo.webm)** · [прод](http://13.218.176.204/) · [dev](http://13.218.176.204:8080/)
+
 </div>
 
 ---
