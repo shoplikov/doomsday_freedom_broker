@@ -99,13 +99,19 @@ def criterion_spec(c: dict) -> dict:
     return spec
 
 
-def build_messages(role, criteria, msgs, facts, briefs=None, feedback=None) -> list[dict]:
+def build_messages(role, criteria, msgs, facts, briefs=None, feedback=None, precedents=None) -> list[dict]:
     # Stable prefix first (system + facts + transcript) so the provider's prompt cache is shared
     # by all three roles and by incremental re-runs; per-call content goes last.
     shared = f"FACTS\n{json.dumps(facts, ensure_ascii=False)}\n\nTRANSCRIPT\n{transcript_block(msgs)}"
     task = (ROLE_TASKS[role] + "\n\nCRITERIA\n"
             + json.dumps([criterion_spec(c) for c in criteria], ensure_ascii=False, indent=1)
             + "\n\n" + OUTPUT_FORMAT.replace("LANG", config.RATIONALE_LANGUAGE))
+    cases = {c["id"]: precedents[c["id"]] for c in criteria if precedents and precedents.get(c["id"])}
+    if cases:
+        task += ("\n\nPRECEDENTS\nEarlier dialogs already decided by our senior reviewers, for the same criteria. They show "
+                 "how this team draws the line (for example, when N/A applies and where one scale step ends). When the "
+                 "situation here is similar, apply the criterion the same way; the facts still come only from TRANSCRIPT.\n"
+                 + "\n".join(f"{cid}:\n{txt}" for cid, txt in cases.items()))
     if briefs:
         task += "\n\nBRIEFS\n" + json.dumps({c["id"]: briefs.get(c["id"]) for c in criteria}, ensure_ascii=False)
     out = [{"role": "system", "content": SYSTEM}, {"role": "user", "content": shared},
@@ -295,9 +301,10 @@ def _cid(x) -> str:
 
 # ---------- running the roles ----------
 
-async def call_role(role, criteria, msgs, facts, ctx, briefs=None, feedback=None, attempt=1) -> tuple[dict, int]:
+async def call_role(role, criteria, msgs, facts, ctx, briefs=None, feedback=None, attempt=1,
+                    precedents=None) -> tuple[dict, int]:
     """One LLM call for a set of criteria. Always leaves a trace row. Returns ({criterion_id: answer}, trace_id)."""
-    messages = build_messages(role, criteria, msgs, facts, briefs, feedback)
+    messages = build_messages(role, criteria, msgs, facts, briefs, feedback, precedents)
     mock = config.LLM_PROVIDER == "mock"
     model = "mock" if mock else config.MODELS[role]
     data, text, error, usage = {}, "", None, {"model": model, "in": 0, "out": 0}
@@ -342,12 +349,12 @@ async def call_role(role, criteria, msgs, facts, ctx, briefs=None, feedback=None
     return out, trace_id
 
 
-async def run_role(role, criteria, msgs, facts, by_mid, ctx, briefs=None) -> tuple[dict, dict, dict]:
+async def run_role(role, criteria, msgs, facts, by_mid, ctx, briefs=None, precedents=None) -> tuple[dict, dict, dict]:
     """Call once, validate, re-ask once for the failing criteria only.
     Returns (valid answers, errors of the last attempt, trace ids per criterion)."""
     valid, errors, pending, feedback, trace_ids = {}, {}, criteria, None, {}
     for attempt in (1, 2):
-        got, trace_id = await call_role(role, pending, msgs, facts, ctx, briefs, feedback, attempt)
+        got, trace_id = await call_role(role, pending, msgs, facts, ctx, briefs, feedback, attempt, precedents)
         errors = {}
         for c in pending:
             trace_ids.setdefault(c["id"], []).append(trace_id)
@@ -377,14 +384,14 @@ def vote_label(d: dict | None) -> str | None:
     return f"{float(d['step']):g}" if d["verdict"] == "scored" else d["verdict"]
 
 
-async def evaluate_criteria(criteria, msgs, facts, conversation_id="") -> tuple[dict, list[dict]]:
+async def evaluate_criteria(criteria, msgs, facts, conversation_id="", precedents=None) -> tuple[dict, list[dict]]:
     """M1 and M2 answer independently (in parallel, they never see each other), then M3 decides.
     Returns ({criterion_id: result}, usage list)."""
     by_mid = {m["mid"]: m["text_masked"] for m in msgs}
     ctx = {"conversation_id": conversation_id, "usage": []}
     (insp, insp_err, insp_tr), (adv, adv_err, adv_tr) = await asyncio.gather(
-        run_role("inspector", criteria, msgs, facts, by_mid, ctx),
-        run_role("advocate", criteria, msgs, facts, by_mid, ctx),
+        run_role("inspector", criteria, msgs, facts, by_mid, ctx, precedents=precedents),
+        run_role("advocate", criteria, msgs, facts, by_mid, ctx, precedents=precedents),
     )
 
     def agreed(c):
@@ -394,7 +401,7 @@ async def evaluate_criteria(criteria, msgs, facts, conversation_id="") -> tuple[
     judged, judge_err, judge_tr = {}, {}, {}
     if to_judge:
         briefs = {c["id"]: {"inspector": insp.get(c["id"]), "advocate": adv.get(c["id"])} for c in to_judge}
-        judged, judge_err, judge_tr = await run_role("judge", to_judge, msgs, facts, by_mid, ctx, briefs)
+        judged, judge_err, judge_tr = await run_role("judge", to_judge, msgs, facts, by_mid, ctx, briefs, precedents)
     judged_ids = {c["id"] for c in to_judge}
     answers = {"inspector": insp, "advocate": adv, "judge": judged}
     errors = {"inspector": insp_err, "advocate": adv_err, "judge": judge_err}

@@ -15,6 +15,8 @@ RUNS: dict[str, dict] = {}  # ponytail: in-memory batch progress; lost on restar
 def _cache_key(conv: dict, c: dict) -> str:
     parts = [conv["transcript_hash"], checklist.fingerprint(c), config.LLM_PROVIDER, config.MODELS,
              config.JUDGE_MODE, config.TRUST_THRESHOLD, config.PROMPT_VERSION]
+    if config.APPROACH != "panel":  # keeps the old keys (and the cache) valid for the default approach
+        parts.append(config.APPROACH)
     return hashlib.sha256(json.dumps(parts, sort_keys=True).encode()).hexdigest()
 
 
@@ -51,7 +53,11 @@ async def evaluate(conversation_id: str, version: int | None = None) -> int:
             todo.append(c)
     usage = []
     if todo:  # incremental: only criteria whose wording changed (or new dialogs) reach the LLM
-        fresh, usage = await pipeline.evaluate_criteria(todo, msgs, facts, conversation_id)
+        if config.APPROACH == "precedents":
+            from . import precedents  # late import: precedents reads the bench label files
+            fresh, usage = await precedents.evaluate_criteria(todo, msgs, facts, conversation_id)
+        else:
+            fresh, usage = await pipeline.evaluate_criteria(todo, msgs, facts, conversation_id)
         with db.tx() as con:
             for c in todo:
                 results[c["id"]] = fresh[c["id"]] | {"cached": False}

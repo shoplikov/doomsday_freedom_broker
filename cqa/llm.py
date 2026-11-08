@@ -1,11 +1,29 @@
 """The only place that talks to an LLM provider. Messages in -> (parsed JSON, usage, raw text) out."""
+import asyncio
 import json
 import logging
+import time
 
 from . import config
 
 log = logging.getLogger(__name__)
 _client = None
+_rate_lock: asyncio.Lock | None = None
+_next_slot = 0.0
+
+
+async def throttle() -> None:
+    """Spread request starts to stay under LLM_RPM requests per minute (a proxy that answers 429 above it)."""
+    global _rate_lock, _next_slot
+    if not config.LLM_RPM:
+        return
+    _rate_lock = _rate_lock or asyncio.Lock()
+    async with _rate_lock:
+        now = time.monotonic()
+        wait = _next_slot - now
+        _next_slot = max(now, _next_slot) + 60.0 / config.LLM_RPM
+    if wait > 0:
+        await asyncio.sleep(wait)
 
 
 def _openai():
@@ -44,6 +62,7 @@ async def chat_json(model: str, messages: list[dict], temperature: float | None 
     # api.openai.com wants max_completion_tokens (reasoning models reject max_tokens); SGLang/vLLM want max_tokens.
     cap = "max_tokens" if config.OPENAI_BASE_URL else "max_completion_tokens"
     extra[cap] = config.LLM_MAX_TOKENS
+    await throttle()
     resp = await _openai().chat.completions.create(
         model=model, messages=messages, response_format={"type": "json_object"},
         extra_body=config.LLM_EXTRA_BODY or None, **extra,

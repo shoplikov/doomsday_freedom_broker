@@ -81,6 +81,7 @@ def _model(evals: list[dict]) -> dict:
                 names.append(name)
                 modes.add("external_api" if name.startswith(("gpt-", "o1", "o3", "o4")) else "local")
     mode = "hybrid" if len(modes) > 1 else (modes.pop() if modes else "local")
+    mode = config.MODEL_MODE or mode  # a hosted open model (e.g. Kimi behind a proxy) is external_api, not local
     return {"mode": mode, "name": ", ".join(names) or "none"}
 
 

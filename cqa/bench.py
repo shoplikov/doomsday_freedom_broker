@@ -30,7 +30,12 @@ NA_CRITERIA = ("c02", "c03", "c04", "c07")
 
 # An approach takes (criteria, msgs, facts, conversation_id) and returns ({criterion_id: result}, usage)
 # with the result shape of pipeline.evaluate_criteria (ai, votes, confidence, status, ...).
-APPROACHES = {"panel": pipeline.evaluate_criteria}
+async def _precedents(*args, **kw):
+    from . import precedents  # late import: precedents reads the bench label files
+    return await precedents.evaluate_criteria(*args, **kw)
+
+
+APPROACHES = {"panel": pipeline.evaluate_criteria, "precedents": _precedents}
 
 
 def norm_label(x) -> str:

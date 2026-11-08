@@ -44,6 +44,10 @@ MODELS = {
     "judge": _get("MODEL_JUDGE", "gpt-4.1"),
 }
 JUDGE_MODE = _get("JUDGE_MODE", "always")  # always | disputed
+# panel = the three roles; precedents = the same with similar decided cases in the prompt (cqa/precedents.py).
+APPROACH = _get("CQA_APPROACH", "panel")
+# results.json model.mode override: local | external_api | hybrid (empty = guessed from the model names).
+MODEL_MODE = _get("CQA_MODEL_MODE")
 TRUST_THRESHOLD = float(_get("TRUST_THRESHOLD", "0.67"))
 CONCURRENCY = int(_get("CONCURRENCY", "8"))
 RATIONALE_LANGUAGE = _get("RATIONALE_LANGUAGE", "Russian")
@@ -58,6 +62,8 @@ LLM_EXTRA_BODY: dict = json.loads(_get("LLM_EXTRA_BODY") or "{}")
 LLM_TEMPERATURE = float(_get("LLM_TEMPERATURE", "0")) if _get("LLM_TEMPERATURE", "0") != "" else None
 # Cap on one answer. A normal answer for 8 criteria is ~1.5k tokens; the cap stops a degenerate answer early.
 LLM_MAX_TOKENS = int(_get("LLM_MAX_TOKENS", "4000"))
+# Client-side cap on requests per minute (0 = none), for a proxy with a hard per-key limit.
+LLM_RPM = float(_get("LLM_RPM", "0"))
 LLM_PRICES: dict[str, list[float]] = json.loads(_get("LLM_PRICES") or "{}")
 
 LOG_DIR = Path(_get("CQA_LOG_DIR") or DATA_DIR / "logs")

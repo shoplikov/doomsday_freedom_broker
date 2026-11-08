@@ -151,3 +151,24 @@ and the fresh set 24 items, judge always called). Prices are OpenAI list prices 
 - Reasoning models reject `temperature` unless `reasoning_effort` is `none`; with `low` the harmless-edit flip rate
   stayed 0 %. gpt-6.1-sol does not accept `none`.
 - Data: personal data is masked before any call (`cqa/privacy.py`), but transcripts do leave our server.
+
+### 5.5 Approach 2: precedents (`CQA_APPROACH=precedents`, `cqa/precedents.py`)
+
+With a strong model the remaining misses are rarely a misread dialog; they are the house reading of a rule (re-asking a
+known detail is "no", not N/A; where c06 step 7 ends). Rewording the checklist per miss overfits (§5.3, v4 c06; a c02
+v6 wording did not help either). Approach 2 shows every role the 4 most similar cases already decided by a reviewer
+(answer, reason, cited messages), with at least one case of each nearby answer so the model sees where the line is.
+Similarity: `BAAI/bge-m3` / OpenAI embeddings, character trigrams without them. On the bench the pool is TUNE only.
+
+Kimi-K2.6 (non-thinking, via an OpenAI-compatible proxy, judge on disputes) and Qwen p7:
+
+| | HOLDOUT macro | fresh macro | c02 HOLDOUT / fresh | c08 recall / false alarm (HOLDOUT) |
+|---|---|---|---|---|
+| Kimi-K2.6 panel | 92.7 | 94.3 | 82 / 75 | 100 / 0 |
+| **Kimi-K2.6 precedents** | **93.5** | **95.3** | **88 / 79** | 100 / 0 |
+| Qwen p7 panel | 92.5 | 91.7 | 92 / 67 | 100 / 3.7 |
+| Qwen p7 precedents (trigrams) | — | 92.2 | — / 75 | — |
+
+Paired, Kimi precedents vs panel: HOLDOUT +12 / −8, fresh +6 / −4. Same direction on all three measurements but not
+yet significant (p ≈ 0.4). It costs one embedding call and ~1.5k prompt tokens per call. A reviewer's decision can
+become a new precedent (not wired yet).
