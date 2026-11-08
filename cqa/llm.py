@@ -38,10 +38,14 @@ async def chat_json(model: str, messages: list[dict], temperature: float | None 
     """temperature: None = config.LLM_TEMPERATURE (0 by default); the pipeline passes a higher one to resample."""
     extra = {"reasoning_effort": config.REASONING_EFFORT} if config.REASONING_EFFORT else {}
     t = config.LLM_TEMPERATURE if temperature is None else temperature
-    if t is not None and not config.REASONING_EFFORT:
+    # Reasoning models accept a temperature only with reasoning_effort "none" (gpt-5.4+, gpt-6 luna/terra).
+    if t is not None and config.REASONING_EFFORT in (None, "", "none"):
         extra["temperature"] = t
+    # api.openai.com wants max_completion_tokens (reasoning models reject max_tokens); SGLang/vLLM want max_tokens.
+    cap = "max_tokens" if config.OPENAI_BASE_URL else "max_completion_tokens"
+    extra[cap] = config.LLM_MAX_TOKENS
     resp = await _openai().chat.completions.create(
-        model=model, messages=messages, response_format={"type": "json_object"}, max_tokens=config.LLM_MAX_TOKENS,
+        model=model, messages=messages, response_format={"type": "json_object"},
         extra_body=config.LLM_EXTRA_BODY or None, **extra,
     )
     u = resp.usage
