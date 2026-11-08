@@ -55,7 +55,7 @@ edit → lint → publish vN+1 → apply → diff. Target: under 5 minutes, no c
 | Question | Answer |
 |---|---|
 | Which model, what cost? | README table; $ per evaluation from real token usage on every card. |
-| How do you know the AI is right? | 65 DEV dialogs labelled blind + synthetic traps + broken-on-purpose copies (docs/EVALUATION.md); accuracy per criterion in «Аналитика»; try «Проверка на прочность» yourself; low-confidence → human, sorted by impact. |
+| How do you know the AI is right? | 65 DEV dialogs labelled blind + synthetic traps + broken-on-purpose copies (docs/EVALUATION.md): 92.5 % per criterion on the half we never tuned on, 91.7 % on dialogs written afterwards, 100 % of gross errors caught; accuracy per criterion in «Аналитика»; try «Проверка на прочность» yourself; low-confidence → human, sorted by impact. |
 | How good is it in Kazakh? | We judge in the original language, never translate; KZ bake-off picked the model; KZ calibration numbers. |
 | What if the AI is wrong? | Validator rejects invented quotes; disagreement → review queue; appeals recalc with the same code; audit log. |
 | Client data? | Typed masks before any LLM call; "что видел ИИ" toggle; keys and data stay server-side. |

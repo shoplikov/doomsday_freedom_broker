@@ -63,3 +63,64 @@ With ~500 cells, a difference of a few cells is noise (p ≥ 0.05): do not keep 
 
 An approach is any function registered in `bench.APPROACHES` with the signature of
 `pipeline.evaluate_criteria`. The current three-model panel is `panel`.
+
+## 5. Results (Qwen `qwen3.8-27b`, non-thinking, 3-role panel)
+
+### 5.1 What each step changed (TUNE, 112 items, 566 cells)
+
+| Version | What changed | macro % | c02 | c03 | c06 | c07 | c08 recall | MAE | harmless flip | auto-accept acc. |
+|---|---|---|---|---|---|---|---|---|---|---|
+| p1 | baseline: server-default sampling, checklist v1 | 81.7 | 56.7 | 64.9 | 80.0 | 82.4 | 92.3 | 12.18 | 15.3 | 82.9 |
+| p4 | + temperature 0, explicit N/A decision (`na_applies`), quote snapping, facts (first reaction counted from the transfer, waits, identity events), checklist v2 | 85.4 | 56.2 | 97.1 | 80.0 | 88.2 | 93.3 | 11.94 | 0.0 | 87.3 |
+| p5 | + rationale written before decisions, "lowest matching step" rule for scales, checklist v3 | 91.4 | 85.9 | 94.3 | 82.9 | 90.8 | 90.0 | 6.60 | 0.0 | 92.8 |
+| p6 | + safety flag when the model itself names a violation, empty-answer resampling, checklist v4 (c08 split into 5 concrete atoms) | 93.3 | 87.5 | 95.7 | 87.1 | 94.7 | 96.7 | 6.92 | 0.0 | 94.8 |
+| p7 | + risk hints by kind (side deal, insult, another person's data, internal info; RU/KZ/EN), checklist v5 (c06 = three equal checks, c04 = every client question) | 95.1 | 89.1 | 98.6 | 88.6 | 98.7 | 100.0 | 7.95 | 0.0 | 95.4 |
+
+What mattered most, in order: (1) **rationale before decisions** in the JSON (a non-thinking model decides
+while it writes; asking for the verdict first made it decide before reading); (2) **N/A as an explicit,
+normal answer** with its own field (c02 N/A recall 15 % → 82 %); (3) **temperature 0** (harmless flip 15 % → 0);
+(4) **concrete atoms** instead of one abstract question (c08).
+
+### 5.2 Does it hold on data we did not tune on?
+
+HOLDOUT (109 items, 542 cells) was run only at milestones, numbers only. The fresh set (24 new dialogs
+written after p6 was frozen: 10 RU chats, 2 RU calls, 6 KZ, 6 EN, verified by a blind second labeller)
+was run once per final candidate.
+
+| | HOLDOUT p1 | HOLDOUT p6 | HOLDOUT p7 | fresh p1 | fresh p6 | fresh p7 |
+|---|---|---|---|---|---|---|
+| macro % | 81.7 | 90.6 | **92.5** | 75.0 | 90.6 | **91.7** |
+| c08 recall % | 100 | 100 | 100 | 50 | 50 | **100** |
+| c08 false alarm % | 1.9 | 3.7 | 3.7 | 0 | 0 | 0 |
+| total MAE | 9.83 | 8.72 | 7.68 | 11.02 | 6.64 | 4.28 |
+| auto-accept accuracy % | 82.4 | 91.0 | 93.1 | 77.8 | 90.6 | 92.1 |
+| harmless flip % | 16.7 | 6.2 | 2.1 | — | — | — |
+| fixed / broken cells vs p1 (sign test) | — | +65 / −19 (p≈0) | +70 / −14 (p≈0) | — | +34 / −4 (p≈0) | +35 / −3 (p≈0) |
+
+**Verdict: p7 + checklist v5 is the shipped configuration** (`PROMPT_VERSION = "p7"`,
+`data/checklist_clarified.json` = `data/eval/checklist_v5.json`). Against p6 on HOLDOUT it fixes 16 cells and
+breaks 6 (c04 75.4 → 82.0, c06 79.1 → 83.6, c07 91.8 → 97.3, harmless flip 6.2 → 2.1 %); on its own that
+difference is borderline (p = 0.05), but it points the same way on TUNE (+21 / −10) and fresh (+5 / −3), and it
+closes the only gross-error miss. The gain from p1 holds out of sample: TUNE +13.4, HOLDOUT +10.8, fresh +16.7
+macro points, so it is not memorised from TUNE.
+
+### 5.3 Honest notes
+
+- **We peeked once.** p6 missed one gross error on the fresh set (`fresh-kz-002`: the operator tells the
+  client about the withdrawal of the client's wife, in Kazakh). We read that miss and added "another person's data"
+  risk hints in RU/KZ/EN (p7). The fresh c08 number for p7 is therefore not fully blind; the TUNE and
+  HOLDOUT c08 numbers are.
+- **A wording can overfit.** Checklist v4 described c06 mostly through timings; TUNE c06 went up but
+  HOLDOUT c06 fell 86.6 → 79.1. v5 gives c06 three equal checks (clarity, no repeated questions, pace).
+- **The inference server can return junk.** One prompt kept getting `{}` / cut-off JSON at temperature 0:
+  a corrupted prefix cache on the shared SGLang server. Fix in `pipeline.call_role`: if the answer has no
+  items, resample once with a fresh first line (`Request <nonce>.`) at temperature 0.7.
+- **Still weak:**
+  - c02 on the fresh set (66.7 %): the model still says "no" where nothing needed clarifying (N/A recall 56 %);
+  - c04 (did the operator answer *every* question): 82 % on HOLDOUT;
+  - c08 false alarms: 2 clean HOLDOUT dialogs flagged, both a curt or dismissive reply read as an insult (same
+    2 as p6; the new risk hints added none).
+
+  Every one of these goes to the review queue when the three roles disagree, so a human sees it before it counts.
+- **Speed:** p7 takes ~150 s per dialog on the shared Qwen server. The
+  10 control dialogs run in parallel well inside the hour.

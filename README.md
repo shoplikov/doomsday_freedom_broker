@@ -68,7 +68,7 @@ and behind the «Трасса» button on each criterion.
 | **Criterion test drive** | «Чек-лист» → criterion → «Тест-драйв» | Run an edited criterion on 5 dialogs before publishing (dialogs the models argued about first): which verdicts change, and whether the models now agree. |
 | **Review by impact** | «Проверка» | Uncertain verdicts sorted by how many points they can move the total, so a reviewer's minute goes where it matters. |
 | **Where the points went** | dialog card | One chip per criterion that lost points, biggest first, click to jump. |
-| **Measured accuracy** | `cli bench`, [docs/EVALUATION.md](docs/EVALUATION.md) | Every prompt or checklist change is measured on 65 DEV dialogs labelled blind, synthetic dialogs with planted traps, and broken-on-purpose copies; kept only if it also holds on a held-out half and on a fresh set written afterwards. `cli gold-import` puts the blind labels into «Аналитика». |
+| **Measured accuracy** | `cli bench`, [docs/EVALUATION.md](docs/EVALUATION.md) | Every prompt or checklist change is measured on 65 DEV dialogs labelled blind, synthetic dialogs with planted traps, and broken-on-purpose copies; kept only if it also holds on a held-out half and on a fresh set written afterwards. Result: 81.7 → **92.5 %** criterion accuracy on the held-out half, 75.0 → **91.7 %** on the fresh set, every gross error caught. `cli gold-import` puts the blind labels into «Аналитика». |
 
 ## Model and cost (required by the brief)
 
