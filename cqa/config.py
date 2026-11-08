@@ -31,6 +31,8 @@ DATABASE_URL = _get("DATABASE_URL", "postgresql://cqa:cqa@localhost:5432/cqa")  
 SQLITE_PATH = Path(_get("CQA_DB_PATH") or DATA_DIR / "cqa.sqlite3")
 RAW_DIR = Path(_get("CQA_RAW_DIR") or DATA_DIR / "raw")  # cached API responses (offline fallback)
 DATASET_API_URL = _get("DATASET_API_URL")
+# Fresh database: also seed data/checklist_clarified.json as the active v2 (tests turn it off to keep v1 only).
+SEED_CLARIFIED = _get("CQA_SEED_CLARIFIED", "1") != "0"
 TEAM_NAME = _get("CQA_TEAM_NAME", "Doomsday Freedom Broker")  # team_name in results/*/results.json
 
 LLM_PROVIDER = _get("LLM_PROVIDER", "mock")  # mock | openai
@@ -54,6 +56,8 @@ LLM_EXTRA_BODY: dict = json.loads(_get("LLM_EXTRA_BODY") or "{}")
 # the server default for Qwen is ~0.7 and made 1 in 5 verdicts change after a harmless typo).
 # Empty = provider default (needed for reasoning models that reject the parameter).
 LLM_TEMPERATURE = float(_get("LLM_TEMPERATURE", "0")) if _get("LLM_TEMPERATURE", "0") != "" else None
+# Cap on one answer. A normal answer for 8 criteria is ~1.5k tokens; the cap stops a degenerate answer early.
+LLM_MAX_TOKENS = int(_get("LLM_MAX_TOKENS", "4000"))
 LLM_PRICES: dict[str, list[float]] = json.loads(_get("LLM_PRICES") or "{}")
 
 LOG_DIR = Path(_get("CQA_LOG_DIR") or DATA_DIR / "logs")

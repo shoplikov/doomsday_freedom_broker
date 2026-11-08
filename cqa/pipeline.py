@@ -15,6 +15,7 @@ import json
 import logging
 import re
 import time
+import uuid
 
 from . import config, llm, mock_llm, traces
 
@@ -282,7 +283,8 @@ RESAMPLE_TEMPERATURE = 0.7
 
 
 def _has_items(data) -> bool:
-    return isinstance(data, dict) and isinstance(data.get("criteria"), list) and bool(data["criteria"])
+    items = data.get("criteria") if isinstance(data, dict) else None
+    return isinstance(items, list) and any(isinstance(x, dict) and x.get("id") for x in items)
 
 
 def _cid(x) -> str:
@@ -312,9 +314,14 @@ async def call_role(role, criteria, msgs, facts, ctx, briefs=None, feedback=None
                 data, usage, text = await llm.chat_json(model, messages, temp)
             ctx["usage"].append(usage | {"role": role})
             if not _has_items(data):
-                log.warning("empty answer conv=%s role=%s try=%d: resampling", ctx["conversation_id"], role, attempt)
+                # Empty or garbled answer. Seen in practice: the server's prefix cache for this exact prompt was
+                # corrupted, so every call sharing the prefix returned junk. A unique first line bypasses it.
+                log.warning("empty answer conv=%s role=%s try=%d: resampling with a fresh prefix",
+                            ctx["conversation_id"], role, attempt)
+                fresh = [{**messages[0], "content": f"Request {uuid.uuid4().hex[:8]}.\n" + messages[0]["content"]},
+                         *messages[1:]]
                 async with _sem:
-                    data, usage2, text = await llm.chat_json(model, messages, RESAMPLE_TEMPERATURE)
+                    data, usage2, text = await llm.chat_json(model, fresh, RESAMPLE_TEMPERATURE)
                 ctx["usage"].append(usage2 | {"role": role})
                 usage = {**usage, "in": usage["in"] + usage2["in"], "out": usage["out"] + usage2["out"]}
     except Exception as exc:  # provider failure after SDK retries: no answer, criteria go to retry / review

@@ -242,6 +242,8 @@ def test_empty_greedy_answer_is_resampled_at_once(fake):
     res = run(["c01"])[0]["c01"]
     assert res["status"] == "auto_accepted" and f.roles().count("inspector") == 2
     assert pipeline.RESAMPLE_TEMPERATURE in f.temps
+    first, second = [m for r, m in f.calls if r == "inspector"]
+    assert second[0]["content"].startswith("Request ") and second[1:] == first[1:]  # fresh prefix, same task
 
 
 def test_flag_named_by_the_verdict_is_raised_even_without_an_atom():
@@ -249,3 +251,8 @@ def test_flag_named_by_the_verdict_is_raised_even_without_an_atom():
     r = {"atoms": {a["id"]: False for a in c08["atoms"]}, "verdict": "yes"}
     assert pipeline.derive(c08, r)["verdict"] == "yes"
     assert pipeline.derive(c08, r | {"verdict": "no"})["verdict"] == "no"
+
+
+def test_garbled_answer_counts_as_empty():
+    assert not pipeline._has_items({"criteria": [None, "structs"]}) and not pipeline._has_items({"c01": {}})
+    assert pipeline._has_items({"criteria": [{"id": "c01"}]})

@@ -41,7 +41,7 @@ async def chat_json(model: str, messages: list[dict], temperature: float | None 
     if t is not None and not config.REASONING_EFFORT:
         extra["temperature"] = t
     resp = await _openai().chat.completions.create(
-        model=model, messages=messages, response_format={"type": "json_object"},
+        model=model, messages=messages, response_format={"type": "json_object"}, max_tokens=config.LLM_MAX_TOKENS,
         extra_body=config.LLM_EXTRA_BODY or None, **extra,
     )
     u = resp.usage

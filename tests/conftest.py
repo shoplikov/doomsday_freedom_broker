@@ -28,6 +28,7 @@ os.environ["DATABASE_URL"] = new_database_url()
 os.environ["CQA_LOG_DIR"] = os.path.join(_tmp, "logs")
 os.environ["LLM_PROVIDER"] = "mock"
 os.environ["DATASET_API_URL"] = ""
+os.environ["CQA_SEED_CLARIFIED"] = "0"
 
 
 @pytest.fixture(scope="session")

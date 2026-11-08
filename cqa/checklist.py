@@ -7,6 +7,9 @@ import re
 from . import config, db
 
 SEED = config.DATA_DIR / "checklist_v1.json"
+# Our clarified wording of the same criteria (meaning unchanged), measured better on the eval bench
+# (docs/EVALUATION.md). A fresh install gets the organizers' text as v1 and this as the active v2.
+CLARIFIED = config.DATA_DIR / "checklist_clarified.json"
 TYPES = {"binary", "scale", "flag"}
 VAGUE = ["хорошо", "нормально", "правильно", "адекватно", "properly", "appropriate", "good", "adequate", "жақсы"]
 _ID = re.compile(r"^[a-z0-9_]+$")
@@ -79,6 +82,13 @@ def ensure_seed() -> None:
                 "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (1, %s, %s, %s, %s)",
                 (SEED.read_text(encoding="utf-8"), "seed from organizers' PDF", "system", db.now()),
             )
+            if config.SEED_CLARIFIED and CLARIFIED.exists():
+                con.execute(
+                    "INSERT INTO checklists (version, json, note, created_by, created_at) VALUES (2, %s, %s, %s, %s)",
+                    (CLARIFIED.read_text(encoding="utf-8"),
+                     "clarified wording of v1, same meaning; measured on the eval bench (docs/EVALUATION.md)",
+                     "system", db.now()),
+                )
 
 
 def get(version: int | None = None) -> dict | None:
