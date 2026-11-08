@@ -10,7 +10,9 @@ COPY pyproject.toml uv.lock ./
 RUN --mount=type=cache,target=/root/.cache/uv uv sync --frozen --no-dev --no-install-project
 COPY cqa ./cqa
 COPY web ./web
-COPY data/checklist_v1.json ./data/checklist_v1.json
+COPY data/checklist_v1.json data/checklist_clarified.json ./data/
+# Blind reference labels and synthetic scenarios: `cli gold-import` and `cli bench` run inside the container.
+COPY data/eval ./data/eval
 COPY data/fixtures/SAMPLE.json ./data/fixtures/SAMPLE.json
 
 FROM base AS test
